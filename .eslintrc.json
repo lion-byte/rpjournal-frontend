@@ -1,0 +1,21 @@
+{
+  "extends": ["standard", "standard-jsx"],
+  "globals": {
+    "afterAll": true,
+    "afterEach": true,
+    "beforeAll": true,
+    "beforeEach": true,
+    "describe": true,
+    "expect": true,
+    "jest": true,
+    "test": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 8
+  },
+  "rules": {
+    "no-var": "error",
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error"
+  }
+}
