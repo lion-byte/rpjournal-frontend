@@ -10,6 +10,6 @@
     "noEmit": true,
     "target": "esnext"
   },
-  "exclude": [".cache", "node_modules", "public"],
+  "exclude": [".cache", "node_modules", "public", "**/coverage/**"],
   "include": ["src/**/*.js", "declarations.d.ts"]
 }

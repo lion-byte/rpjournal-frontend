@@ -6,14 +6,15 @@ module.exports = {
   },
   moduleNameMapper: {
     '.+\\.(css|styl|less|sass|scss)$': 'identity-obj-proxy',
-    '.+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/__mocks__/fileMock.js'
+    '.+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': require.resolve(
+      './__mocks__/file-mock.js'
+    )
   },
-  setupFiles: ['<rootDir>/loadershim.js'],
-  testPathIgnorePatterns: ['node_modules', '.cache'],
+  setupFiles: [require.resolve('./loadershim.js')],
+  testPathIgnorePatterns: ['node_modules', '.cache', 'coverage'],
   testURL: 'http://localhost',
   transform: {
-    '^.+\\.jsx?$': '<rootDir>/jest-preprocess.js'
+    '^.+\\.jsx?$': require.resolve('./jest-preprocess.js')
   },
   transformIgnorePatterns: ['node_modules/(?!(gatsby)/)']
 }
