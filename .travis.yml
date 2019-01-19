@@ -1,12 +1,19 @@
 language: node_js
 
 node_js:
-  - 'node'
+  - node
+
+matrix:
+  include:
+    - name: Back End
+      env: PROJECT=src/backend
+    - name: Front End
+      env: PROJECT=src/frontend
 
 before_install:
   - npm i -g npm@6
+  - cd $PROJECT
 
-install:
-  - npm ci
+install: npm ci
 
 script: npm test
