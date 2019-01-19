@@ -1,0 +1,125 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Nav renders correctly 1`] = `
+.c0 {
+  font-size: 1.5em;
+}
+
+.c0 a,
+.c0 button {
+  background-color: transparent;
+  border: none;
+  display: block;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  padding: 0.25em 0.5em;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.c0 .menu-button {
+  cursor: pointer;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  text-align: left;
+  width: 100%;
+}
+
+.c0 .menu {
+  -webkit-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.c0 .menu.active {
+  max-height: 25em;
+}
+
+.c0 .menu ul {
+  border-top: 1px solid #353535;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.c0 .menu a {
+  border-bottom: 1px solid #353535;
+}
+
+.c0 .menu a[aria-current] {
+  border-bottom: 1px solid royalblue;
+}
+
+@media screen and (min-width:55em) {
+  .c0 .menu-button {
+    display: none;
+  }
+
+  .c0 .menu {
+    max-height: none;
+  }
+
+  .c0 .menu ul {
+    border: 0;
+    margin: 0 0 0 -0.25em;
+  }
+
+  .c0 .menu li {
+    display: inline-block;
+    margin: 0 0.25em;
+  }
+
+  .c0 .menu a {
+    border: 0;
+  }
+}
+
+<nav
+  className="c0"
+>
+  <button
+    className="menu-button"
+    onClick={[Function]}
+  >
+    <span>
+      Menu
+    </span>
+  </button>
+  <div
+    className="menu"
+    onClick={[Function]}
+  >
+    <ul>
+      <li>
+        <a
+          href="/"
+        >
+          Home
+        </a>
+      </li>
+      <li>
+        <a
+          href="/about"
+        >
+          About
+        </a>
+      </li>
+      <li>
+        <a
+          href="/contact"
+        >
+          Contact
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+`;

@@ -1,0 +1,14 @@
+{
+  "name": "rpjournal-backend",
+  "version": "0.0.0",
+  "description": "A journaling tool for holding RPG session notes",
+  "scripts": {
+    "start": "node src",
+    "test": "jest"
+  },
+  "license": "MIT",
+  "main": "src/index.js",
+  "author": "Mark Hernandez <mark@lion-byte.com>",
+  "devDependencies": {},
+  "dependencies": {}
+}
