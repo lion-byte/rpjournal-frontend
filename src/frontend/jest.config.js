@@ -1,6 +1,12 @@
 module.exports = {
   displayName: 'frontend',
   testEnvironment: 'jest-environment-jsdom',
+  collectCoverageFrom: [
+    '**/src/**/*.js',
+    '!**/node_modules/**',
+    '!**/.cache/**',
+    '!**/coverage/**'
+  ],
   globals: {
     __PATH_PREFIX__: ''
   },
