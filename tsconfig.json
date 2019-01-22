@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "alwaysStrict": true,
     "checkJs": true,
     "esModuleInterop": true,
     "jsx": "react",
     "module": "es2015",
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "noEmit": true,
     "target": "esnext"
   },
   "exclude": [".cache", "node_modules", "public", "**/coverage/**"],
-  "include": ["src/**/*.js", "declarations.d.ts"]
+  "include": ["declarations.d.ts", "types.d.ts", "src/**/*.js"]
 }

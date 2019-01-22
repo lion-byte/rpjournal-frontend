@@ -10,17 +10,12 @@ const StyledJournal = styled.article`
   }
 `
 
-/**
- * @typedef {object} Journal
- * @property {string} id
- * @property {string} title
- * @property {string} description
- * @property {number} entryCount
- */
+const fillerImage = dummy.image(640, 480)
 
 /**
  * @param {object} props
- * @param {Journal} props.journal
+ * @param {JournalModel} props.journal
+ * @returns {React.ReactElement}
  */
 const Journal = props => {
   const { journal } = props
@@ -29,12 +24,12 @@ const Journal = props => {
     <StyledJournal>
       <h1>{journal.title}</h1>
 
-      <img src={dummy.image(640, 480)} alt={journal.title} />
+      <img src={fillerImage} alt={journal.title} />
 
       <p>{journal.description}</p>
 
       <footer>
-        <p>Entry Count: {journal.entryCount}</p>
+        <p>Entry Count: {journal.sessions.length}</p>
       </footer>
     </StyledJournal>
   )
