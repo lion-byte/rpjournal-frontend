@@ -21,7 +21,7 @@ const Layout = ({ children }) => (
       <SkipNavLink />
       <Header />
       <SkipNavContent />
-      <main>{children}</main>
+      <main role='main'>{children}</main>
     </Page>
   </Theme>
 )

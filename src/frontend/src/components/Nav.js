@@ -41,12 +41,9 @@ const StyledNav = styled.nav`
       padding: 0;
     }
 
-    a {
+    a,
+    button {
       border-bottom: 1px solid ${props => props.theme.black};
-
-      &[aria-current] {
-        border-bottom: 1px solid ${props => props.theme.primaryColor};
-      }
     }
   }
 
@@ -104,7 +101,7 @@ export class Nav extends React.PureComponent {
               <Link to='/about'>About</Link>
             </li>
             <li>
-              <Link to='/contact'>Contact</Link>
+              <Link to='/journal'>Journal</Link>
             </li>
           </ul>
         </div>

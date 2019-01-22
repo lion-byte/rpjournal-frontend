@@ -8,6 +8,10 @@ module.exports = {
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-sharp',
     {
+      resolve: 'gatsby-plugin-create-client-paths',
+      options: { prefixes: ['/journal/*'] }
+    },
+    {
       resolve: 'gatsby-plugin-nprogress',
       options: {
         color: '#28579d',

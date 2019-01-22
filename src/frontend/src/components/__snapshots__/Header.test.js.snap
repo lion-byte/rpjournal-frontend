@@ -50,12 +50,9 @@ exports[`Header renders correctly 1`] = `
   padding: 0;
 }
 
-.c1 .menu a {
+.c1 .menu a,
+.c1 .menu button {
   border-bottom: 1px solid #353535;
-}
-
-.c1 .menu a[aria-current] {
-  border-bottom: 1px solid royalblue;
 }
 
 .c0 .bar {
@@ -180,9 +177,9 @@ exports[`Header renders correctly 1`] = `
           </li>
           <li>
             <a
-              href="/contact"
+              href="/journal"
             >
-              Contact
+              Journal
             </a>
           </li>
         </ul>
