@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import styled from 'styled-components'
 
 const StyledNav = styled.nav`
@@ -95,13 +95,19 @@ export class Nav extends React.PureComponent {
         >
           <ul>
             <li>
-              <Link to='/'>Home</Link>
+              <Link href='/' prefetch>
+                <a>Home</a>
+              </Link>
             </li>
             <li>
-              <Link to='/about'>About</Link>
+              <Link href='/about' prefetch>
+                <a>About</a>
+              </Link>
             </li>
             <li>
-              <Link to='/journal'>Journal</Link>
+              <Link href='/journal' prefetch>
+                <a>Journal</a>
+              </Link>
             </li>
           </ul>
         </div>

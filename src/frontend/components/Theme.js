@@ -1,6 +1,6 @@
 import React from 'react'
-import '@reach/skip-nav/styles.css'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import '@reach/skip-nav/styles.css'
 
 const theme = {
   black: '#353535',

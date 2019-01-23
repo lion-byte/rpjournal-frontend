@@ -11,5 +11,5 @@
     "target": "esnext"
   },
   "exclude": [".cache", "node_modules", "public", "**/coverage/**"],
-  "include": ["declarations.d.ts", "types.d.ts", "src/**/*.js"]
+  "include": ["type-merges.d.ts", "types.d.ts", "src/**/*.js"]
 }

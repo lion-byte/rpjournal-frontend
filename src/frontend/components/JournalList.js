@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import journals from '../data/journals.json'
+import journals from '../data/journals'
 import Journal from './Journal'
 
 const StyledList = styled.section`

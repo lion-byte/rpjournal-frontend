@@ -1,6 +1,6 @@
 # Compiled Outputs
 public/
-.cache/
+.next/
 
 # Logs
 logs

@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'gatsby'
 import styled from 'styled-components'
 
 import Nav from './Nav'
@@ -45,7 +44,7 @@ const Header = props => (
   <StyledHeader>
     <div className='bar'>
       <h1>
-        <Link to='/'>RPJournal</Link>
+        <a href='/'>RPJournal</a>
       </h1>
     </div>
 

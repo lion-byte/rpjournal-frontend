@@ -1,16 +1,21 @@
 import React from 'react'
-import dummy from 'dummyjs'
 import styled from 'styled-components'
 
 const StyledJournal = styled.article`
   img {
     object-fit: contain;
-    max-height: 100%;
     max-width: 100%;
   }
 `
 
-const fillerImage = dummy.image(640, 480)
+/**
+ * @param {string} text
+ * @returns {string}
+ */
+const fillerImage = text =>
+  `https://via.placeholder.com/640x480.png/535353/eeeeee?text=${encodeURI(
+    text
+  )}`
 
 /**
  * @param {object} props
@@ -24,7 +29,7 @@ const Journal = props => {
     <StyledJournal>
       <h1>{journal.title}</h1>
 
-      <img src={fillerImage} alt={journal.title} />
+      <img src={fillerImage(journal.title)} alt={journal.title} />
 
       <p>{journal.description}</p>
 

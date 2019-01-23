@@ -6,7 +6,7 @@ import Header from './Header'
 import Meta from './Meta'
 import Theme from './Theme'
 
-const Page = styled.div`
+const StyledPage = styled.div`
   main {
     margin: 0 auto;
     max-width: 1400px;
@@ -14,16 +14,16 @@ const Page = styled.div`
   }
 `
 
-const Layout = ({ children }) => (
+const Page = ({ children }) => (
   <Theme>
-    <Page>
+    <StyledPage>
       <Meta />
       <SkipNavLink />
       <Header />
       <SkipNavContent />
       <main role='main'>{children}</main>
-    </Page>
+    </StyledPage>
   </Theme>
 )
 
-export default Layout
+export default Page
