@@ -27,7 +27,7 @@ const inlineStyles = [
 
 /**
  * @typedef {object} EditorProps
- * @property {(contentState: object) => void} [onSave]
+ * @property {(contentState: any) => void} [onSave]
  */
 
 /**

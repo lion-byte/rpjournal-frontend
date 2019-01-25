@@ -10,7 +10,8 @@ const exampleJournal = {
   id: '1',
   title: 'Example Journal',
   description: 'Lorem ipsum a et louve.',
-  sessions: []
+  sessions: [],
+  quests: []
 }
 
 describe('Journal', () => {
