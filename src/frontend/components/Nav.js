@@ -105,8 +105,18 @@ export class Nav extends React.PureComponent {
               </Link>
             </li>
             <li>
-              <Link href='/journal' prefetch>
-                <a>Journal</a>
+              <Link href='/journals' prefetch>
+                <a>Journals</a>
+              </Link>
+            </li>
+            <li>
+              <Link href='/next-journey' prefetch>
+                <a>New Journal</a>
+              </Link>
+            </li>
+            <li>
+              <Link href='/new-entry' prefetch>
+                <a>Write Session</a>
               </Link>
             </li>
           </ul>

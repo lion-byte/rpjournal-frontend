@@ -5,6 +5,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next",
+    "start": "next start",
     "test": "jest"
   },
   "license": "MIT",
@@ -25,10 +26,13 @@
     "apollo-boost": "^0.1.27",
     "apollo-client": "^2.4.12",
     "babel-plugin-styled-components": "^1.10.0",
+    "draft-js": "^0.10.5",
+    "draftail": "^1.0.0",
     "graphql": "^14.1.1",
     "graphql-tag": "^2.10.1",
     "next": "^7.0.2",
     "next-with-apollo": "^3.3.2",
+    "nprogress": "^0.2.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "styled-components": "^4.1.3"

@@ -1,6 +1,14 @@
 interface SessionModel {
   id: string
-  notes: Array<string>
+  date: string
+  notes: string
+}
+
+interface QuestModel {
+  id: string
+  title: string
+  details: string
+  completed: boolean
 }
 
 interface JournalModel {
@@ -8,4 +16,5 @@ interface JournalModel {
   title: string
   description: string
   sessions: Array<SessionModel>
+  quests: Array<QuestModel>
 }

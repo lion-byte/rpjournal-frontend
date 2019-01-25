@@ -1,10 +1,19 @@
 import React from 'react'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import 'nprogress/nprogress.css'
 import '@reach/skip-nav/styles.css'
+import 'draft-js/dist/Draft.css'
+import 'draftail/dist/draftail.css'
 
 const theme = {
+  white: '#ffffff',
+  offWhite: '#dfdfdf',
+  lightGray: '#c3c3c3',
+  gray: '#767676',
+  darkGray: '#525252',
   black: '#353535',
-  primaryColor: 'royalblue'
+  primaryColor: '#ea45ba',
+  accentColor: ''
 }
 
 const GlobalStyles = createGlobalStyle`

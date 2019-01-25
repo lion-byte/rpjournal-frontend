@@ -2,10 +2,10 @@ import React from 'react'
 
 import JournalList from '../components/JournalList'
 
-const Journal = props => (
+const Journals = props => (
   <div>
     <JournalList />
   </div>
 )
 
-export default Journal
+export default Journals
