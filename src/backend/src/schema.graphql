@@ -1,0 +1,28 @@
+type Query {
+  journals: [Journal!]!
+}
+
+type Mutation {
+  login: String
+}
+
+type Session {
+  id: ID!
+  title: String!
+  notes: String!
+}
+
+type Quest {
+  id: ID!
+  title: String!
+  details: String!
+  completed: Boolean!
+}
+
+type Journal {
+  id: ID!
+  title: String!
+  description: String!
+  sessions: [Session!]!
+  quests: [Quest!]!
+}
