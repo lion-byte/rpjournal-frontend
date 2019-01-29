@@ -1,4 +1,4 @@
-const { ApolloServer } = require('apollo-server')
+const { ApolloServer } = require('apollo-server-express')
 const { importSchema } = require('graphql-import')
 const path = require('path')
 
@@ -12,7 +12,8 @@ const createServer = () => {
     typeDefs,
     resolvers: { Query, Mutation },
     mocks: true,
-    mockEntireSchema: false
+    mockEntireSchema: false,
+    context: req => ({ ...req })
   })
 }
 
