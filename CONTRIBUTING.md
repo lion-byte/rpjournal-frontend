@@ -14,4 +14,4 @@ Make sure that you have the [StandardJS](https://standardjs.com/#are-there-text-
 
 Running `npm test` is pretty good for basic testing. It's always helpful to add tests!
 
-If your changes fail the test suite, either fix your code or refactor the tests to reflect the additions/changes. Also try to keep code coverage at least 90%.
+If your changes fail the test suite, either fix your code or refactor the tests to reflect the additions/changes.
