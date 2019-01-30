@@ -9,6 +9,7 @@ const createServer = () => {
   const typeDefs = importSchema(path.resolve(__dirname, './schema.graphql'))
 
   return new ApolloServer({
+    // @ts-ignore
     typeDefs,
     resolvers: { Query, Mutation },
     mocks: true,

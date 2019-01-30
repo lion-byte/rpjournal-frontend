@@ -12,6 +12,12 @@
     "noEmit": true,
     "target": "esnext"
   },
-  "exclude": [".cache", "node_modules", "public", "**/coverage/**"],
+  "exclude": [
+    ".cache",
+    "node_modules",
+    "public",
+    "**/coverage/**",
+    "**/.next/**"
+  ],
   "include": ["type-merges.d.ts", "types.d.ts", "src/**/*.js"]
 }

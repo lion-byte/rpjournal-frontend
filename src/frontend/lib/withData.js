@@ -6,7 +6,7 @@ import { endpoint } from '../config'
 export default withApollo(({ headers }) => {
   return new ApolloClient({
     uri: process.env.NODE_ENV === 'development' ? endpoint : endpoint,
-    request: operation => {
+    request: async operation => {
       operation.setContext({
         fetchOptions: {
           credentials: 'include'
