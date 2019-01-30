@@ -21,8 +21,11 @@ exports[`Journal renders correctly 1`] = `
   </p>
   <footer>
     <p>
-      Entry Count: 
+      Quests Completed: (
       0
+      /
+      0
+      )
     </p>
   </footer>
 </article>

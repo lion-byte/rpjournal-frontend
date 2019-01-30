@@ -1,11 +1,11 @@
 import React from 'react'
 
-import JournalList from '../components/JournalList'
+import Journals from '../components/Journals'
 
-const Journals = props => (
+const JournalsPage = props => (
   <div>
-    <JournalList />
+    <Journals />
   </div>
 )
 
-export default Journals
+export default JournalsPage

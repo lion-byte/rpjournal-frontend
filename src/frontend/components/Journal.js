@@ -1,21 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { fillerImage } from '../lib/filler'
+
 const StyledJournal = styled.article`
   img {
     object-fit: contain;
     max-width: 100%;
   }
 `
-
-/**
- * @param {string} text
- * @returns {string}
- */
-const fillerImage = text =>
-  `https://via.placeholder.com/640x480.png/535353/eeeeee?text=${encodeURI(
-    text
-  )}`
 
 /**
  * @param {object} props
@@ -25,16 +18,26 @@ const fillerImage = text =>
 const Journal = props => {
   const { journal } = props
 
+  const totalQuests = journal.quests.length
+  const completedQuests = journal.quests.reduce(
+    (prev, curr) => (curr.completed ? prev + 1 : prev),
+    0
+  )
+
+  const img = fillerImage({ text: journal.title })
+
   return (
     <StyledJournal>
       <h1>{journal.title}</h1>
 
-      <img src={fillerImage(journal.title)} alt={journal.title} />
+      <img src={img} alt={journal.title} />
 
       <p>{journal.description}</p>
 
       <footer>
-        <p>Entry Count: {journal.sessions.length}</p>
+        <p>
+          Quests Completed: ({completedQuests}/{totalQuests})
+        </p>
       </footer>
     </StyledJournal>
   )
