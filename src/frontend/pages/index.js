@@ -2,7 +2,7 @@ import React from 'react'
 
 const Home = props => (
   <div>
-    <p>Hello</p>
+    <h1>Welcome to RPJournal</h1>
   </div>
 )
 

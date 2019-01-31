@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 
 import Form from './styles/Form'
 
-export class CreateJournal extends PureComponent {
+export class CreateAdventure extends PureComponent {
   state = {
     title: '',
     description: ''
@@ -51,11 +51,11 @@ export class CreateJournal extends PureComponent {
             />
           </label>
 
-          <button type='submit'>Create Journal</button>
+          <button type='submit'>Create Adventure</button>
         </fieldset>
       </Form>
     )
   }
 }
 
-export default CreateJournal
+export default CreateAdventure

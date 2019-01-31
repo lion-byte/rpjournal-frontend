@@ -1,28 +1,16 @@
+# import * from './generated/prisma.graphql'
+
 type Query {
-  journals: [Journal!]!
+  adventures: [Adventure!]!
 }
 
 type Mutation {
-  login: String
-}
-
-type Session {
-  id: ID!
-  title: String!
-  notes: String!
-}
-
-type Quest {
-  id: ID!
-  title: String!
-  details: String!
-  completed: Boolean!
-}
-
-type Journal {
-  id: ID!
-  title: String!
-  description: String!
-  sessions: [Session!]!
-  quests: [Quest!]!
+  createAdventure(title: String!, description: String!): Adventure!
+  createSession(id: ID!, title: String!, description: String!): Session!
+  createQuest(
+    id: ID!
+    title: String!
+    description: String!
+    completed: Boolean
+  ): Quest!
 }
