@@ -4,6 +4,7 @@ const path = require('path')
 
 const { Mutation } = require('./resolvers/mutation')
 const { Query } = require('./resolvers/query')
+const { db } = require('./db')
 
 const createServer = () => {
   const typeDefs = importSchema(path.resolve(__dirname, './schema.graphql'))
@@ -11,10 +12,15 @@ const createServer = () => {
   return new ApolloServer({
     // @ts-ignore
     typeDefs,
-    resolvers: { Query, Mutation },
-    mocks: true,
+    resolvers: {
+      Query,
+      Mutation,
+      // To get rid of a noisy, unnecessary warning
+      Node: { __resolveType: () => null }
+    },
+    mocks: false,
     mockEntireSchema: false,
-    context: req => ({ ...req })
+    context: req => ({ ...req, db })
   })
 }
 

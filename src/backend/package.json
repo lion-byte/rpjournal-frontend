@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "A journaling tool for holding RPG session notes",
   "scripts": {
+    "deploy": "prisma deploy --env-file .env",
     "dev": "nodemon -e js,graphql -x node --inspect src",
     "start": "nodemon -e js,graphql -x node src",
     "test": "jest"
@@ -11,6 +12,7 @@
   "main": "src/index.js",
   "author": "Mark Hernandez <mark@lion-byte.com>",
   "devDependencies": {
+    "graphql-cli": "^3.0.8",
     "jest": "^24.0.0",
     "nodemon": "^1.18.9"
   },
@@ -23,6 +25,8 @@
     "graphql": "^14.1.1",
     "graphql-import": "^0.7.1",
     "graphql-tools": "^4.0.4",
-    "jsonwebtoken": "^8.4.0"
+    "jsonwebtoken": "^8.4.0",
+    "prisma": "^1.25.4",
+    "prisma-binding": "^2.3.0"
   }
 }

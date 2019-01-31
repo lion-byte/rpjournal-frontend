@@ -1,0 +1,35 @@
+type User {
+  id: ID! @unique
+  name: String!
+  email: String! @unique
+  password: String!
+}
+
+type Adventure {
+  id: ID! @unique
+  title: String!
+  description: String!
+  sessions: [Session!]! @relation(name: "AdventureSessions", onDelete: CASCADE)
+  quests: [Quest!]! @relation(name: "AdventureQuests", onDelete: CASCADE)
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
+
+type Session {
+  id: ID! @unique
+  title: String!
+  description: String!
+  adventure: Adventure! @relation(name: "AdventureSessions")
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
+
+type Quest {
+  id: ID! @unique
+  title: String!
+  description: String!
+  completed: Boolean! @default(value: "false")
+  adventure: Adventure! @relation(name: "AdventureQuests")
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
