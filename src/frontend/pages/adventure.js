@@ -1,8 +1,10 @@
 import React from 'react'
 
+import SingleAdventure from '../components/SingleAdventure'
+
 const AdventurePage = props => (
   <div>
-    <h1>{props.query.id}</h1>
+    <SingleAdventure id={props.query.id} />
   </div>
 )
 

@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import Router from 'next/router'
 
 import Form from './styles/Form'
+import Title from './Title'
 
 export const CREATE_ADVENTURE_MUTATION = gql`
   mutation CREATE_ADVENTURE_MUTATION($title: String!, $description: String!) {
@@ -57,6 +58,8 @@ export class CreateAdventure extends PureComponent {
               this.handleSubmit(event, createAdventureMutation)
             }
           >
+            <Title title='New Adventure' />
+
             <fieldset aria-busy={loading}>
               <label htmlFor='title'>
                 Title

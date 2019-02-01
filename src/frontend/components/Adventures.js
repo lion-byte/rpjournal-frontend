@@ -4,8 +4,9 @@ import gql from 'graphql-tag'
 import styled from 'styled-components'
 
 import Adventure from './Adventure'
+import Title from './Title'
 
-const StyledList = styled.section`
+const StyledList = styled.div`
   .list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(16em, 1fr));
@@ -27,6 +28,8 @@ export const ADVENTURES_QUERY = gql`
 
 const Adventures = props => (
   <StyledList>
+    <Title title='Adventures' />
+
     <h1>Adventures</h1>
 
     <Query query={ADVENTURES_QUERY}>

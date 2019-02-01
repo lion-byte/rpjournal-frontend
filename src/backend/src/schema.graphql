@@ -2,6 +2,7 @@
 
 type Query {
   adventures: [Adventure!]!
+  adventure(where: AdventureWhereUniqueInput!): Adventure
 }
 
 type Mutation {
