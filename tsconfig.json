@@ -8,6 +8,7 @@
     "jsx": "react",
     "module": "es2015",
     "moduleResolution": "node",
+    "plugins": [{ "name": "typescript-styled-plugin" }],
     "resolveJsonModule": true,
     "noEmit": true,
     "target": "esnext"

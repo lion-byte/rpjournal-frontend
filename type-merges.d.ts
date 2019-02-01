@@ -10,5 +10,7 @@ declare module 'styled-components' {
     black: string
     primaryColor: string
     accentColor: string
+    headerFont: string
+    baseFont: string
   }
 }

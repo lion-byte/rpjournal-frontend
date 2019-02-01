@@ -11,23 +11,25 @@ const loading = keyframes`
 `
 
 const Form = styled.form`
-  box-shadow: 0 0 0.5em 0.25em rgba(0, 0, 0, 0.05);
-  background: rgba(0, 0, 0, 0.02);
-  border: 0.25em solid ${props => props.theme.white};
-  padding: 1em;
-  font-size: 1.5em;
+  border: 0.25em solid ${props => props.theme.offWhite};
+  padding: 1.5em;
   line-height: 1.5;
   font-weight: 600;
+  &[aria-busy='true']::before {
+    background-size: 50% auto;
+    animation: ${loading} 1.5s linear infinite;
+  }
   label {
     display: block;
     margin-bottom: 1em;
+    font-size: 1.5em;
   }
   input,
   textarea,
   select {
     width: 100%;
     padding: 0.5em;
-    font-size: 1em;
+    font-size: 0.67em;
     border: 1px solid ${props => props.theme.black};
     font-family: inherit;
     resize: vertical;
@@ -35,6 +37,9 @@ const Form = styled.form`
       outline: 0;
       border-color: ${props => props.theme.primaryColor};
     }
+  }
+  textarea {
+    min-height: 8em;
   }
   button,
   input[type='submit'] {
@@ -63,10 +68,6 @@ const Form = styled.form`
         ${props => props.theme.white} 100%
       );
       transition: background 1s ease-in-out;
-    }
-    &[aria-busy='true']::before {
-      background-size: 50% auto;
-      animation: ${loading} 1.5s linear infinite;
     }
   }
 `

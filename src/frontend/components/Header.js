@@ -12,6 +12,7 @@ const StyledHeader = styled.header`
     justify-content: space-between;
 
     h1 {
+      font-family: ${props => props.theme.baseFont};
       font-size: 4em;
       margin-left: 0.5em;
       position: relative;
