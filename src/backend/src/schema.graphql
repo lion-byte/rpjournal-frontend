@@ -1,7 +1,12 @@
 # import * from './generated/prisma.graphql'
 
 type Query {
-  adventures: [Adventure!]!
+  adventures(
+    where: AdventureWhereInput
+    orderBy: AdventureOrderByInput
+    skip: Int
+    first: Int
+  ): [Adventure!]!
   adventure(where: AdventureWhereUniqueInput!): Adventure
 }
 

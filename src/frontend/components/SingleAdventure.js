@@ -1,4 +1,5 @@
 import React from 'react'
+import TimeAgo from 'react-timeago'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
@@ -11,11 +12,17 @@ export const SINGLE_ADVENTURE_QUERY = gql`
       id
       title
       description
+      createdAt
+      updatedAt
     }
   }
 `
 
-const StyledAdventure = styled.div``
+const StyledAdventure = styled.div`
+  .dates {
+    font-size: 0.8em;
+  }
+`
 
 /**
  * @param {object} props
@@ -36,8 +43,19 @@ const SingleAdventure = props => (
         <StyledAdventure>
           <Title title={adventure.title} />
 
-          <h1>{adventure.title}</h1>
-          <p>{adventure.description}</p>
+          <header>
+            <h1>{adventure.title}</h1>
+
+            <p className='dates'>
+              Created <TimeAgo date={adventure.createdAt} />
+              {' | '}
+              Updated <TimeAgo date={adventure.updatedAt} />
+            </p>
+          </header>
+
+          <section>
+            <p>{adventure.description}</p>
+          </section>
         </StyledAdventure>
       )
     }}
