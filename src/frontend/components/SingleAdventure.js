@@ -1,5 +1,6 @@
 import React from 'react'
 import TimeAgo from 'react-timeago'
+import Link from 'next/link'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
@@ -56,6 +57,17 @@ const SingleAdventure = props => (
           <section>
             <p>{adventure.description}</p>
           </section>
+
+          <footer>
+            <Link
+              href={{
+                pathname: '/update-adventure',
+                query: { id: adventure.id }
+              }}
+            >
+              <a>Update Adventure</a>
+            </Link>
+          </footer>
         </StyledAdventure>
       )
     }}

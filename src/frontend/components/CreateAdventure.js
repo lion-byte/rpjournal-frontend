@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import Router from 'next/router'
 
 import Form from './styles/Form'
+import { ADVENTURES_QUERY } from './Adventures'
 import Title from './Title'
 
 export const CREATE_ADVENTURE_MUTATION = gql`
@@ -51,6 +52,7 @@ export class CreateAdventure extends PureComponent {
       <Mutation
         mutation={CREATE_ADVENTURE_MUTATION}
         variables={{ title, description }}
+        refetchQueries={[{ query: ADVENTURES_QUERY }]}
       >
         {(createAdventure, { loading }) => (
           <Form
