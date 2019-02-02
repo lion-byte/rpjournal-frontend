@@ -52,15 +52,14 @@ export class CreateAdventure extends PureComponent {
         mutation={CREATE_ADVENTURE_MUTATION}
         variables={{ title, description }}
       >
-        {(createAdventureMutation, { loading }) => (
+        {(createAdventure, { loading }) => (
           <Form
-            onSubmit={event =>
-              this.handleSubmit(event, createAdventureMutation)
-            }
+            onSubmit={event => this.handleSubmit(event, createAdventure)}
+            aria-busy={loading}
           >
             <Title title='New Adventure' />
 
-            <fieldset aria-busy={loading}>
+            <fieldset disabled={loading}>
               <label htmlFor='title'>
                 Title
                 <input
