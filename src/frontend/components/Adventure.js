@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import Link from 'next/link'
 
 const StyledAdventure = styled.article`
   img {
@@ -18,7 +19,11 @@ const Adventure = props => {
 
   return (
     <StyledAdventure>
-      <h1>{adventure.title}</h1>
+      <h1>
+        <Link href={{ pathname: '/adventure', query: { id: adventure.id } }}>
+          <a>{adventure.title}</a>
+        </Link>
+      </h1>
 
       <p>{adventure.description}</p>
     </StyledAdventure>

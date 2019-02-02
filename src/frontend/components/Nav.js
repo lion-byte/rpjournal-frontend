@@ -100,8 +100,8 @@ export class Nav extends React.PureComponent {
               </Link>
             </li>
             <li>
-              <Link href='/adventures' prefetch>
-                <a>Adventures</a>
+              <Link href='/new-adventure' prefetch>
+                <a>New Adventure</a>
               </Link>
             </li>
           </ul>

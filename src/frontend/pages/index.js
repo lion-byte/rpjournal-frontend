@@ -1,8 +1,10 @@
 import React from 'react'
 
+import Adventures from '../components/Adventures'
+
 const Home = props => (
   <div>
-    <h1>Welcome to RPJournal</h1>
+    <Adventures />
   </div>
 )
 
