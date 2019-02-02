@@ -12,11 +12,28 @@ type Query {
 
 type Mutation {
   createAdventure(title: String!, description: String!): Adventure!
-  createSession(id: ID!, title: String!, description: String!): Session!
+  updateAdventure(id: ID!, title: String, description: String): Adventure
+  deleteAdventure(id: ID!): Adventure
+
+  createSession(
+    adventureId: ID!
+    title: String!
+    description: String!
+  ): Session!
+  updateSession(id: ID!, title: String, description: String): Session
+  deleteSession(id: ID!): Session
+
   createQuest(
-    id: ID!
+    adventureId: ID!
     title: String!
     description: String!
     completed: Boolean
   ): Quest!
+  updateQuest(
+    id: ID!
+    title: String
+    description: String
+    completed: Boolean
+  ): Quest
+  deleteQuest(id: ID!): Quest
 }
