@@ -5,7 +5,21 @@ import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 
+import Quest from './Quest'
+import Session from './Session'
 import Title from './Title'
+
+const StyledAdventure = styled.div`
+  .dates {
+    font-size: 0.8em;
+  }
+
+  .additional-details {
+    display: grid;
+    grid-gap: 2em;
+    grid-template-columns: repeat(auto-fit, minmax(30em, 1fr));
+  }
+`
 
 export const SINGLE_ADVENTURE_QUERY = gql`
   query SINGLE_ADVENTURE_QUERY($id: ID!) {
@@ -15,13 +29,22 @@ export const SINGLE_ADVENTURE_QUERY = gql`
       description
       createdAt
       updatedAt
+      sessions(orderBy: title_ASC) {
+        id
+        title
+        description
+        createdAt
+        updatedAt
+      }
+      quests(orderBy: title_ASC) {
+        id
+        title
+        description
+        completed
+        createdAt
+        updatedAt
+      }
     }
-  }
-`
-
-const StyledAdventure = styled.div`
-  .dates {
-    font-size: 0.8em;
   }
 `
 
@@ -52,22 +75,55 @@ const SingleAdventure = props => (
               {' | '}
               Updated <TimeAgo date={adventure.updatedAt} />
             </p>
+
+            <p>
+              <Link
+                href={{
+                  pathname: '/update-adventure',
+                  query: { id: adventure.id }
+                }}
+              >
+                <a>Update Adventure</a>
+              </Link>
+            </p>
           </header>
 
-          <section>
+          <section className='description'>
+            <h2>Description</h2>
+
             <p>{adventure.description}</p>
           </section>
 
-          <footer>
-            <Link
-              href={{
-                pathname: '/update-adventure',
-                query: { id: adventure.id }
-              }}
-            >
-              <a>Update Adventure</a>
-            </Link>
-          </footer>
+          <div className='additional-details'>
+            <section className='sessions'>
+              <h2>Sessions</h2>
+
+              {adventure.sessions.length === 0 ? (
+                <p>
+                  Well! There's no sessions recorded yet. Record your notes!
+                </p>
+              ) : (
+                adventure.sessions.map(session => (
+                  <Session key={session.id} session={session} />
+                ))
+              )}
+            </section>
+
+            <section className='quests'>
+              <h2>Quests</h2>
+
+              {adventure.quests.length === 0 ? (
+                <p>
+                  No quests yet. Feel free to set one up. Or you can enjoy your
+                  own whims. Either way, have fun!
+                </p>
+              ) : (
+                adventure.quests.map(quest => (
+                  <Quest key={quest.id} quest={quest} />
+                ))
+              )}
+            </section>
+          </div>
         </StyledAdventure>
       )
     }}

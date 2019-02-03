@@ -26,7 +26,7 @@ const Mutation = {
   },
 
   async createSession (parent, args, ctx, info) {
-    const { id: adventureId, title, description } = args
+    const { adventureId, title, description } = args
 
     const adventure = await db.query.adventure({ where: { id: adventureId } })
 
@@ -59,7 +59,7 @@ const Mutation = {
   },
 
   async createQuest (parent, args, ctx, info) {
-    const { id: adventureId, title, description, completed = false } = args
+    const { adventureId, title, description, completed = false } = args
 
     const adventure = await db.query.adventure({ where: { id: adventureId } })
 
