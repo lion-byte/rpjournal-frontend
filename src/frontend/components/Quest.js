@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import styled from 'styled-components'
 
 const StyledQuest = styled.article`
@@ -16,7 +17,11 @@ const Quest = props => {
 
   return (
     <StyledQuest>
-      <h1>{quest.title}</h1>
+      <h1>
+        <Link href={{ pathname: '/quest', query: { id: quest.id } }}>
+          <a>{quest.title}</a>
+        </Link>
+      </h1>
 
       <p className='quest-status'>
         [{quest.completed ? 'Completed' : 'In Progress'}]

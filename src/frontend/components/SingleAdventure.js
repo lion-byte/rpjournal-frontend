@@ -10,14 +10,39 @@ import Session from './Session'
 import Title from './Title'
 
 const StyledAdventure = styled.div`
-  .dates {
-    font-size: 0.8em;
+  & > header {
+    .dates {
+      font-size: 0.8em;
+    }
+
+    .menu {
+      a {
+        background-color: ${props => props.theme.primaryColor};
+        border-radius: 1em;
+        color: ${props => props.theme.white};
+        display: inline-block;
+        font-size: 0.8em;
+        font-weight: bold;
+        margin: 0 0.5em 0.5em 0;
+        padding: 0.5em 0.75em;
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+          text-decoration: underline;
+        }
+      }
+    }
   }
 
   .additional-details {
     display: grid;
     grid-gap: 2em;
-    grid-template-columns: repeat(auto-fit, minmax(30em, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(18em, 1fr));
+
+    .sessions,
+    .quests {
+    }
   }
 `
 
@@ -71,12 +96,20 @@ const SingleAdventure = props => (
             <h1>{adventure.title}</h1>
 
             <p className='dates'>
-              Created <TimeAgo date={adventure.createdAt} />
-              {' | '}
-              Updated <TimeAgo date={adventure.updatedAt} />
+              <span>
+                Created <TimeAgo date={adventure.createdAt} />
+              </span>
+
+              <span>
+                Updated <TimeAgo date={adventure.updatedAt} />
+              </span>
             </p>
 
-            <p>
+            <div className='menu'>
+              <a href='#'>+ New Session</a>
+
+              <a href='#'>+ New Quest</a>
+
               <Link
                 href={{
                   pathname: '/update-adventure',
@@ -85,23 +118,17 @@ const SingleAdventure = props => (
               >
                 <a>Update Adventure</a>
               </Link>
-            </p>
+            </div>
           </header>
 
-          <section className='description'>
-            <h2>Description</h2>
-
-            <p>{adventure.description}</p>
-          </section>
+          <p>{adventure.description}</p>
 
           <div className='additional-details'>
             <section className='sessions'>
-              <h2>Sessions</h2>
+              <h3>Sessions</h3>
 
               {adventure.sessions.length === 0 ? (
-                <p>
-                  Well! There's no sessions recorded yet. Record your notes!
-                </p>
+                <p>No sessions yet.</p>
               ) : (
                 adventure.sessions.map(session => (
                   <Session key={session.id} session={session} />
@@ -110,13 +137,10 @@ const SingleAdventure = props => (
             </section>
 
             <section className='quests'>
-              <h2>Quests</h2>
+              <h3>Quests</h3>
 
               {adventure.quests.length === 0 ? (
-                <p>
-                  No quests yet. Feel free to set one up. Or you can enjoy your
-                  own whims. Either way, have fun!
-                </p>
+                <p>No quests yet.</p>
               ) : (
                 adventure.quests.map(quest => (
                   <Quest key={quest.id} quest={quest} />

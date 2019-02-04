@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import styled from 'styled-components'
 
 const StyledSession = styled.article``
@@ -12,7 +13,11 @@ const Session = props => {
 
   return (
     <StyledSession>
-      <h1>{session.title}</h1>
+      <h1>
+        <Link href={{ pathname: '/session', query: { id: session.id } }}>
+          <a>{session.title}</a>
+        </Link>
+      </h1>
 
       <p>{session.description}</p>
     </StyledSession>

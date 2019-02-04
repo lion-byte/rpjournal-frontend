@@ -15,6 +15,11 @@ const StyledNav = styled.nav`
     line-height: inherit;
     padding: 0.25em 0.5em;
     text-decoration: none;
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+    }
   }
 
   .menu-button {
