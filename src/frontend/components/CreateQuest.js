@@ -7,16 +7,18 @@ import Form from './styles/Form'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
 import Title from './Title'
 
-export const CREATE_SESSION_MUTATION = gql`
-  mutation CREATE_SESSION_MUTATION(
+export const CREATE_QUEST_MUTATION = gql`
+  mutation CREATE_QUEST_MUTATION(
     $adventureId: ID!
     $title: String!
     $description: String!
+    $completed: Boolean
   ) {
-    createSession(
+    createQuest(
       adventureId: $adventureId
       title: $title
       description: $description
+      completed: $completed
     ) {
       id
     }
@@ -24,65 +26,67 @@ export const CREATE_SESSION_MUTATION = gql`
 `
 
 /**
- * @typedef {object} CreateSessionProps
+ * @typedef {object} CreateQuestProps
  * @property {string} adventureId
  */
 
-/** @augments {PureComponent<CreateSessionProps>} */
-export class CreateSession extends PureComponent {
+/** @augments {PureComponent<CreateQuestProps>} */
+export class CreateQuest extends PureComponent {
   static defaultProps = {
     adventureId: ''
   }
 
   state = {
     title: '',
-    description: ''
+    description: '',
+    completed: false
   }
 
   /**
    * @param {React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>} event
    */
   handleChange = event => {
-    const { name, value } = event.target
+    // @ts-ignore
+    const { type, name, checked, value } = event.target
 
-    this.setState({ [name]: value })
+    this.setState({ [name]: type === 'checkbox' ? checked : value })
   }
 
   /**
    * @param {React.FormEvent<HTMLFormElement>} event
-   * @param {any} createSessionMutation
+   * @param {any} createQuestMutation
    */
-  createSession = async (event, createSessionMutation) => {
+  createQuest = async (event, createQuestMutation) => {
     event.preventDefault()
 
-    const { data } = await createSessionMutation()
+    const { data } = await createQuestMutation()
 
     Router.push({
-      pathname: '/session',
-      query: { id: data.createSession.id }
+      pathname: '/quest',
+      query: { id: data.createQuest.id }
     })
   }
 
   render () {
     const {
       props: { adventureId },
-      state: { title, description }
+      state: { title, description, completed }
     } = this
 
     return (
       <Mutation
-        mutation={CREATE_SESSION_MUTATION}
-        variables={{ adventureId, title, description }}
+        mutation={CREATE_QUEST_MUTATION}
+        variables={{ adventureId, title, description, completed }}
         refetchQueries={[
           { query: SINGLE_ADVENTURE_QUERY, variables: { id: adventureId } }
         ]}
       >
-        {(createSession, { loading }) => (
+        {(createQuest, { loading }) => (
           <Form
-            onSubmit={event => this.createSession(event, createSession)}
+            onSubmit={event => this.createQuest(event, createQuest)}
             aria-busy={loading}
           >
-            <Title title='New Session' />
+            <Title title='New Quest' />
 
             <fieldset disabled={loading}>
               <label htmlFor='title'>
@@ -108,7 +112,18 @@ export class CreateSession extends PureComponent {
                 />
               </label>
 
-              <button type='submit'>Create Session</button>
+              <label htmlFor='completed'>
+                Completed
+                <input
+                  id='completed'
+                  type='checkbox'
+                  name='completed'
+                  checked={completed}
+                  onChange={this.handleChange}
+                />
+              </label>
+
+              <button type='submit'>Create Quest</button>
             </fieldset>
           </Form>
         )}
@@ -117,4 +132,4 @@ export class CreateSession extends PureComponent {
   }
 }
 
-export default CreateSession
+export default CreateQuest

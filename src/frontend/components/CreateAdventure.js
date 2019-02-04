@@ -34,7 +34,7 @@ export class CreateAdventure extends PureComponent {
    * @param {React.FormEvent<HTMLFormElement>} event
    * @param {any} createAdventureMutation
    */
-  handleSubmit = async (event, createAdventureMutation) => {
+  createAdventure = async (event, createAdventureMutation) => {
     event.preventDefault()
 
     const { data } = await createAdventureMutation()
@@ -56,7 +56,7 @@ export class CreateAdventure extends PureComponent {
       >
         {(createAdventure, { loading }) => (
           <Form
-            onSubmit={event => this.handleSubmit(event, createAdventure)}
+            onSubmit={event => this.createAdventure(event, createAdventure)}
             aria-busy={loading}
           >
             <Title title='New Adventure' />

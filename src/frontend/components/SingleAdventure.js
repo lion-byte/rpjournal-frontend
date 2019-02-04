@@ -11,20 +11,29 @@ import Title from './Title'
 
 const StyledAdventure = styled.div`
   & > header {
-    .dates {
-      font-size: 0.8em;
-    }
-
     .menu {
-      a {
+      align-items: center;
+      display: flex;
+      flex-flow: row;
+      flex-wrap: wrap;
+      font-size: 0.8em;
+
+      .dates span,
+      .options a {
+        display: inline-block;
+        margin: 0 0.5em 0.5em 0;
+        padding: 0.5em 0.75em;
+      }
+
+      .dates span {
+        padding: 0 0.5em 0 0;
+      }
+
+      .options a {
         background-color: ${props => props.theme.primaryColor};
         border-radius: 1em;
         color: ${props => props.theme.white};
-        display: inline-block;
-        font-size: 0.8em;
         font-weight: bold;
-        margin: 0 0.5em 0.5em 0;
-        padding: 0.5em 0.75em;
         text-decoration: none;
 
         &:hover,
@@ -39,10 +48,6 @@ const StyledAdventure = styled.div`
     display: grid;
     grid-gap: 2em;
     grid-template-columns: repeat(auto-fit, minmax(18em, 1fr));
-
-    .sessions,
-    .quests {
-    }
   }
 `
 
@@ -94,30 +99,41 @@ const SingleAdventure = props => (
 
           <header>
             <h1>{adventure.title}</h1>
-
-            <p className='dates'>
-              <span>
-                Created <TimeAgo date={adventure.createdAt} />
-              </span>
-
-              <span>
-                Updated <TimeAgo date={adventure.updatedAt} />
-              </span>
-            </p>
-
             <div className='menu'>
-              <a href='#'>+ New Session</a>
-
-              <a href='#'>+ New Quest</a>
-
-              <Link
-                href={{
-                  pathname: '/update-adventure',
-                  query: { id: adventure.id }
-                }}
-              >
-                <a>Update Adventure</a>
-              </Link>
+              <div className='dates'>
+                <span>
+                  Created <TimeAgo date={adventure.createdAt} />
+                </span>
+                <span>
+                  Updated <TimeAgo date={adventure.updatedAt} />
+                </span>
+              </div>
+              <div className='options'>
+                <Link
+                  href={{
+                    pathname: '/new-session',
+                    query: { adventureId: adventure.id }
+                  }}
+                >
+                  <a>+ New Session</a>
+                </Link>
+                <Link
+                  href={{
+                    pathname: '/new-quest',
+                    query: { adventureId: adventure.id }
+                  }}
+                >
+                  <a>+ New Quest</a>
+                </Link>
+                <Link
+                  href={{
+                    pathname: '/update-adventure',
+                    query: { id: adventure.id }
+                  }}
+                >
+                  <a>Update Adventure</a>
+                </Link>
+              </div>
             </div>
           </header>
 
@@ -125,7 +141,7 @@ const SingleAdventure = props => (
 
           <div className='additional-details'>
             <section className='sessions'>
-              <h3>Sessions</h3>
+              <h2>Sessions</h2>
 
               {adventure.sessions.length === 0 ? (
                 <p>No sessions yet.</p>
@@ -137,7 +153,7 @@ const SingleAdventure = props => (
             </section>
 
             <section className='quests'>
-              <h3>Quests</h3>
+              <h2>Quests</h2>
 
               {adventure.quests.length === 0 ? (
                 <p>No quests yet.</p>
