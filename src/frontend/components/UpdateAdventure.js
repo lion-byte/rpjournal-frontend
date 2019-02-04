@@ -21,7 +21,12 @@ export const UPDATE_ADVENTURE_MUTATION = gql`
 `
 
 /**
- * @augments {PureComponent<{ id: string }>}
+ * @typedef {object} UpdateAdventureProps
+ * @property {string} id
+ */
+
+/**
+ * @augments {PureComponent<UpdateAdventureProps>}
  */
 export class UpdateAdventure extends PureComponent {
   static defaultProps = {
