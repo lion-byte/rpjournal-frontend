@@ -37,15 +37,15 @@ export const SINGLE_SESSION_QUERY = gql`
  */
 const SingleSession = props => (
   <Query query={SINGLE_SESSION_QUERY} variables={{ id: props.id }}>
-    {({ loading, data: { session } }) => {
+    {({ loading, data }) => {
+      /** @type {SessionModel} */
+      const session = data.session
+
       if (loading) {
         return <p>Loading...</p>
       } else if (!session) {
         return <p>No session found for ID {props.id}</p>
       }
-
-      /** @type {AdventureModel} */
-      const adventure = session.adventure
 
       return (
         <StyledSingleSession>
@@ -64,15 +64,22 @@ const SingleSession = props => (
                   <Link
                     href={{
                       pathname: '/adventure',
-                      query: { id: adventure.id }
+                      query: { id: session.adventure.id }
                     }}
                   >
-                    <a>{adventure.title}</a>
+                    <a>{session.adventure.title}</a>
                   </Link>
                 </span>
               </div>
               <div className='options'>
-                <a href='#'>Update Session</a>
+                <Link
+                  href={{
+                    pathname: '/update-session',
+                    query: { id: session.id }
+                  }}
+                >
+                  <a>Update Session</a>
+                </Link>
               </div>
             </DetailsMenu>
           </header>
@@ -83,11 +90,11 @@ const SingleSession = props => (
 
           <footer>
             <h2>Other Sessions</h2>
-            {adventure.sessions.length === 0 ? (
+            {session.adventure.sessions.length === 0 ? (
               <p>No other sessions.</p>
             ) : (
               <div className='other-sessions'>
-                {adventure.sessions.map(otherSession => (
+                {session.adventure.sessions.map(otherSession => (
                   <Session key={otherSession.id} session={otherSession} />
                 ))}
               </div>
