@@ -5,45 +5,12 @@ import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 
+import DetailsMenu from './styles/DetailsMenu'
 import Quest from './Quest'
 import Session from './Session'
 import Title from './Title'
 
 const StyledAdventure = styled.div`
-  & > header {
-    .menu {
-      align-items: center;
-      display: flex;
-      flex-flow: row;
-      flex-wrap: wrap;
-      font-size: 0.8em;
-
-      .dates span,
-      .options a {
-        display: inline-block;
-        margin: 0 0.5em 0.5em 0;
-        padding: 0.5em 0.75em;
-      }
-
-      .dates span {
-        padding: 0 0.5em 0 0;
-      }
-
-      .options a {
-        background-color: ${props => props.theme.primaryColor};
-        border-radius: 1em;
-        color: ${props => props.theme.white};
-        font-weight: bold;
-        text-decoration: none;
-
-        &:hover,
-        &:focus {
-          text-decoration: underline;
-        }
-      }
-    }
-  }
-
   .additional-details {
     display: grid;
     grid-gap: 2em;
@@ -63,16 +30,12 @@ export const SINGLE_ADVENTURE_QUERY = gql`
         id
         title
         description
-        createdAt
-        updatedAt
       }
       quests(orderBy: title_ASC) {
         id
         title
         description
         completed
-        createdAt
-        updatedAt
       }
     }
   }
@@ -90,7 +53,7 @@ const SingleAdventure = props => (
       } else if (error) {
         return <p>Error. {error.message}</p>
       } else if (!adventure) {
-        return <p>Nothing found with this id: {props.id}</p>
+        return <p>No adventure found for ID {props.id}</p>
       }
 
       return (
@@ -99,8 +62,8 @@ const SingleAdventure = props => (
 
           <header>
             <h1>{adventure.title}</h1>
-            <div className='menu'>
-              <div className='dates'>
+            <DetailsMenu>
+              <div className='details'>
                 <span>
                   Created <TimeAgo date={adventure.createdAt} />
                 </span>
@@ -134,7 +97,7 @@ const SingleAdventure = props => (
                   <a>Update Adventure</a>
                 </Link>
               </div>
-            </div>
+            </DetailsMenu>
           </header>
 
           <p>{adventure.description}</p>

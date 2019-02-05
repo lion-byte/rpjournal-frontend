@@ -65,7 +65,10 @@ export class UpdateAdventure extends PureComponent {
         <Title title='Update Adventure' />
 
         <Query query={SINGLE_ADVENTURE_QUERY} variables={{ id }}>
-          {({ loading, data: { adventure } }) => {
+          {({ loading, data }) => {
+            /** @type {AdventureModel} */
+            const adventure = data.adventure
+
             if (loading) {
               return <p>Loading...</p>
             } else if (!adventure) {
@@ -73,50 +76,54 @@ export class UpdateAdventure extends PureComponent {
             }
 
             return (
-              <Mutation
-                mutation={UPDATE_ADVENTURE_MUTATION}
-                variables={{ id, ...state }}
-                refetchQueries={[
-                  { query: SINGLE_ADVENTURE_QUERY, variables: { id } },
-                  { query: ADVENTURES_QUERY }
-                ]}
-              >
-                {(updateAdventure, { loading, error }) => (
-                  <Form
-                    onSubmit={event =>
-                      this.updateAdventure(event, updateAdventure)
-                    }
-                    aria-busy={loading}
-                  >
-                    <fieldset disabled={loading}>
-                      <label htmlFor='title'>
-                        Title
-                        <input
-                          id='title'
-                          type='text'
-                          name='title'
-                          defaultValue={adventure.title}
-                          onChange={this.handleChange}
-                          required
-                        />
-                      </label>
+              <div>
+                <h1>Updating - {adventure.title}</h1>
 
-                      <label htmlFor='description'>
-                        Description
-                        <textarea
-                          id='description'
-                          name='description'
-                          defaultValue={adventure.description}
-                          onChange={this.handleChange}
-                          required
-                        />
-                      </label>
+                <Mutation
+                  mutation={UPDATE_ADVENTURE_MUTATION}
+                  variables={{ id, ...state }}
+                  refetchQueries={[
+                    { query: SINGLE_ADVENTURE_QUERY, variables: { id } },
+                    { query: ADVENTURES_QUERY }
+                  ]}
+                >
+                  {(updateAdventure, { loading, error }) => (
+                    <Form
+                      onSubmit={event =>
+                        this.updateAdventure(event, updateAdventure)
+                      }
+                      aria-busy={loading}
+                    >
+                      <fieldset disabled={loading}>
+                        <label htmlFor='title'>
+                          Title
+                          <input
+                            id='title'
+                            type='text'
+                            name='title'
+                            defaultValue={adventure.title}
+                            onChange={this.handleChange}
+                            required
+                          />
+                        </label>
 
-                      <button type='submit'>Update Adventure</button>
-                    </fieldset>
-                  </Form>
-                )}
-              </Mutation>
+                        <label htmlFor='description'>
+                          Description
+                          <textarea
+                            id='description'
+                            name='description'
+                            defaultValue={adventure.description}
+                            onChange={this.handleChange}
+                            required
+                          />
+                        </label>
+
+                        <button type='submit'>Update Adventure</button>
+                      </fieldset>
+                    </Form>
+                  )}
+                </Mutation>
+              </div>
             )
           }}
         </Query>

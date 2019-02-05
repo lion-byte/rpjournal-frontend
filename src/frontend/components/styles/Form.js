@@ -15,10 +15,6 @@ const Form = styled.form`
   padding: 1.5em;
   line-height: 1.5;
   font-weight: 600;
-  &[aria-busy='true']::before {
-    background-size: 50% auto;
-    animation: ${loading} 1.5s linear infinite;
-  }
   label {
     display: block;
     margin-bottom: 1em;
@@ -56,6 +52,10 @@ const Form = styled.form`
     padding: 0;
     &[disabled] {
       opacity: 0.5;
+    }
+    &[aria-busy='true']::before {
+      background-size: 50% auto;
+      animation: ${loading} 1.5s linear infinite;
     }
     &::before {
       height: 10px;

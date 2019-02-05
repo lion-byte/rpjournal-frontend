@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react'
-import { Mutation } from 'react-apollo'
+import { Query, Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import Router from 'next/router'
 
 import Form from './styles/Form'
+import Quest from './Quest'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
 import Title from './Title'
 
@@ -12,13 +13,11 @@ export const CREATE_QUEST_MUTATION = gql`
     $adventureId: ID!
     $title: String!
     $description: String!
-    $completed: Boolean
   ) {
     createQuest(
       adventureId: $adventureId
       title: $title
       description: $description
-      completed: $completed
     ) {
       id
     }
@@ -38,18 +37,16 @@ export class CreateQuest extends PureComponent {
 
   state = {
     title: '',
-    description: '',
-    completed: false
+    description: ''
   }
 
   /**
    * @param {React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>} event
    */
   handleChange = event => {
-    // @ts-ignore
-    const { type, name, checked, value } = event.target
+    const { name, value } = event.target
 
-    this.setState({ [name]: type === 'checkbox' ? checked : value })
+    this.setState({ [name]: value })
   }
 
   /**
@@ -70,64 +67,90 @@ export class CreateQuest extends PureComponent {
   render () {
     const {
       props: { adventureId },
-      state: { title, description, completed }
+      state: { title, description }
     } = this
 
     return (
-      <Mutation
-        mutation={CREATE_QUEST_MUTATION}
-        variables={{ adventureId, title, description, completed }}
-        refetchQueries={[
-          { query: SINGLE_ADVENTURE_QUERY, variables: { id: adventureId } }
-        ]}
-      >
-        {(createQuest, { loading }) => (
-          <Form
-            onSubmit={event => this.createQuest(event, createQuest)}
-            aria-busy={loading}
-          >
-            <Title title='New Quest' />
+      <Query query={SINGLE_ADVENTURE_QUERY} variables={{ id: adventureId }}>
+        {({ loading, data }) => {
+          /** @type {AdventureModel} */
+          const adventure = data.adventure
 
-            <fieldset disabled={loading}>
-              <label htmlFor='title'>
-                Title
-                <input
-                  id='title'
-                  type='text'
-                  name='title'
-                  value={title}
-                  onChange={this.handleChange}
-                  required
-                />
-              </label>
+          if (loading) {
+            return <p>Loading...</p>
+          } else if (!adventure) {
+            return <p>No adventure found for ID {adventureId}.</p>
+          }
 
-              <label htmlFor='description'>
-                Description
-                <textarea
-                  id='description'
-                  name='description'
-                  value={description}
-                  onChange={this.handleChange}
-                  required
-                />
-              </label>
+          return (
+            <div>
+              <Title title='New Quest' />
+              <header>
+                <h1>
+                  Create New Quest for <u>{adventure.title}</u>
+                </h1>
+              </header>
 
-              <label htmlFor='completed'>
-                Completed
-                <input
-                  id='completed'
-                  type='checkbox'
-                  name='completed'
-                  checked={completed}
-                  onChange={this.handleChange}
-                />
-              </label>
+              <Mutation
+                mutation={CREATE_QUEST_MUTATION}
+                variables={{ adventureId, title, description }}
+                refetchQueries={[
+                  {
+                    query: SINGLE_ADVENTURE_QUERY,
+                    variables: { id: adventureId }
+                  }
+                ]}
+              >
+                {(createQuest, { loading }) => (
+                  <Form
+                    onSubmit={event => this.createQuest(event, createQuest)}
+                  >
+                    <fieldset aria-busy={loading} disabled={loading}>
+                      <label htmlFor='title'>
+                        Title
+                        <input
+                          id='title'
+                          type='text'
+                          name='title'
+                          value={title}
+                          onChange={this.handleChange}
+                          required
+                        />
+                      </label>
 
-              <button type='submit'>Create Quest</button>
-            </fieldset>
-          </Form>
-        )}
-      </Mutation>
+                      <label htmlFor='description'>
+                        Description
+                        <textarea
+                          id='description'
+                          name='description'
+                          value={description}
+                          onChange={this.handleChange}
+                          required
+                        />
+                      </label>
+
+                      <button type='submit'>Create Quest</button>
+                    </fieldset>
+                  </Form>
+                )}
+              </Mutation>
+
+              <footer>
+                <h2>Other Quests</h2>
+                {adventure.quests.length === 0 ? (
+                  <p>No other quests. Looks like this is your first one!</p>
+                ) : (
+                  <div className='other-quests'>
+                    {adventure.quests.map(otherQuest => (
+                      <Quest key={otherQuest.id} quest={otherQuest} />
+                    ))}
+                  </div>
+                )}
+              </footer>
+            </div>
+          )
+        }}
+      </Query>
     )
   }
 }

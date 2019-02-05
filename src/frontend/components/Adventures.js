@@ -1,11 +1,13 @@
 import React from 'react'
+import Link from 'next/link'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 
+import DetailsMenu from './styles/DetailsMenu'
 import Adventure from './Adventure'
 
-const StyledList = styled.div`
+const StyledAdventuresPage = styled.div`
   .list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(20em, 1fr));
@@ -26,19 +28,27 @@ export const ADVENTURES_QUERY = gql`
 `
 
 const Adventures = () => (
-  <StyledList>
-    <h1>Adventures</h1>
+  <StyledAdventuresPage>
+    <header>
+      <h1>Adventures</h1>
+      <DetailsMenu>
+        <div className='options'>
+          <Link href='/new-adventure'>
+            <a>+ New Adventure</a>
+          </Link>
+        </div>
+      </DetailsMenu>
+    </header>
 
     <Query query={ADVENTURES_QUERY}>
-      {({ loading, error, data: { adventures } }) => {
-        if (loading || error || !Array.isArray(adventures)) {
+      {({ loading, error, data }) => {
+        /** @type {ReadonlyArray<AdventureModel>} */
+        const adventures = data.adventures
+
+        if (loading || error) {
           return null
         } else if (adventures.length === 0) {
-          return (
-            <p>
-              Oh. No adventures have been written yet. Care to start your own?
-            </p>
-          )
+          return <p>No adventures have been written yet.</p>
         }
 
         return (
@@ -50,7 +60,7 @@ const Adventures = () => (
         )
       }}
     </Query>
-  </StyledList>
+  </StyledAdventuresPage>
 )
 
 export default Adventures

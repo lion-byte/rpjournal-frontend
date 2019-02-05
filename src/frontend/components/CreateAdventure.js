@@ -49,47 +49,49 @@ export class CreateAdventure extends PureComponent {
     const { title, description } = this.state
 
     return (
-      <Mutation
-        mutation={CREATE_ADVENTURE_MUTATION}
-        variables={{ title, description }}
-        refetchQueries={[{ query: ADVENTURES_QUERY }]}
-      >
-        {(createAdventure, { loading }) => (
-          <Form
-            onSubmit={event => this.createAdventure(event, createAdventure)}
-            aria-busy={loading}
-          >
-            <Title title='New Adventure' />
+      <div>
+        <Title title='New Adventure' />
+        <h1>Create New Adventure</h1>
 
-            <fieldset disabled={loading}>
-              <label htmlFor='title'>
-                Title
-                <input
-                  id='title'
-                  type='text'
-                  name='title'
-                  value={title}
-                  onChange={this.handleChange}
-                  required
-                />
-              </label>
+        <Mutation
+          mutation={CREATE_ADVENTURE_MUTATION}
+          variables={{ title, description }}
+          refetchQueries={[{ query: ADVENTURES_QUERY }]}
+        >
+          {(createAdventure, { loading }) => (
+            <Form
+              onSubmit={event => this.createAdventure(event, createAdventure)}
+            >
+              <fieldset aria-busy={loading} disabled={loading}>
+                <label htmlFor='title'>
+                  Title
+                  <input
+                    id='title'
+                    type='text'
+                    name='title'
+                    value={title}
+                    onChange={this.handleChange}
+                    required
+                  />
+                </label>
 
-              <label htmlFor='description'>
-                Description
-                <textarea
-                  id='description'
-                  name='description'
-                  value={description}
-                  onChange={this.handleChange}
-                  required
-                />
-              </label>
+                <label htmlFor='description'>
+                  Description
+                  <textarea
+                    id='description'
+                    name='description'
+                    value={description}
+                    onChange={this.handleChange}
+                    required
+                  />
+                </label>
 
-              <button type='submit'>Create Adventure</button>
-            </fieldset>
-          </Form>
-        )}
-      </Mutation>
+                <button type='submit'>Create Adventure</button>
+              </fieldset>
+            </Form>
+          )}
+        </Mutation>
+      </div>
     )
   }
 }

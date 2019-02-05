@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react'
-import { Mutation } from 'react-apollo'
+import { Query, Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import Router from 'next/router'
 
 import Form from './styles/Form'
+import Session from './Session'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
 import Title from './Title'
 
@@ -70,49 +71,85 @@ export class CreateSession extends PureComponent {
     } = this
 
     return (
-      <Mutation
-        mutation={CREATE_SESSION_MUTATION}
-        variables={{ adventureId, title, description }}
-        refetchQueries={[
-          { query: SINGLE_ADVENTURE_QUERY, variables: { id: adventureId } }
-        ]}
-      >
-        {(createSession, { loading }) => (
-          <Form
-            onSubmit={event => this.createSession(event, createSession)}
-            aria-busy={loading}
-          >
-            <Title title='New Session' />
+      <Query query={SINGLE_ADVENTURE_QUERY} variables={{ id: adventureId }}>
+        {({ loading, data }) => {
+          /** @type {AdventureModel} */
+          const adventure = data.adventure
+          if (loading) {
+            return <p>Loading...</p>
+          } else if (!adventure) {
+            return <p>No adventure found for ID {adventureId}.</p>
+          }
 
-            <fieldset disabled={loading}>
-              <label htmlFor='title'>
-                Title
-                <input
-                  id='title'
-                  type='text'
-                  name='title'
-                  value={title}
-                  onChange={this.handleChange}
-                  required
-                />
-              </label>
+          return (
+            <div>
+              <Title title='New Session' />
+              <header>
+                <h1>
+                  Create New Session for <u>{adventure.title}</u>
+                </h1>
+              </header>
 
-              <label htmlFor='description'>
-                Description
-                <textarea
-                  id='description'
-                  name='description'
-                  value={description}
-                  onChange={this.handleChange}
-                  required
-                />
-              </label>
+              <Mutation
+                mutation={CREATE_SESSION_MUTATION}
+                variables={{ adventureId, title, description }}
+                refetchQueries={[
+                  {
+                    query: SINGLE_ADVENTURE_QUERY,
+                    variables: { id: adventureId }
+                  }
+                ]}
+              >
+                {(createSession, { loading }) => (
+                  <Form
+                    onSubmit={event => this.createSession(event, createSession)}
+                  >
+                    <fieldset aria-busy={loading} disabled={loading}>
+                      <label htmlFor='title'>
+                        Title
+                        <input
+                          id='title'
+                          type='text'
+                          name='title'
+                          value={title}
+                          onChange={this.handleChange}
+                          required
+                        />
+                      </label>
 
-              <button type='submit'>Create Session</button>
-            </fieldset>
-          </Form>
-        )}
-      </Mutation>
+                      <label htmlFor='description'>
+                        Description
+                        <textarea
+                          id='description'
+                          name='description'
+                          value={description}
+                          onChange={this.handleChange}
+                          required
+                        />
+                      </label>
+
+                      <button type='submit'>Create Session</button>
+                    </fieldset>
+                  </Form>
+                )}
+              </Mutation>
+
+              <footer>
+                <h2>Other Sessions</h2>
+                {adventure.sessions.length === 0 ? (
+                  <p>No other sessions. Looks like this is your first one!</p>
+                ) : (
+                  <div className='other-sessions'>
+                    {adventure.sessions.map(otherSession => (
+                      <Session key={otherSession.id} session={otherSession} />
+                    ))}
+                  </div>
+                )}
+              </footer>
+            </div>
+          )
+        }}
+      </Query>
     )
   }
 }
