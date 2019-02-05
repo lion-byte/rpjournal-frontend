@@ -12,6 +12,7 @@ interface QuestModel {
   title: string
   description: string
   completed: boolean
+  adventure?: AdventureModel
   [key: string]: any
 }
 
@@ -19,5 +20,6 @@ interface SessionModel {
   id: string
   title: string
   description: string
+  adventure?: AdventureModel
   [key: string]: any
 }

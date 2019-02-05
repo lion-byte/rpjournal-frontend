@@ -4,31 +4,29 @@ import gql from 'graphql-tag'
 import Router from 'next/router'
 
 import Form from './styles/Form'
-import { ADVENTURES_QUERY } from './Adventures'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
+import { SINGLE_SESSION_QUERY } from './SingleSession'
 import Title from './Title'
 
-export const UPDATE_ADVENTURE_MUTATION = gql`
-  mutation UPDATE_ADVENTURE_MUTATION(
+export const UPDATE_SESSION_MUTATION = gql`
+  mutation UPDATE_SESSION_MUTATION(
     $id: ID!
     $title: String
     $description: String
   ) {
-    updateAdventure(id: $id, title: $title, description: $description) {
+    updateSession(id: $id, title: $title, description: $description) {
       id
     }
   }
 `
 
 /**
- * @typedef {object} UpdateAdventureProps
+ * @typedef {object} UpdateSessionProps
  * @property {string} id
  */
 
-/**
- * @augments {PureComponent<UpdateAdventureProps>}
- */
-export class UpdateAdventure extends PureComponent {
+/** @augments {PureComponent<UpdateSessionProps>} */
+export class UpdateSession extends PureComponent {
   static defaultProps = {
     id: ''
   }
@@ -41,15 +39,15 @@ export class UpdateAdventure extends PureComponent {
     this.setState({ [name]: value })
   }
 
-  updateAdventure = async (event, updateAdventureMutation) => {
+  updateSession = async (event, updateSessionMutation) => {
     event.preventDefault()
 
-    const { data } = await updateAdventureMutation()
+    const { data } = await updateSessionMutation()
 
-    if (data.updateAdventure) {
+    if (data.updateSession) {
       Router.push({
-        pathname: '/adventure',
-        query: { id: data.updateAdventure.id }
+        pathname: '/session',
+        query: { id: data.updateSession.id }
       })
     }
   }
@@ -61,37 +59,38 @@ export class UpdateAdventure extends PureComponent {
     } = this
 
     return (
-      <Query query={SINGLE_ADVENTURE_QUERY} variables={{ id }}>
+      <Query query={SINGLE_SESSION_QUERY} variables={{ id }}>
         {({ loading, data }) => {
-          /** @type {AdventureModel} */
-          const adventure = data.adventure
+          /** @type {SessionModel} */
+          const session = data.session
 
           if (loading) {
             return <p>Loading...</p>
-          } else if (!adventure) {
-            return <p>No adventure found for ID {id}</p>
+          } else if (!session) {
+            return <p>No session found for ID {id}</p>
           }
 
           return (
             <div>
-              <Title title='Update Adventure' />
+              <Title title='Update Session' />
               <header>
-                <h1>Updating - {adventure.title}</h1>
+                <h1>Updating - {session.title}</h1>
               </header>
 
               <Mutation
-                mutation={UPDATE_ADVENTURE_MUTATION}
+                mutation={UPDATE_SESSION_MUTATION}
                 variables={{ id, ...state }}
                 refetchQueries={[
-                  { query: SINGLE_ADVENTURE_QUERY, variables: { id } },
-                  { query: ADVENTURES_QUERY }
+                  { query: SINGLE_SESSION_QUERY, variables: { id } },
+                  {
+                    query: SINGLE_ADVENTURE_QUERY,
+                    variables: { id: session.adventure.id }
+                  }
                 ]}
               >
-                {(updateAdventure, { loading, error }) => (
+                {(updateSession, { loading, error }) => (
                   <Form
-                    onSubmit={event =>
-                      this.updateAdventure(event, updateAdventure)
-                    }
+                    onSubmit={event => this.updateSession(event, updateSession)}
                   >
                     <fieldset aria-busy={loading} disabled={loading}>
                       <label htmlFor='title'>
@@ -100,7 +99,7 @@ export class UpdateAdventure extends PureComponent {
                           id='title'
                           type='text'
                           name='title'
-                          defaultValue={adventure.title}
+                          defaultValue={session.title}
                           onChange={this.handleChange}
                           required
                         />
@@ -111,13 +110,13 @@ export class UpdateAdventure extends PureComponent {
                         <textarea
                           id='description'
                           name='description'
-                          defaultValue={adventure.description}
+                          defaultValue={session.description}
                           onChange={this.handleChange}
                           required
                         />
                       </label>
 
-                      <button type='submit'>Update Adventure</button>
+                      <button type='submit'>Update Session</button>
                     </fieldset>
                   </Form>
                 )}
@@ -130,4 +129,4 @@ export class UpdateAdventure extends PureComponent {
   }
 }
 
-export default UpdateAdventure
+export default UpdateSession

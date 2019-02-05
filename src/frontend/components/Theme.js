@@ -22,6 +22,10 @@ const theme = {
 }
 
 const GlobalStyles = createGlobalStyle`
+  * {
+    outline-width: 2px;
+  }
+
   body {
     color: ${props => props.theme.black};
     font-family: ${props => props.theme.baseFont};

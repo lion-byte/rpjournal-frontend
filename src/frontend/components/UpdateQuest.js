@@ -4,31 +4,35 @@ import gql from 'graphql-tag'
 import Router from 'next/router'
 
 import Form from './styles/Form'
-import { ADVENTURES_QUERY } from './Adventures'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
+import { SINGLE_QUEST_QUERY } from './SingleQuest'
 import Title from './Title'
 
-export const UPDATE_ADVENTURE_MUTATION = gql`
-  mutation UPDATE_ADVENTURE_MUTATION(
+export const UPDATE_QUEST_MUTATION = gql`
+  mutation UPDATE_QUEST_MUTATION(
     $id: ID!
     $title: String
     $description: String
+    $completed: Boolean
   ) {
-    updateAdventure(id: $id, title: $title, description: $description) {
+    updateQuest(
+      id: $id
+      title: $title
+      description: $description
+      completed: $completed
+    ) {
       id
     }
   }
 `
 
 /**
- * @typedef {object} UpdateAdventureProps
+ * @typedef {object} UpdateQuestProps
  * @property {string} id
  */
 
-/**
- * @augments {PureComponent<UpdateAdventureProps>}
- */
-export class UpdateAdventure extends PureComponent {
+/** @augments {PureComponent<UpdateQuestProps>} */
+export class UpdateQuest extends PureComponent {
   static defaultProps = {
     id: ''
   }
@@ -41,15 +45,15 @@ export class UpdateAdventure extends PureComponent {
     this.setState({ [name]: value })
   }
 
-  updateAdventure = async (event, updateAdventureMutation) => {
+  updateQuest = async (event, updateQuestMutation) => {
     event.preventDefault()
 
-    const { data } = await updateAdventureMutation()
+    const { data } = await updateQuestMutation()
 
-    if (data.updateAdventure) {
+    if (data.updateQuest) {
       Router.push({
-        pathname: '/adventure',
-        query: { id: data.updateAdventure.id }
+        pathname: '/quest',
+        query: { id: data.updateQuest.id }
       })
     }
   }
@@ -61,37 +65,38 @@ export class UpdateAdventure extends PureComponent {
     } = this
 
     return (
-      <Query query={SINGLE_ADVENTURE_QUERY} variables={{ id }}>
+      <Query query={SINGLE_QUEST_QUERY} variables={{ id }}>
         {({ loading, data }) => {
-          /** @type {AdventureModel} */
-          const adventure = data.adventure
+          /** @type {QuestModel} */
+          const quest = data.quest
 
           if (loading) {
             return <p>Loading...</p>
-          } else if (!adventure) {
-            return <p>No adventure found for ID {id}</p>
+          } else if (!quest) {
+            return <p>No quest found for ID {id}</p>
           }
 
           return (
             <div>
-              <Title title='Update Adventure' />
+              <Title title='Update Quest' />
               <header>
-                <h1>Updating - {adventure.title}</h1>
+                <h1>Updating - {quest.title}</h1>
               </header>
 
               <Mutation
-                mutation={UPDATE_ADVENTURE_MUTATION}
+                mutation={UPDATE_QUEST_MUTATION}
                 variables={{ id, ...state }}
                 refetchQueries={[
-                  { query: SINGLE_ADVENTURE_QUERY, variables: { id } },
-                  { query: ADVENTURES_QUERY }
+                  { query: SINGLE_QUEST_QUERY, variables: { id } },
+                  {
+                    query: SINGLE_ADVENTURE_QUERY,
+                    variables: { id: quest.adventure.id }
+                  }
                 ]}
               >
-                {(updateAdventure, { loading, error }) => (
+                {(updateQuest, { loading, error }) => (
                   <Form
-                    onSubmit={event =>
-                      this.updateAdventure(event, updateAdventure)
-                    }
+                    onSubmit={event => this.updateQuest(event, updateQuest)}
                   >
                     <fieldset aria-busy={loading} disabled={loading}>
                       <label htmlFor='title'>
@@ -100,7 +105,7 @@ export class UpdateAdventure extends PureComponent {
                           id='title'
                           type='text'
                           name='title'
-                          defaultValue={adventure.title}
+                          defaultValue={quest.title}
                           onChange={this.handleChange}
                           required
                         />
@@ -111,13 +116,13 @@ export class UpdateAdventure extends PureComponent {
                         <textarea
                           id='description'
                           name='description'
-                          defaultValue={adventure.description}
+                          defaultValue={quest.description}
                           onChange={this.handleChange}
                           required
                         />
                       </label>
 
-                      <button type='submit'>Update Adventure</button>
+                      <button type='submit'>Update Quest</button>
                     </fieldset>
                   </Form>
                 )}
@@ -130,4 +135,4 @@ export class UpdateAdventure extends PureComponent {
   }
 }
 
-export default UpdateAdventure
+export default UpdateQuest

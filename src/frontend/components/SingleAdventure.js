@@ -5,7 +5,18 @@ import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 
+import DetailsMenu from './styles/DetailsMenu'
+import Quest from './Quest'
+import Session from './Session'
 import Title from './Title'
+
+const StyledAdventure = styled.div`
+  .additional-details {
+    display: grid;
+    grid-gap: 2em;
+    grid-template-columns: repeat(auto-fit, minmax(18em, 1fr));
+  }
+`
 
 export const SINGLE_ADVENTURE_QUERY = gql`
   query SINGLE_ADVENTURE_QUERY($id: ID!) {
@@ -15,13 +26,18 @@ export const SINGLE_ADVENTURE_QUERY = gql`
       description
       createdAt
       updatedAt
+      sessions(orderBy: title_ASC) {
+        id
+        title
+        description
+      }
+      quests(orderBy: title_ASC) {
+        id
+        title
+        description
+        completed
+      }
     }
-  }
-`
-
-const StyledAdventure = styled.div`
-  .dates {
-    font-size: 0.8em;
   }
 `
 
@@ -37,7 +53,7 @@ const SingleAdventure = props => (
       } else if (error) {
         return <p>Error. {error.message}</p>
       } else if (!adventure) {
-        return <p>Nothing found with this id: {props.id}</p>
+        return <p>No adventure found for ID {props.id}</p>
       }
 
       return (
@@ -46,28 +62,71 @@ const SingleAdventure = props => (
 
           <header>
             <h1>{adventure.title}</h1>
-
-            <p className='dates'>
-              Created <TimeAgo date={adventure.createdAt} />
-              {' | '}
-              Updated <TimeAgo date={adventure.updatedAt} />
-            </p>
+            <DetailsMenu>
+              <div className='details'>
+                <span>
+                  Created <TimeAgo date={adventure.createdAt} />
+                </span>
+                <span>
+                  Updated <TimeAgo date={adventure.updatedAt} />
+                </span>
+              </div>
+              <div className='options'>
+                <Link
+                  href={{
+                    pathname: '/new-session',
+                    query: { adventureId: adventure.id }
+                  }}
+                >
+                  <a>+ New Session</a>
+                </Link>
+                <Link
+                  href={{
+                    pathname: '/new-quest',
+                    query: { adventureId: adventure.id }
+                  }}
+                >
+                  <a>+ New Quest</a>
+                </Link>
+                <Link
+                  href={{
+                    pathname: '/update-adventure',
+                    query: { id: adventure.id }
+                  }}
+                >
+                  <a>Update Adventure</a>
+                </Link>
+              </div>
+            </DetailsMenu>
           </header>
 
-          <section>
-            <p>{adventure.description}</p>
-          </section>
+          <p>{adventure.description}</p>
 
-          <footer>
-            <Link
-              href={{
-                pathname: '/update-adventure',
-                query: { id: adventure.id }
-              }}
-            >
-              <a>Update Adventure</a>
-            </Link>
-          </footer>
+          <div className='additional-details'>
+            <section className='sessions'>
+              <h2>Sessions</h2>
+
+              {adventure.sessions.length === 0 ? (
+                <p>No sessions yet.</p>
+              ) : (
+                adventure.sessions.map(session => (
+                  <Session key={session.id} session={session} />
+                ))
+              )}
+            </section>
+
+            <section className='quests'>
+              <h2>Quests</h2>
+
+              {adventure.quests.length === 0 ? (
+                <p>No quests yet.</p>
+              ) : (
+                adventure.quests.map(quest => (
+                  <Quest key={quest.id} quest={quest} />
+                ))
+              )}
+            </section>
+          </div>
         </StyledAdventure>
       )
     }}

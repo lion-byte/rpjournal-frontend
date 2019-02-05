@@ -4,17 +4,17 @@ import gql from 'graphql-tag'
 import Router from 'next/router'
 
 import Form from './styles/Form'
-import Session from './Session'
+import Quest from './Quest'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
 import Title from './Title'
 
-export const CREATE_SESSION_MUTATION = gql`
-  mutation CREATE_SESSION_MUTATION(
+export const CREATE_QUEST_MUTATION = gql`
+  mutation CREATE_QUEST_MUTATION(
     $adventureId: ID!
     $title: String!
     $description: String!
   ) {
-    createSession(
+    createQuest(
       adventureId: $adventureId
       title: $title
       description: $description
@@ -25,12 +25,12 @@ export const CREATE_SESSION_MUTATION = gql`
 `
 
 /**
- * @typedef {object} CreateSessionProps
+ * @typedef {object} CreateQuestProps
  * @property {string} adventureId
  */
 
-/** @augments {PureComponent<CreateSessionProps>} */
-export class CreateSession extends PureComponent {
+/** @augments {PureComponent<CreateQuestProps>} */
+export class CreateQuest extends PureComponent {
   static defaultProps = {
     adventureId: ''
   }
@@ -51,16 +51,16 @@ export class CreateSession extends PureComponent {
 
   /**
    * @param {React.FormEvent<HTMLFormElement>} event
-   * @param {any} createSessionMutation
+   * @param {any} createQuestMutation
    */
-  createSession = async (event, createSessionMutation) => {
+  createQuest = async (event, createQuestMutation) => {
     event.preventDefault()
 
-    const { data } = await createSessionMutation()
+    const { data } = await createQuestMutation()
 
     Router.push({
-      pathname: '/session',
-      query: { id: data.createSession.id }
+      pathname: '/quest',
+      query: { id: data.createQuest.id }
     })
   }
 
@@ -75,6 +75,7 @@ export class CreateSession extends PureComponent {
         {({ loading, data }) => {
           /** @type {AdventureModel} */
           const adventure = data.adventure
+
           if (loading) {
             return <p>Loading...</p>
           } else if (!adventure) {
@@ -83,15 +84,15 @@ export class CreateSession extends PureComponent {
 
           return (
             <div>
-              <Title title='New Session' />
+              <Title title='New Quest' />
               <header>
                 <h1>
-                  Create New Session for <u>{adventure.title}</u>
+                  Create New Quest for <u>{adventure.title}</u>
                 </h1>
               </header>
 
               <Mutation
-                mutation={CREATE_SESSION_MUTATION}
+                mutation={CREATE_QUEST_MUTATION}
                 variables={{ adventureId, title, description }}
                 refetchQueries={[
                   {
@@ -100,9 +101,9 @@ export class CreateSession extends PureComponent {
                   }
                 ]}
               >
-                {(createSession, { loading }) => (
+                {(createQuest, { loading }) => (
                   <Form
-                    onSubmit={event => this.createSession(event, createSession)}
+                    onSubmit={event => this.createQuest(event, createQuest)}
                   >
                     <fieldset aria-busy={loading} disabled={loading}>
                       <label htmlFor='title'>
@@ -128,20 +129,20 @@ export class CreateSession extends PureComponent {
                         />
                       </label>
 
-                      <button type='submit'>Create Session</button>
+                      <button type='submit'>Create Quest</button>
                     </fieldset>
                   </Form>
                 )}
               </Mutation>
 
               <footer>
-                <h2>Other Sessions</h2>
-                {adventure.sessions.length === 0 ? (
-                  <p>No other sessions. Looks like this is your first one!</p>
+                <h2>Other Quests</h2>
+                {adventure.quests.length === 0 ? (
+                  <p>No other quests. Looks like this is your first one!</p>
                 ) : (
-                  <div className='other-sessions'>
-                    {adventure.sessions.map(otherSession => (
-                      <Session key={otherSession.id} session={otherSession} />
+                  <div className='other-quests'>
+                    {adventure.quests.map(otherQuest => (
+                      <Quest key={otherQuest.id} quest={otherQuest} />
                     ))}
                   </div>
                 )}
@@ -154,4 +155,4 @@ export class CreateSession extends PureComponent {
   }
 }
 
-export default CreateSession
+export default CreateQuest

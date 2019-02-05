@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import Link from 'next/link'
 
 const StyledAdventure = styled.article`
+  word-wrap: break-word;
+
   img {
     object-fit: contain;
     max-width: 100%;
