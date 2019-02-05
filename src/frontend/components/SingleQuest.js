@@ -39,15 +39,15 @@ export const SINGLE_QUEST_QUERY = gql`
  */
 const SingleQuest = props => (
   <Query query={SINGLE_QUEST_QUERY} variables={{ id: props.id }}>
-    {({ loading, data: { quest } }) => {
+    {({ loading, data }) => {
+      /** @type {QuestModel} */
+      const quest = data.quest
+
       if (loading) {
         return <p>Loading...</p>
       } else if (!quest) {
         return <p>No quest found for ID {props.id}</p>
       }
-
-      /** @type {AdventureModel} */
-      const adventure = quest.adventure
 
       return (
         <StyledSingleQuest>
@@ -66,15 +66,19 @@ const SingleQuest = props => (
                   <Link
                     href={{
                       pathname: '/adventure',
-                      query: { id: adventure.id }
+                      query: { id: quest.adventure.id }
                     }}
                   >
-                    <a>{adventure.title}</a>
+                    <a>{quest.adventure.title}</a>
                   </Link>
                 </span>
               </div>
               <div className='options'>
-                <a href='#'>Update Quest</a>
+                <Link
+                  href={{ pathname: '/update-quest', query: { id: quest.id } }}
+                >
+                  <a>Update Quest</a>
+                </Link>
               </div>
             </DetailsMenu>
           </header>
@@ -87,11 +91,11 @@ const SingleQuest = props => (
 
           <footer>
             <h2>Other Quests</h2>
-            {adventure.quests.length === 0 ? (
+            {quest.adventure.quests.length === 0 ? (
               <p>No other quests.</p>
             ) : (
               <div className='other-quests'>
-                {adventure.quests.map(otherQuest => (
+                {quest.adventure.quests.map(otherQuest => (
                   <Quest key={quest.id} quest={quest} />
                 ))}
               </div>

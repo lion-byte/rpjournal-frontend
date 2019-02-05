@@ -1,4 +1,5 @@
 import React from 'react'
+
 import UpdateSession from '../components/UpdateSession'
 
 const UpdateSessionPage = props => (
