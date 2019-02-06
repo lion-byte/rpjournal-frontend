@@ -19,7 +19,7 @@ const Session = props => {
         </Link>
       </h1>
 
-      <p>{session.description}</p>
+      <section dangerouslySetInnerHTML={{ __html: session.description }} />
     </StyledSession>
   )
 }

@@ -27,7 +27,7 @@ const Adventure = props => {
         </Link>
       </h1>
 
-      <p>{adventure.description}</p>
+      <section dangerouslySetInnerHTML={{ __html: adventure.description }} />
     </StyledAdventure>
   )
 }

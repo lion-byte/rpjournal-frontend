@@ -4,7 +4,9 @@ import gql from 'graphql-tag'
 import Router from 'next/router'
 
 import Form from './styles/Form'
+import FormButton from './styles/FormButton'
 import { ADVENTURES_QUERY } from './Adventures'
+import Editor from './Editor'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
 import Title from './Title'
 
@@ -37,9 +39,10 @@ export class UpdateAdventure extends PureComponent {
 
   handleChange = event => {
     const { name, value } = event.target
-
     this.setState({ [name]: value })
   }
+
+  descriptionChange = description => this.setState({ description })
 
   updateAdventure = async (event, updateAdventureMutation) => {
     event.preventDefault()
@@ -106,18 +109,15 @@ export class UpdateAdventure extends PureComponent {
                         />
                       </label>
 
-                      <label htmlFor='description'>
+                      <div className='description'>
                         Description
-                        <textarea
-                          id='description'
-                          name='description'
-                          defaultValue={adventure.description}
-                          onChange={this.handleChange}
-                          required
+                        <Editor
+                          initialText={adventure.description}
+                          onSave={this.descriptionChange}
                         />
-                      </label>
+                      </div>
 
-                      <button type='submit'>Update Adventure</button>
+                      <FormButton>Update Adventure</FormButton>
                     </fieldset>
                   </Form>
                 )}
