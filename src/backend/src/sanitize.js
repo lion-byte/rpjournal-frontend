@@ -21,6 +21,7 @@ const defaultSanitizeConfig = {
     'strong',
     'em',
     'strike',
+    's',
     'code',
     'hr',
     'br',
