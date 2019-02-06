@@ -47,7 +47,9 @@ export const SINGLE_ADVENTURE_QUERY = gql`
  */
 const SingleAdventure = props => (
   <Query query={SINGLE_ADVENTURE_QUERY} variables={{ id: props.id }}>
-    {({ loading, error, data: { adventure } }) => {
+    {({ loading, error, data }) => {
+      /** @type {AdventureModel} */
+      const adventure = data.adventure
       if (loading) {
         return <p>Loading...</p>
       } else if (error) {
@@ -100,7 +102,9 @@ const SingleAdventure = props => (
             </DetailsMenu>
           </header>
 
-          <p>{adventure.description}</p>
+          <section
+            dangerouslySetInnerHTML={{ __html: adventure.description }}
+          />
 
           <div className='additional-details'>
             <section className='sessions'>

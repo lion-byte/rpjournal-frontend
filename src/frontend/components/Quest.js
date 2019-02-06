@@ -27,7 +27,7 @@ const Quest = props => {
         [{quest.completed ? 'Completed' : 'In Progress'}]
       </p>
 
-      <p>{quest.description}</p>
+      <section dangerouslySetInnerHTML={{ __html: quest.description }} />
     </StyledQuest>
   )
 }

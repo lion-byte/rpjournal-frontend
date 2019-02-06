@@ -85,9 +85,7 @@ const SingleQuest = props => (
 
           <p>{quest.completed ? '' : 'Not '}Completed</p>
 
-          <section>
-            <p>{quest.description}</p>
-          </section>
+          <section dangerouslySetInnerHTML={{ __html: quest.description }} />
 
           <footer>
             <h2>Other Quests</h2>
@@ -96,7 +94,7 @@ const SingleQuest = props => (
             ) : (
               <div className='other-quests'>
                 {quest.adventure.quests.map(otherQuest => (
-                  <Quest key={quest.id} quest={quest} />
+                  <Quest key={quest.id} quest={otherQuest} />
                 ))}
               </div>
             )}

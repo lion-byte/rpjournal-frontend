@@ -14,8 +14,8 @@ const Form = styled.form`
   border: 0.25em solid ${props => props.theme.offWhite};
   padding: 1.5em;
   line-height: 1.5;
-  font-weight: 600;
-  label {
+  label,
+  .description {
     display: block;
     margin-bottom: 1em;
     font-size: 1.5em;
@@ -36,16 +36,6 @@ const Form = styled.form`
   }
   textarea {
     min-height: 8em;
-  }
-  button,
-  input[type='submit'] {
-    width: auto;
-    background: ${props => props.theme.primaryColor};
-    color: white;
-    border: 0;
-    font-size: 1em;
-    font-weight: 600;
-    padding: 0.5em 1.25em;
   }
   fieldset {
     border: 0;

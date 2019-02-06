@@ -84,9 +84,7 @@ const SingleSession = props => (
             </DetailsMenu>
           </header>
 
-          <section>
-            <p>{session.description}</p>
-          </section>
+          <section dangerouslySetInnerHTML={{ __html: session.description }} />
 
           <footer>
             <h2>Other Sessions</h2>

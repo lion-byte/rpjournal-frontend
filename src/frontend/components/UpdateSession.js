@@ -4,6 +4,8 @@ import gql from 'graphql-tag'
 import Router from 'next/router'
 
 import Form from './styles/Form'
+import FormButton from './styles/FormButton'
+import Editor from './Editor'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
 import { SINGLE_SESSION_QUERY } from './SingleSession'
 import Title from './Title'
@@ -38,6 +40,8 @@ export class UpdateSession extends PureComponent {
 
     this.setState({ [name]: value })
   }
+
+  descriptionChange = description => this.setState({ description })
 
   updateSession = async (event, updateSessionMutation) => {
     event.preventDefault()
@@ -105,18 +109,15 @@ export class UpdateSession extends PureComponent {
                         />
                       </label>
 
-                      <label htmlFor='description'>
+                      <div className='description'>
                         Description
-                        <textarea
-                          id='description'
-                          name='description'
-                          defaultValue={session.description}
-                          onChange={this.handleChange}
-                          required
+                        <Editor
+                          initialText={session.description}
+                          onSave={this.descriptionChange}
                         />
-                      </label>
+                      </div>
 
-                      <button type='submit'>Update Session</button>
+                      <FormButton>Update Session</FormButton>
                     </fieldset>
                   </Form>
                 )}

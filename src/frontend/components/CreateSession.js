@@ -4,6 +4,8 @@ import gql from 'graphql-tag'
 import Router from 'next/router'
 
 import Form from './styles/Form'
+import FormButton from './styles/FormButton'
+import Editor from './Editor'
 import Session from './Session'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
 import Title from './Title'
@@ -48,6 +50,8 @@ export class CreateSession extends PureComponent {
 
     this.setState({ [name]: value })
   }
+
+  handleDescription = description => this.setState({ description })
 
   /**
    * @param {React.FormEvent<HTMLFormElement>} event
@@ -117,18 +121,12 @@ export class CreateSession extends PureComponent {
                         />
                       </label>
 
-                      <label htmlFor='description'>
+                      <div className='description'>
                         Description
-                        <textarea
-                          id='description'
-                          name='description'
-                          value={description}
-                          onChange={this.handleChange}
-                          required
-                        />
-                      </label>
+                        <Editor onSave={this.handleDescription} />
+                      </div>
 
-                      <button type='submit'>Create Session</button>
+                      <FormButton>Create Session</FormButton>
                     </fieldset>
                   </Form>
                 )}

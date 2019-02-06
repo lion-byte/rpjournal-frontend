@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react'
-import styled from 'styled-components'
 import { DraftailEditor, BLOCK_TYPE, INLINE_STYLE } from 'draftail'
+import styled from 'styled-components'
+
+import { exportHTML, importHTML } from '../../lib/rich-text'
 
 const EditorStyles = styled.section`
   .Draftail-Toolbar {
@@ -27,12 +29,11 @@ const inlineStyles = [
 
 /**
  * @typedef {object} EditorProps
- * @property {(contentState: any) => void} [onSave]
+ * @property {string} [initialText] Initial HTML to fill the Editor
+ * @property {(richHTML: string) => void} [onSave]
  */
 
-/**
- * @augments {PureComponent<EditorProps>}
- */
+/** @augments {PureComponent<EditorProps>} */
 export class Editor extends PureComponent {
   state = { showEditor: false }
 
@@ -40,10 +41,20 @@ export class Editor extends PureComponent {
     this.setState({ showEditor: true })
   }
 
+  handleSave = rawContent => {
+    if (!this.props.onSave) {
+      return
+    }
+
+    const html = exportHTML(rawContent)
+
+    this.props.onSave(html)
+  }
+
   render () {
     const {
       state: { showEditor },
-      props: { onSave }
+      props: { initialText }
     } = this
 
     if (!showEditor) {
@@ -53,9 +64,11 @@ export class Editor extends PureComponent {
     return (
       <EditorStyles>
         <DraftailEditor
+          rawContentState={importHTML(initialText)}
           blockTypes={blockTypes}
+          enableHorizontalRule
           inlineStyles={inlineStyles}
-          onSave={onSave}
+          onSave={this.handleSave}
           stateSaveInterval={500}
         />
       </EditorStyles>
