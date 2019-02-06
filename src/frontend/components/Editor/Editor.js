@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { DraftailEditor, BLOCK_TYPE, INLINE_STYLE } from 'draftail'
 import styled from 'styled-components'
 
-import { exportHTML } from '../../lib/rich-text'
+import { exportHTML, importHTML } from '../../lib/rich-text'
 
 const EditorStyles = styled.section`
   .Draftail-Toolbar {
@@ -29,6 +29,7 @@ const inlineStyles = [
 
 /**
  * @typedef {object} EditorProps
+ * @property {string} [initialText] Initial HTML to fill the Editor
  * @property {(richHTML: string) => void} [onSave]
  */
 
@@ -52,7 +53,8 @@ export class Editor extends PureComponent {
 
   render () {
     const {
-      state: { showEditor }
+      state: { showEditor },
+      props: { initialText }
     } = this
 
     if (!showEditor) {
@@ -62,6 +64,7 @@ export class Editor extends PureComponent {
     return (
       <EditorStyles>
         <DraftailEditor
+          rawContentState={importHTML(initialText)}
           blockTypes={blockTypes}
           enableHorizontalRule
           inlineStyles={inlineStyles}
