@@ -1,7 +1,72 @@
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+
 const { db } = require('../db')
 const { sanitize } = require('../sanitize')
 
 const Mutation = {
+  async register (parent, args, ctx, info) {
+    // Set email to lowercase to avoid duplication
+    args.email = args.email.toLowerCase()
+
+    // Hash password
+    const password = await bcrypt.hash(args.password, 16)
+
+    const user = await db.mutation.createUser(
+      {
+        data: { ...args, password, permissions: { set: ['USER'] } }
+      },
+      info
+    )
+
+    // Create the JWT
+    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET)
+
+    // Store the cookie with the user for one (1) year
+    ctx.res.cookie('token', token, {
+      httpOnly: true,
+      maxAge: 1000 * 3600 * 24 * 365
+    })
+
+    return user
+  },
+
+  async login (parent, args, ctx, info) {
+    // Set email to lowercase to avoid duplication
+    const email = args.email.toLowerCase()
+
+    // Find user by email
+    const user = await db.query.user({ where: { email } })
+
+    if (!user) {
+      throw Error(`No such user found for this email: ${email}`)
+    }
+
+    // Confirm the password
+    const isValid = await bcrypt.compare(args.password, user.password)
+
+    if (!isValid) {
+      throw Error('Invalid password')
+    }
+
+    // Create token for user
+    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET)
+
+    // Store the cookie with the user for one (1) year
+    ctx.res.cookie('token', token, {
+      httpOnly: true,
+      maxAge: 1000 * 3600 * 24 * 365
+    })
+
+    return user
+  },
+
+  logout (parent, args, ctx, info) {
+    ctx.res.clearCookie('token')
+
+    return 'Goodbye!'
+  },
+
   async createAdventure (parent, args, ctx, info) {
     const { title, description } = args
 

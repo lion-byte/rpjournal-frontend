@@ -1,13 +1,31 @@
 const cookieParser = require('cookie-parser')
 const express = require('express')
+const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 const { createServer } = require('./create-server')
-
-const { PORT } = process.env
+// const { db } = require('./db')
 
 const server = createServer()
 const app = express()
+
+app.use(cookieParser())
+
+// Decode the JWT to get the user's ID
+app.use((req, res, next) => {
+  const { token } = req.cookies
+
+  if (token) {
+    // @ts-ignore
+    const { userId } = jwt.verify(token, process.env.APP_SECRET)
+
+    // Append the userId to the request parameter
+    // @ts-ignore
+    req.userId = userId
+  }
+
+  next()
+})
 
 server.applyMiddleware({
   app,
@@ -17,9 +35,7 @@ server.applyMiddleware({
   },
   path: '/'
 })
-
-app.use(cookieParser())
-// TODO: Add authorization middleware
+const { PORT } = process.env
 
 app.listen({ port: PORT }, () => {
   const url = `http://localhost:${PORT}${server.graphqlPath}`

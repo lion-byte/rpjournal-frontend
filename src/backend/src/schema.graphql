@@ -1,6 +1,8 @@
 # import * from './generated/prisma.graphql'
 
 type Query {
+  me: User
+
   adventures(
     where: AdventureWhereInput
     orderBy: AdventureOrderByInput
@@ -15,6 +17,10 @@ type Query {
 }
 
 type Mutation {
+  register(name: String!, email: String!, password: String!): User!
+  login(email: String!, password: String!): User!
+  logout: String
+
   createAdventure(title: String!, description: String!): Adventure!
   updateAdventure(id: ID!, title: String, description: String): Adventure
   deleteAdventure(id: ID!): Adventure
@@ -40,4 +46,20 @@ type Mutation {
     completed: Boolean
   ): Quest
   deleteQuest(id: ID!): Quest
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  permissions: [Permission!]!
+  adventures(
+    where: AdventureWhereInput
+    orderBy: AdventureOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Adventure!]
 }

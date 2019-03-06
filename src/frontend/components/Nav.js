@@ -2,6 +2,8 @@ import React from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
 
+import User from './User'
+
 const StyledNav = styled.nav`
   font-size: 1.5em;
 
@@ -109,6 +111,25 @@ export class Nav extends React.PureComponent {
                 <a>New Adventure</a>
               </Link>
             </li>
+            <User>
+              {({ data: { me } }) =>
+                !me ? (
+                  <React.Fragment>
+                    <li>
+                      <Link href='/login' prefetch>
+                        <a>Login</a>
+                      </Link>
+                    </li>
+                  </React.Fragment>
+                ) : (
+                  <React.Fragment>
+                    <li>
+                      <button>Oh Hi, {me.name}!</button>
+                    </li>
+                  </React.Fragment>
+                )
+              }
+            </User>
           </ul>
         </div>
       </StyledNav>

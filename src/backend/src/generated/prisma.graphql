@@ -1,10 +1,11 @@
 # source: https://us1.prisma.sh/mark-hernandez-074398/rpjournal/dev
-# timestamp: Wed Jan 30 2019 20:08:39 GMT-0600 (Central Standard Time)
+# timestamp: Tue Mar 05 2019 12:27:12 GMT-0600 (Central Standard Time)
 
 type Adventure implements Node {
   id: ID!
   title: String!
   description: String!
+  owner: User!
   sessions(
     where: SessionWhereInput
     orderBy: SessionOrderByInput
@@ -46,8 +47,14 @@ type AdventureConnection {
 input AdventureCreateInput {
   title: String!
   description: String!
+  owner: UserCreateOneWithoutAdventuresInput!
   sessions: SessionCreateManyWithoutAdventureInput
   quests: QuestCreateManyWithoutAdventureInput
+}
+
+input AdventureCreateManyWithoutOwnerInput {
+  create: [AdventureCreateWithoutOwnerInput!]
+  connect: [AdventureWhereUniqueInput!]
 }
 
 input AdventureCreateOneWithoutQuestsInput {
@@ -60,15 +67,24 @@ input AdventureCreateOneWithoutSessionsInput {
   connect: AdventureWhereUniqueInput
 }
 
+input AdventureCreateWithoutOwnerInput {
+  title: String!
+  description: String!
+  sessions: SessionCreateManyWithoutAdventureInput
+  quests: QuestCreateManyWithoutAdventureInput
+}
+
 input AdventureCreateWithoutQuestsInput {
   title: String!
   description: String!
+  owner: UserCreateOneWithoutAdventuresInput!
   sessions: SessionCreateManyWithoutAdventureInput
 }
 
 input AdventureCreateWithoutSessionsInput {
   title: String!
   description: String!
+  owner: UserCreateOneWithoutAdventuresInput!
   quests: QuestCreateManyWithoutAdventureInput
 }
 
@@ -106,6 +122,293 @@ type AdventurePreviousValues {
   description: String!
   updatedAt: DateTime!
   createdAt: DateTime!
+}
+
+input AdventureScalarWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [AdventureScalarWhereInput!]
+
+  """
+  Logical OR on all given filters.
+  """
+  OR: [AdventureScalarWhereInput!]
+
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [AdventureScalarWhereInput!]
+  id: ID
+
+  """
+  All values that are not equal to given value.
+  """
+  id_not: ID
+
+  """
+  All values that are contained in given list.
+  """
+  id_in: [ID!]
+
+  """
+  All values that are not contained in given list.
+  """
+  id_not_in: [ID!]
+
+  """
+  All values less than the given value.
+  """
+  id_lt: ID
+
+  """
+  All values less than or equal the given value.
+  """
+  id_lte: ID
+
+  """
+  All values greater than the given value.
+  """
+  id_gt: ID
+
+  """
+  All values greater than or equal the given value.
+  """
+  id_gte: ID
+
+  """
+  All values containing the given string.
+  """
+  id_contains: ID
+
+  """
+  All values not containing the given string.
+  """
+  id_not_contains: ID
+
+  """
+  All values starting with the given string.
+  """
+  id_starts_with: ID
+
+  """
+  All values not starting with the given string.
+  """
+  id_not_starts_with: ID
+
+  """
+  All values ending with the given string.
+  """
+  id_ends_with: ID
+
+  """
+  All values not ending with the given string.
+  """
+  id_not_ends_with: ID
+  title: String
+
+  """
+  All values that are not equal to given value.
+  """
+  title_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  title_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  title_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  title_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  title_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  title_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  title_gte: String
+
+  """
+  All values containing the given string.
+  """
+  title_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  title_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  title_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  title_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  title_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  title_not_ends_with: String
+  description: String
+
+  """
+  All values that are not equal to given value.
+  """
+  description_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  description_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  description_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  description_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  description_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  description_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  description_gte: String
+
+  """
+  All values containing the given string.
+  """
+  description_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  description_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  description_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  description_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  description_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  description_not_ends_with: String
+  updatedAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  updatedAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  updatedAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  updatedAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  updatedAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  updatedAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  updatedAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  createdAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  createdAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  createdAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  createdAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  createdAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  createdAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  createdAt_gte: DateTime
 }
 
 type AdventureSubscriptionPayload {
@@ -156,13 +459,36 @@ input AdventureSubscriptionWhereInput {
 input AdventureUpdateInput {
   title: String
   description: String
+  owner: UserUpdateOneRequiredWithoutAdventuresInput
   sessions: SessionUpdateManyWithoutAdventureInput
   quests: QuestUpdateManyWithoutAdventureInput
+}
+
+input AdventureUpdateManyDataInput {
+  title: String
+  description: String
 }
 
 input AdventureUpdateManyMutationInput {
   title: String
   description: String
+}
+
+input AdventureUpdateManyWithoutOwnerInput {
+  create: [AdventureCreateWithoutOwnerInput!]
+  connect: [AdventureWhereUniqueInput!]
+  set: [AdventureWhereUniqueInput!]
+  disconnect: [AdventureWhereUniqueInput!]
+  delete: [AdventureWhereUniqueInput!]
+  update: [AdventureUpdateWithWhereUniqueWithoutOwnerInput!]
+  updateMany: [AdventureUpdateManyWithWhereNestedInput!]
+  deleteMany: [AdventureScalarWhereInput!]
+  upsert: [AdventureUpsertWithWhereUniqueWithoutOwnerInput!]
+}
+
+input AdventureUpdateManyWithWhereNestedInput {
+  where: AdventureScalarWhereInput!
+  data: AdventureUpdateManyDataInput!
 }
 
 input AdventureUpdateOneRequiredWithoutQuestsInput {
@@ -179,16 +505,30 @@ input AdventureUpdateOneRequiredWithoutSessionsInput {
   upsert: AdventureUpsertWithoutSessionsInput
 }
 
+input AdventureUpdateWithoutOwnerDataInput {
+  title: String
+  description: String
+  sessions: SessionUpdateManyWithoutAdventureInput
+  quests: QuestUpdateManyWithoutAdventureInput
+}
+
 input AdventureUpdateWithoutQuestsDataInput {
   title: String
   description: String
+  owner: UserUpdateOneRequiredWithoutAdventuresInput
   sessions: SessionUpdateManyWithoutAdventureInput
 }
 
 input AdventureUpdateWithoutSessionsDataInput {
   title: String
   description: String
+  owner: UserUpdateOneRequiredWithoutAdventuresInput
   quests: QuestUpdateManyWithoutAdventureInput
+}
+
+input AdventureUpdateWithWhereUniqueWithoutOwnerInput {
+  where: AdventureWhereUniqueInput!
+  data: AdventureUpdateWithoutOwnerDataInput!
 }
 
 input AdventureUpsertWithoutQuestsInput {
@@ -199,6 +539,12 @@ input AdventureUpsertWithoutQuestsInput {
 input AdventureUpsertWithoutSessionsInput {
   update: AdventureUpdateWithoutSessionsDataInput!
   create: AdventureCreateWithoutSessionsInput!
+}
+
+input AdventureUpsertWithWhereUniqueWithoutOwnerInput {
+  where: AdventureWhereUniqueInput!
+  update: AdventureUpdateWithoutOwnerDataInput!
+  create: AdventureCreateWithoutOwnerInput!
 }
 
 input AdventureWhereInput {
@@ -486,6 +832,7 @@ input AdventureWhereInput {
   All values greater than or equal the given value.
   """
   createdAt_gte: DateTime
+  owner: UserWhereInput
   sessions_every: SessionWhereInput
   sessions_some: SessionWhereInput
   sessions_none: SessionWhereInput
@@ -629,6 +976,12 @@ type PageInfo {
   When paginating forwards, the cursor to continue.
   """
   endCursor: String
+}
+
+enum Permission {
+  ADMIN
+  USER
+  PERMISSIONUPDATE
 }
 
 type Query {
@@ -2256,6 +2609,18 @@ type User implements Node {
   name: String!
   email: String!
   password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: [Permission!]!
+  adventures(
+    where: AdventureWhereInput
+    orderBy: AdventureOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Adventure!]
 }
 
 """
@@ -2278,6 +2643,28 @@ input UserCreateInput {
   name: String!
   email: String!
   password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserCreatepermissionsInput
+  adventures: AdventureCreateManyWithoutOwnerInput
+}
+
+input UserCreateOneWithoutAdventuresInput {
+  create: UserCreateWithoutAdventuresInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreatepermissionsInput {
+  set: [Permission!]
+}
+
+input UserCreateWithoutAdventuresInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserCreatepermissionsInput
 }
 
 """
@@ -2304,6 +2691,10 @@ enum UserOrderByInput {
   email_DESC
   password_ASC
   password_DESC
+  resetToken_ASC
+  resetToken_DESC
+  resetTokenExpiry_ASC
+  resetTokenExpiry_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -2315,6 +2706,9 @@ type UserPreviousValues {
   name: String!
   email: String!
   password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: [Permission!]!
 }
 
 type UserSubscriptionPayload {
@@ -2366,12 +2760,44 @@ input UserUpdateInput {
   name: String
   email: String
   password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
+  adventures: AdventureUpdateManyWithoutOwnerInput
 }
 
 input UserUpdateManyMutationInput {
   name: String
   email: String
   password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
+}
+
+input UserUpdateOneRequiredWithoutAdventuresInput {
+  create: UserCreateWithoutAdventuresInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutAdventuresDataInput
+  upsert: UserUpsertWithoutAdventuresInput
+}
+
+input UserUpdatepermissionsInput {
+  set: [Permission!]
+}
+
+input UserUpdateWithoutAdventuresDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
+}
+
+input UserUpsertWithoutAdventuresInput {
+  update: UserUpdateWithoutAdventuresDataInput!
+  create: UserCreateWithoutAdventuresInput!
 }
 
 input UserWhereInput {
@@ -2653,6 +3079,111 @@ input UserWhereInput {
   All values not ending with the given string.
   """
   password_not_ends_with: String
+  resetToken: String
+
+  """
+  All values that are not equal to given value.
+  """
+  resetToken_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  resetToken_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  resetToken_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  resetToken_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  resetToken_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  resetToken_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  resetToken_gte: String
+
+  """
+  All values containing the given string.
+  """
+  resetToken_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  resetToken_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  resetToken_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  resetToken_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  resetToken_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  resetToken_not_ends_with: String
+  resetTokenExpiry: Float
+
+  """
+  All values that are not equal to given value.
+  """
+  resetTokenExpiry_not: Float
+
+  """
+  All values that are contained in given list.
+  """
+  resetTokenExpiry_in: [Float!]
+
+  """
+  All values that are not contained in given list.
+  """
+  resetTokenExpiry_not_in: [Float!]
+
+  """
+  All values less than the given value.
+  """
+  resetTokenExpiry_lt: Float
+
+  """
+  All values less than or equal the given value.
+  """
+  resetTokenExpiry_lte: Float
+
+  """
+  All values greater than the given value.
+  """
+  resetTokenExpiry_gt: Float
+
+  """
+  All values greater than or equal the given value.
+  """
+  resetTokenExpiry_gte: Float
+  adventures_every: AdventureWhereInput
+  adventures_some: AdventureWhereInput
+  adventures_none: AdventureWhereInput
 }
 
 input UserWhereUniqueInput {
