@@ -68,18 +68,42 @@ const Mutation = {
   },
 
   async createAdventure (parent, args, ctx, info) {
+    const { userId } = ctx.req
+
+    // Check for user ID
+    if (!userId) {
+      throw Error('You must be logged in to do that!')
+    }
+
     const { title, description } = args
 
     const cleanDescription = sanitize(description)
 
     return db.mutation.createAdventure(
-      { data: { title, description: cleanDescription } },
+      {
+        data: {
+          title,
+          description: cleanDescription,
+          owner: { connect: { id: userId } }
+        }
+      },
       info
     )
   },
 
   async updateAdventure (parent, args, ctx, info) {
+    const { userId } = ctx.req
     const { id, ...updates } = args
+
+    // Check if allowed to update adventure
+    const adventure = await db.query.adventure(
+      { where: { id } },
+      `{ owner { id } }`
+    )
+
+    if (!adventure || adventure.owner.id !== userId) {
+      return null
+    }
 
     if (updates.description) {
       updates.description = sanitize(updates.description)
@@ -95,18 +119,35 @@ const Mutation = {
   },
 
   async deleteAdventure (parent, args, ctx, info) {
+    const { userId } = ctx.req
     const { id } = args
+
+    // Check if allowed to delete adventure
+    const adventure = await db.query.adventure(
+      { where: { id } },
+      `{ owner { id } }`
+    )
+
+    if (!adventure || adventure.owner.id !== userId) {
+      return null
+    }
 
     return db.mutation.deleteAdventure({ where: { id } }, info)
   },
 
   async createSession (parent, args, ctx, info) {
+    const { userId } = ctx.req
     const { adventureId, title, description } = args
 
-    const adventure = await db.query.adventure({ where: { id: adventureId } })
+    const adventure = await db.query.adventure(
+      { where: { id: adventureId } },
+      `{ owner { id } }`
+    )
 
     if (!adventure) {
       throw Error(`No such Adventure for ${adventureId}`)
+    } else if (adventure.owner.id !== userId) {
+      throw Error(`You don't have permission to do that!`)
     }
 
     const cleanDescription = sanitize(description)
@@ -124,7 +165,17 @@ const Mutation = {
   },
 
   async updateSession (parent, args, ctx, info) {
+    const { userId } = ctx.req
     const { id, ...updates } = args
+
+    const session = await db.query.session(
+      { where: { id } },
+      `{ adventure { owner { id } } }`
+    )
+
+    if (!session || session.adventure.owner.id !== userId) {
+      return null
+    }
 
     if (updates.description) {
       updates.description = sanitize(updates.description)
@@ -134,18 +185,34 @@ const Mutation = {
   },
 
   async deleteSession (parent, args, ctx, info) {
+    const { userId } = ctx.req
     const { id } = args
+
+    const session = await db.query.session(
+      { where: { id } },
+      `{ adventure { owner { id } } }`
+    )
+
+    if (!session || session.adventure.owner.id !== userId) {
+      return null
+    }
 
     return db.mutation.deleteSession({ where: { id } }, info)
   },
 
   async createQuest (parent, args, ctx, info) {
+    const { userId } = ctx.req
     const { adventureId, title, description, completed = false } = args
 
-    const adventure = await db.query.adventure({ where: { id: adventureId } })
+    const adventure = await db.query.adventure(
+      { where: { id: adventureId } },
+      `{ adventure { owner { id } } }`
+    )
 
     if (!adventure) {
       throw Error(`No such Adventure for ${adventureId}`)
+    } else if (adventure.owner.id !== userId) {
+      throw Error(`You don't have permission to do that!`)
     }
 
     const cleanDescription = sanitize(description)
@@ -164,7 +231,17 @@ const Mutation = {
   },
 
   async updateQuest (parent, args, ctx, info) {
+    const { userId } = ctx.req
     const { id, ...updates } = args
+
+    const quest = await db.query.quest(
+      { where: { id } },
+      `{ adventure { owner { id } } }`
+    )
+
+    if (!quest || quest.adventure.owner.id !== userId) {
+      return null
+    }
 
     if (updates.description) {
       updates.description = sanitize(updates.description)
@@ -174,7 +251,17 @@ const Mutation = {
   },
 
   async deleteQuest (parent, args, ctx, info) {
+    const { userId } = ctx.req
     const { id } = args
+
+    const quest = await db.query.quest(
+      { where: { id } },
+      `{ adventure { owner { id } } }`
+    )
+
+    if (!quest || quest.adventure.owner.id !== userId) {
+      return null
+    }
 
     return db.mutation.deleteQuest({ where: { id } }, info)
   }
