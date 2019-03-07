@@ -6,6 +6,7 @@ import Router from 'next/router'
 import Form from './styles/Form'
 import FormButton from './styles/FormButton'
 import Editor from './Editor'
+import ErrorMessage from './ErrorMessage'
 import Quest from './Quest'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
 import Title from './Title'
@@ -105,10 +106,11 @@ export class CreateQuest extends PureComponent {
                   }
                 ]}
               >
-                {(createQuest, { loading }) => (
+                {(createQuest, { loading, error }) => (
                   <Form
                     onSubmit={event => this.createQuest(event, createQuest)}
                   >
+                    <ErrorMessage error={error} />
                     <fieldset aria-busy={loading} disabled={loading}>
                       <label htmlFor='title'>
                         Title

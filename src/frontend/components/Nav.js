@@ -116,23 +116,27 @@ export class Nav extends React.PureComponent {
               </Link>
             </li>
             <User>
-              {({ data: { me } }) =>
-                !me ? (
-                  <React.Fragment>
-                    <li>
-                      <Link href='/login'>
-                        <a>Login</a>
-                      </Link>
-                    </li>
-                  </React.Fragment>
-                ) : (
-                  <React.Fragment>
-                    <li>
-                      <Logout />
-                    </li>
-                  </React.Fragment>
-                )
-              }
+              {({ data }) => {
+                if (!data || !data.me) {
+                  return (
+                    <React.Fragment>
+                      <li>
+                        <Link href='/login'>
+                          <a>Login</a>
+                        </Link>
+                      </li>
+                    </React.Fragment>
+                  )
+                } else {
+                  return (
+                    <React.Fragment>
+                      <li>
+                        <Logout />
+                      </li>
+                    </React.Fragment>
+                  )
+                }
+              }}
             </User>
           </ul>
         </div>

@@ -106,8 +106,10 @@ const Mutation = {
       `{ owner { id } }`
     )
 
-    if (!adventure || adventure.owner.id !== userId) {
+    if (!adventure) {
       return null
+    } else if (adventure.owner.id !== userId) {
+      throw Error(`You don't have permission to do that!`)
     }
 
     if (updates.description) {
@@ -138,8 +140,10 @@ const Mutation = {
       `{ owner { id } }`
     )
 
-    if (!adventure || adventure.owner.id !== userId) {
+    if (!adventure) {
       return null
+    } else if (adventure.owner.id !== userId) {
+      throw Error(`You don't have permission to do that!`)
     }
 
     return db.mutation.deleteAdventure({ where: { id } }, info)
@@ -193,8 +197,10 @@ const Mutation = {
       `{ adventure { owner { id } } }`
     )
 
-    if (!session || session.adventure.owner.id !== userId) {
+    if (!session) {
       return null
+    } else if (session.adventure.owner.id !== userId) {
+      throw Error(`You don't have permission to do that!`)
     }
 
     if (updates.description) {
@@ -218,8 +224,10 @@ const Mutation = {
       `{ adventure { owner { id } } }`
     )
 
-    if (!session || session.adventure.owner.id !== userId) {
+    if (!session) {
       return null
+    } else if (session.adventure.owner.id !== userId) {
+      throw Error(`You don't have permission to do that!`)
     }
 
     return db.mutation.deleteSession({ where: { id } }, info)
@@ -274,8 +282,10 @@ const Mutation = {
       `{ adventure { owner { id } } }`
     )
 
-    if (!quest || quest.adventure.owner.id !== userId) {
+    if (!quest) {
       return null
+    } else if (quest.adventure.owner.id !== userId) {
+      throw Error(`You don't have permission to do that!`)
     }
 
     if (updates.description) {
@@ -299,8 +309,10 @@ const Mutation = {
       `{ adventure { owner { id } } }`
     )
 
-    if (!quest || quest.adventure.owner.id !== userId) {
+    if (!quest) {
       return null
+    } else if (quest.adventure.owner.id !== userId) {
+      throw Error(`You don't have permission to do that!`)
     }
 
     return db.mutation.deleteQuest({ where: { id } }, info)

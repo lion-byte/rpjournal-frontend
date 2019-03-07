@@ -6,6 +6,7 @@ import Router from 'next/router'
 import Form from './styles/Form'
 import FormButton from './styles/FormButton'
 import Editor from './Editor'
+import ErrorMessage from './ErrorMessage'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
 import Title from './Title'
 import { CURRENT_USER_QUERY } from './User'
@@ -96,6 +97,7 @@ export class UpdateAdventure extends PureComponent {
                       this.updateAdventure(event, updateAdventure)
                     }
                   >
+                    <ErrorMessage error={error} />
                     <fieldset aria-busy={loading} disabled={loading}>
                       <label htmlFor='title'>
                         Title

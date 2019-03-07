@@ -6,6 +6,7 @@ import Router from 'next/router'
 import Form from './styles/Form'
 import FormButton from './styles/FormButton'
 import Editor from './Editor'
+import ErrorMessage from './ErrorMessage'
 import Session from './Session'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
 import Title from './Title'
@@ -104,10 +105,11 @@ export class CreateSession extends PureComponent {
                   }
                 ]}
               >
-                {(createSession, { loading }) => (
+                {(createSession, { loading, error }) => (
                   <Form
                     onSubmit={event => this.createSession(event, createSession)}
                   >
+                    <ErrorMessage error={error} />
                     <fieldset aria-busy={loading} disabled={loading}>
                       <label htmlFor='title'>
                         Title

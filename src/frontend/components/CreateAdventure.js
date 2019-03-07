@@ -6,8 +6,9 @@ import Router from 'next/router'
 import Form from './styles/Form'
 import FormButton from './styles/FormButton'
 import Editor from './Editor'
-import { CURRENT_USER_QUERY } from './User'
+import ErrorMessage from './ErrorMessage'
 import Title from './Title'
+import { CURRENT_USER_QUERY } from './User'
 
 export const CREATE_ADVENTURE_MUTATION = gql`
   mutation CREATE_ADVENTURE_MUTATION($title: String!, $description: String!) {
@@ -23,12 +24,8 @@ export class CreateAdventure extends PureComponent {
     description: ''
   }
 
-  /**
-   * @param {React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>} event
-   */
   handleChange = event => {
     const { name, value } = event.target
-
     this.setState({ [name]: value })
   }
 
@@ -62,10 +59,11 @@ export class CreateAdventure extends PureComponent {
           variables={{ title, description }}
           refetchQueries={[{ query: CURRENT_USER_QUERY }]}
         >
-          {(createAdventure, { loading }) => (
+          {(createAdventure, { loading, error }) => (
             <Form
               onSubmit={event => this.createAdventure(event, createAdventure)}
             >
+              <ErrorMessage error={error} />
               <fieldset aria-busy={loading} disabled={loading}>
                 <label htmlFor='title'>
                   Title
