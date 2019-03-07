@@ -14,7 +14,6 @@ const Query = {
     return db.query.user({ where: { id: userId } }, info)
   },
 
-  adventures: forwardTo('db'),
   adventure: forwardTo('db'),
   session: forwardTo('db'),
   quest: forwardTo('db')

@@ -95,6 +95,11 @@ const Mutation = {
     const { userId } = ctx.req
     const { id, ...updates } = args
 
+    // Check for user ID
+    if (!userId) {
+      throw Error('You must be logged in to do that!')
+    }
+
     // Check if allowed to update adventure
     const adventure = await db.query.adventure(
       { where: { id } },
@@ -122,6 +127,11 @@ const Mutation = {
     const { userId } = ctx.req
     const { id } = args
 
+    // Check for user ID
+    if (!userId) {
+      throw Error('You must be logged in to do that!')
+    }
+
     // Check if allowed to delete adventure
     const adventure = await db.query.adventure(
       { where: { id } },
@@ -138,6 +148,11 @@ const Mutation = {
   async createSession (parent, args, ctx, info) {
     const { userId } = ctx.req
     const { adventureId, title, description } = args
+
+    // Check for user ID
+    if (!userId) {
+      throw Error('You must be logged in to do that!')
+    }
 
     const adventure = await db.query.adventure(
       { where: { id: adventureId } },
@@ -168,6 +183,11 @@ const Mutation = {
     const { userId } = ctx.req
     const { id, ...updates } = args
 
+    // Check for user ID
+    if (!userId) {
+      throw Error('You must be logged in to do that!')
+    }
+
     const session = await db.query.session(
       { where: { id } },
       `{ adventure { owner { id } } }`
@@ -188,6 +208,11 @@ const Mutation = {
     const { userId } = ctx.req
     const { id } = args
 
+    // Check for user ID
+    if (!userId) {
+      throw Error('You must be logged in to do that!')
+    }
+
     const session = await db.query.session(
       { where: { id } },
       `{ adventure { owner { id } } }`
@@ -203,6 +228,11 @@ const Mutation = {
   async createQuest (parent, args, ctx, info) {
     const { userId } = ctx.req
     const { adventureId, title, description, completed = false } = args
+
+    // Check for user ID
+    if (!userId) {
+      throw Error('You must be logged in to do that!')
+    }
 
     const adventure = await db.query.adventure(
       { where: { id: adventureId } },
@@ -234,6 +264,11 @@ const Mutation = {
     const { userId } = ctx.req
     const { id, ...updates } = args
 
+    // Check for user ID
+    if (!userId) {
+      throw Error('You must be logged in to do that!')
+    }
+
     const quest = await db.query.quest(
       { where: { id } },
       `{ adventure { owner { id } } }`
@@ -253,6 +288,11 @@ const Mutation = {
   async deleteQuest (parent, args, ctx, info) {
     const { userId } = ctx.req
     const { id } = args
+
+    // Check for user ID
+    if (!userId) {
+      throw Error('You must be logged in to do that!')
+    }
 
     const quest = await db.query.quest(
       { where: { id } },

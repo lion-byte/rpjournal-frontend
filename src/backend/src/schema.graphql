@@ -2,17 +2,8 @@
 
 type Query {
   me: User
-
-  adventures(
-    where: AdventureWhereInput
-    orderBy: AdventureOrderByInput
-    skip: Int
-    first: Int
-  ): [Adventure!]!
   adventure(where: AdventureWhereUniqueInput!): Adventure
-
   session(where: SessionWhereUniqueInput!): Session
-
   quest(where: QuestWhereUniqueInput!): Quest
 }
 
