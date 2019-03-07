@@ -7,6 +7,7 @@ import styled from 'styled-components'
 
 import DetailsMenu from './styles/DetailsMenu'
 import Session from './Session'
+import Title from './Title'
 import User from './User'
 
 const StyledSingleSession = styled.div``
@@ -54,6 +55,8 @@ const SingleSession = props => (
 
       return (
         <StyledSingleSession>
+          <Title title={`${session.title} | ${session.adventure.title}`} />
+
           <header>
             <h1>{session.title}</h1>
             <DetailsMenu>

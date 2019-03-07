@@ -7,6 +7,7 @@ import styled from 'styled-components'
 
 import DetailsMenu from './styles/DetailsMenu'
 import Quest from './Quest'
+import Title from './Title'
 import User from './User'
 
 const StyledSingleQuest = styled.div``
@@ -56,6 +57,8 @@ const SingleQuest = props => (
 
       return (
         <StyledSingleQuest>
+          <Title title={`${quest.title} | ${quest.adventure.title}`} />
+
           <header>
             <h1>{quest.title}</h1>
             <DetailsMenu>
