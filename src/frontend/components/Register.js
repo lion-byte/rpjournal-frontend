@@ -5,6 +5,7 @@ import gql from 'graphql-tag'
 
 import Form from './styles/Form'
 import FormButton from './styles/FormButton'
+import Title from './Title'
 import { CURRENT_USER_QUERY } from './User'
 
 export const REGISTER_MUTATION = gql`
@@ -56,6 +57,8 @@ export class Register extends Component {
             method='post'
             onSubmit={event => this.handleSubmit(event, register)}
           >
+            <Title title='Register' />
+
             <fieldset disabled={loading} aria-busy={loading}>
               <label htmlFor='name'>
                 Name

@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 
 import Form from './styles/Form'
 import FormButton from './styles/FormButton'
+import Title from './Title'
 import { CURRENT_USER_QUERY } from './User'
 
 export const LOGIN_MUTATION = gql`
@@ -18,7 +19,15 @@ export const LOGIN_MUTATION = gql`
   }
 `
 
+/**
+ * @typedef {object} LoginProps
+ * @property {boolean} [noRedirect]
+ */
+
+/** @augments Component<LoginProps> */
 export class Login extends Component {
+  static defaultProps = { noRedirect: false }
+
   state = {
     email: '',
     password: ''
@@ -33,7 +42,7 @@ export class Login extends Component {
     event.preventDefault()
     const { data } = await loginMutation()
 
-    if (data.login) {
+    if (data.login && !this.props.noRedirect) {
       Router.push('/')
     }
   }
@@ -52,6 +61,8 @@ export class Login extends Component {
             method='post'
             onSubmit={event => this.handleSubmit(event, login)}
           >
+            <Title title='Login' />
+
             <fieldset disabled={loading} aria-busy={loading}>
               <label htmlFor='email'>
                 Email

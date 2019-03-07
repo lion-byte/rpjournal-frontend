@@ -1,10 +1,13 @@
 import React from 'react'
 
 import CreateQuest from '../components/CreateQuest'
+import PleaseLogin from '../components/PleaseLogin'
 
 const NewQuestPage = props => (
   <div>
-    <CreateQuest adventureId={props.query.adventureId} />
+    <PleaseLogin>
+      <CreateQuest adventureId={props.query.adventureId} />
+    </PleaseLogin>
   </div>
 )
 
