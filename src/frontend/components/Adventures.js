@@ -1,66 +1,75 @@
 import React from 'react'
 import Link from 'next/link'
-import { Query } from 'react-apollo'
-import gql from 'graphql-tag'
 import styled from 'styled-components'
 
 import DetailsMenu from './styles/DetailsMenu'
 import Adventure from './Adventure'
+import User from './User'
 
-const StyledAdventuresPage = styled.div`
+const StyledAdventures = styled.div`
   .list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(20em, 1fr));
     grid-gap: 2em;
   }
-`
 
-export const ADVENTURES_QUERY = gql`
-  query ADVENTURES_QUERY {
-    adventures(orderBy: title_ASC) {
-      id
-      title
-      description
-      createdAt
-      updatedAt
-    }
+  pre {
+    white-space: pre-wrap;
   }
 `
 
 const Adventures = () => (
-  <StyledAdventuresPage>
+  <StyledAdventures>
     <header>
       <h1>Adventures</h1>
-      <DetailsMenu>
-        <div className='options'>
-          <Link href='/new-adventure'>
-            <a>+ New Adventure</a>
-          </Link>
-        </div>
-      </DetailsMenu>
+      <User>
+        {({ data: { me } }) => {
+          if (!me) {
+            return null
+          }
+
+          return (
+            <DetailsMenu>
+              <div className='options'>
+                <Link href='/new-adventure'>
+                  <a>+ New Adventure</a>
+                </Link>
+              </div>
+            </DetailsMenu>
+          )
+        }}
+      </User>
     </header>
 
-    <Query query={ADVENTURES_QUERY}>
+    <User>
       {({ loading, error, data }) => {
-        /** @type {ReadonlyArray<AdventureModel>} */
-        const adventures = data.adventures
-
-        if (loading || error) {
+        if (loading) {
+          return <p>Loading...</p>
+        } else if (error) {
+          return <pre>Error: {error.message}</pre>
+        } else if (!data) {
           return null
-        } else if (adventures.length === 0) {
+        }
+
+        /** @type {UserModel} */
+        const me = data.me
+
+        if (!me) {
+          return <p>Login to see your adventures.</p>
+        } else if (me.adventures.length === 0) {
           return <p>No adventures have been written yet.</p>
         }
 
         return (
           <div className='list'>
-            {adventures.map(adventure => (
+            {me.adventures.map(adventure => (
               <Adventure key={adventure.id} adventure={adventure} />
             ))}
           </div>
         )
       }}
-    </Query>
-  </StyledAdventuresPage>
+    </User>
+  </StyledAdventures>
 )
 
 export default Adventures

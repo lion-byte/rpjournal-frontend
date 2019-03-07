@@ -7,6 +7,7 @@ import styled from 'styled-components'
 
 import DetailsMenu from './styles/DetailsMenu'
 import Session from './Session'
+import User from './User'
 
 const StyledSingleSession = styled.div``
 
@@ -21,6 +22,10 @@ export const SINGLE_SESSION_QUERY = gql`
       adventure {
         id
         title
+        owner {
+          id
+          name
+        }
         sessions(where: { id_not: $id }) {
           id
           title
@@ -71,16 +76,26 @@ const SingleSession = props => (
                   </Link>
                 </span>
               </div>
-              <div className='options'>
-                <Link
-                  href={{
-                    pathname: '/update-session',
-                    query: { id: session.id }
-                  }}
-                >
-                  <a>Update Session</a>
-                </Link>
-              </div>
+              <User>
+                {({ data: { me } }) => {
+                  if (!me || session.adventure.owner.id !== me.id) {
+                    return null
+                  }
+
+                  return (
+                    <div className='options'>
+                      <Link
+                        href={{
+                          pathname: '/update-session',
+                          query: { id: session.id }
+                        }}
+                      >
+                        <a>Update Session</a>
+                      </Link>
+                    </div>
+                  )
+                }}
+              </User>
             </DetailsMenu>
           </header>
 

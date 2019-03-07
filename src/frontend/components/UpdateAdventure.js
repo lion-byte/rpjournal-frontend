@@ -5,10 +5,10 @@ import Router from 'next/router'
 
 import Form from './styles/Form'
 import FormButton from './styles/FormButton'
-import { ADVENTURES_QUERY } from './Adventures'
 import Editor from './Editor'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
 import Title from './Title'
+import { CURRENT_USER_QUERY } from './User'
 
 export const UPDATE_ADVENTURE_MUTATION = gql`
   mutation UPDATE_ADVENTURE_MUTATION(
@@ -87,7 +87,7 @@ export class UpdateAdventure extends PureComponent {
                 variables={{ id, ...state }}
                 refetchQueries={[
                   { query: SINGLE_ADVENTURE_QUERY, variables: { id } },
-                  { query: ADVENTURES_QUERY }
+                  { query: CURRENT_USER_QUERY }
                 ]}
               >
                 {(updateAdventure, { loading, error }) => (

@@ -9,6 +9,7 @@ import DetailsMenu from './styles/DetailsMenu'
 import Quest from './Quest'
 import Session from './Session'
 import Title from './Title'
+import User from './User'
 
 const StyledAdventure = styled.div`
   .additional-details {
@@ -26,6 +27,10 @@ export const SINGLE_ADVENTURE_QUERY = gql`
       description
       createdAt
       updatedAt
+      owner {
+        id
+        name
+      }
       sessions(orderBy: title_ASC) {
         id
         title
@@ -66,6 +71,7 @@ const SingleAdventure = props => (
             <h1>{adventure.title}</h1>
             <DetailsMenu>
               <div className='details'>
+                <span>By {adventure.owner.name}</span>
                 <span>
                   Created <TimeAgo date={adventure.createdAt} />
                 </span>
@@ -73,32 +79,42 @@ const SingleAdventure = props => (
                   Updated <TimeAgo date={adventure.updatedAt} />
                 </span>
               </div>
-              <div className='options'>
-                <Link
-                  href={{
-                    pathname: '/new-session',
-                    query: { adventureId: adventure.id }
-                  }}
-                >
-                  <a>+ New Session</a>
-                </Link>
-                <Link
-                  href={{
-                    pathname: '/new-quest',
-                    query: { adventureId: adventure.id }
-                  }}
-                >
-                  <a>+ New Quest</a>
-                </Link>
-                <Link
-                  href={{
-                    pathname: '/update-adventure',
-                    query: { id: adventure.id }
-                  }}
-                >
-                  <a>Update Adventure</a>
-                </Link>
-              </div>
+              <User>
+                {({ data: { me } }) => {
+                  if (!me || adventure.owner.id !== me.id) {
+                    return null
+                  }
+
+                  return (
+                    <div className='options'>
+                      <Link
+                        href={{
+                          pathname: '/new-session',
+                          query: { adventureId: adventure.id }
+                        }}
+                      >
+                        <a>+ New Session</a>
+                      </Link>
+                      <Link
+                        href={{
+                          pathname: '/new-quest',
+                          query: { adventureId: adventure.id }
+                        }}
+                      >
+                        <a>+ New Quest</a>
+                      </Link>
+                      <Link
+                        href={{
+                          pathname: '/update-adventure',
+                          query: { id: adventure.id }
+                        }}
+                      >
+                        <a>Update Adventure</a>
+                      </Link>
+                    </div>
+                  )
+                }}
+              </User>
             </DetailsMenu>
           </header>
 

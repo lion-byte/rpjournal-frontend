@@ -7,6 +7,7 @@ import styled from 'styled-components'
 
 import DetailsMenu from './styles/DetailsMenu'
 import Quest from './Quest'
+import User from './User'
 
 const StyledSingleQuest = styled.div``
 
@@ -22,6 +23,10 @@ export const SINGLE_QUEST_QUERY = gql`
       adventure {
         id
         title
+        owner {
+          id
+          name
+        }
         quests(where: { id_not: $id }) {
           id
           title
@@ -73,13 +78,27 @@ const SingleQuest = props => (
                   </Link>
                 </span>
               </div>
-              <div className='options'>
-                <Link
-                  href={{ pathname: '/update-quest', query: { id: quest.id } }}
-                >
-                  <a>Update Quest</a>
-                </Link>
-              </div>
+
+              <User>
+                {({ data: { me } }) => {
+                  if (!me || quest.adventure.owner.id !== me.id) {
+                    return null
+                  }
+
+                  return (
+                    <div className='options'>
+                      <Link
+                        href={{
+                          pathname: '/update-quest',
+                          query: { id: quest.id }
+                        }}
+                      >
+                        <a>Update Quest</a>
+                      </Link>
+                    </div>
+                  )
+                }}
+              </User>
             </DetailsMenu>
           </header>
 

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Link from 'next/link'
 import Router from 'next/router'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -79,6 +80,13 @@ export class Login extends Component {
               </label>
 
               <FormButton>Sign In</FormButton>
+
+              <div style={{ marginTop: '1em' }}>
+                New here?{' '}
+                <Link href='/register' prefetch>
+                  <a>Register an account</a>
+                </Link>
+              </div>
             </fieldset>
           </Form>
         )}

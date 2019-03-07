@@ -6,7 +6,7 @@ import Router from 'next/router'
 import Form from './styles/Form'
 import FormButton from './styles/FormButton'
 import Editor from './Editor'
-import { ADVENTURES_QUERY } from './Adventures'
+import { CURRENT_USER_QUERY } from './User'
 import Title from './Title'
 
 export const CREATE_ADVENTURE_MUTATION = gql`
@@ -60,7 +60,7 @@ export class CreateAdventure extends PureComponent {
         <Mutation
           mutation={CREATE_ADVENTURE_MUTATION}
           variables={{ title, description }}
-          refetchQueries={[{ query: ADVENTURES_QUERY }]}
+          refetchQueries={[{ query: CURRENT_USER_QUERY }]}
         >
           {(createAdventure, { loading }) => (
             <Form

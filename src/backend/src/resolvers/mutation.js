@@ -206,7 +206,7 @@ const Mutation = {
 
     const adventure = await db.query.adventure(
       { where: { id: adventureId } },
-      `{ adventure { owner { id } } }`
+      `{ owner { id }  }`
     )
 
     if (!adventure) {
