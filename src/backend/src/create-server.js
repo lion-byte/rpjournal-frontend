@@ -20,7 +20,7 @@ const createServer = () => {
     },
     mocks: false,
     mockEntireSchema: false,
-    context: req => ({ ...req, db })
+    context: context => ({ ...context, db })
   })
 }
 

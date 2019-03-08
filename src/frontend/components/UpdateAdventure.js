@@ -5,10 +5,11 @@ import Router from 'next/router'
 
 import Form from './styles/Form'
 import FormButton from './styles/FormButton'
-import { ADVENTURES_QUERY } from './Adventures'
 import Editor from './Editor'
+import ErrorMessage from './ErrorMessage'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
 import Title from './Title'
+import { CURRENT_USER_QUERY } from './User'
 
 export const UPDATE_ADVENTURE_MUTATION = gql`
   mutation UPDATE_ADVENTURE_MUTATION(
@@ -65,15 +66,17 @@ export class UpdateAdventure extends PureComponent {
 
     return (
       <Query query={SINGLE_ADVENTURE_QUERY} variables={{ id }}>
-        {({ loading, data }) => {
-          /** @type {AdventureModel} */
-          const adventure = data.adventure
-
+        {({ loading, error, data }) => {
           if (loading) {
             return <p>Loading...</p>
-          } else if (!adventure) {
+          } else if (error) {
+            return <ErrorMessage error={error} />
+          } else if (!data.adventure) {
             return <p>No adventure found for ID {id}</p>
           }
+
+          /** @type {AdventureModel} */
+          const adventure = data.adventure
 
           return (
             <div>
@@ -87,7 +90,7 @@ export class UpdateAdventure extends PureComponent {
                 variables={{ id, ...state }}
                 refetchQueries={[
                   { query: SINGLE_ADVENTURE_QUERY, variables: { id } },
-                  { query: ADVENTURES_QUERY }
+                  { query: CURRENT_USER_QUERY }
                 ]}
               >
                 {(updateAdventure, { loading, error }) => (
@@ -96,6 +99,7 @@ export class UpdateAdventure extends PureComponent {
                       this.updateAdventure(event, updateAdventure)
                     }
                   >
+                    <ErrorMessage error={error} />
                     <fieldset aria-busy={loading} disabled={loading}>
                       <label htmlFor='title'>
                         Title

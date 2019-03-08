@@ -14,7 +14,6 @@ const StyledAdventure = styled.article`
 /**
  * @param {object} props
  * @param {AdventureModel} props.adventure
- * @returns {React.ReactElement}
  */
 const Adventure = props => {
   const { adventure } = props

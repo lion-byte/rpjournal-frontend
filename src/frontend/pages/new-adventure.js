@@ -1,10 +1,13 @@
 import React from 'react'
 
 import CreateAdventure from '../components/CreateAdventure'
+import PleaseLogin from '../components/PleaseLogin'
 
-const NewAdventure = props => (
+const NewAdventure = () => (
   <div>
-    <CreateAdventure />
+    <PleaseLogin>
+      <CreateAdventure />
+    </PleaseLogin>
   </div>
 )
 

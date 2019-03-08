@@ -2,6 +2,9 @@ import React from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
 
+import Logout from './Logout'
+import User from './User'
+
 const StyledNav = styled.nav`
   font-size: 1.5em;
 
@@ -50,6 +53,13 @@ const StyledNav = styled.nav`
     button {
       border-bottom: 1px solid ${props => props.theme.black};
     }
+
+    button {
+      color: ${props => props.theme.primaryColor};
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+    }
   }
 
   @media screen and (min-width: 55em) {
@@ -70,7 +80,8 @@ const StyledNav = styled.nav`
         margin: 0 0.25em;
       }
 
-      a {
+      a,
+      button {
         border: 0;
       }
     }
@@ -104,11 +115,29 @@ export class Nav extends React.PureComponent {
                 <a>Home</a>
               </Link>
             </li>
-            <li>
-              <Link href='/new-adventure' prefetch>
-                <a>New Adventure</a>
-              </Link>
-            </li>
+            <User>
+              {({ data }) => {
+                if (!data || !data.me) {
+                  return (
+                    <React.Fragment>
+                      <li>
+                        <Link href='/login'>
+                          <a>Login</a>
+                        </Link>
+                      </li>
+                    </React.Fragment>
+                  )
+                } else {
+                  return (
+                    <React.Fragment>
+                      <li>
+                        <Logout />
+                      </li>
+                    </React.Fragment>
+                  )
+                }
+              }}
+            </User>
           </ul>
         </div>
       </StyledNav>

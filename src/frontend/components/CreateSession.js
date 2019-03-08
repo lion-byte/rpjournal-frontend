@@ -6,6 +6,7 @@ import Router from 'next/router'
 import Form from './styles/Form'
 import FormButton from './styles/FormButton'
 import Editor from './Editor'
+import ErrorMessage from './ErrorMessage'
 import Session from './Session'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
 import Title from './Title'
@@ -76,14 +77,17 @@ export class CreateSession extends PureComponent {
 
     return (
       <Query query={SINGLE_ADVENTURE_QUERY} variables={{ id: adventureId }}>
-        {({ loading, data }) => {
-          /** @type {AdventureModel} */
-          const adventure = data.adventure
+        {({ loading, error, data }) => {
           if (loading) {
             return <p>Loading...</p>
-          } else if (!adventure) {
+          } else if (error) {
+            return <ErrorMessage error={error} />
+          } else if (!data.adventure) {
             return <p>No adventure found for ID {adventureId}.</p>
           }
+
+          /** @type {AdventureModel} */
+          const adventure = data.adventure
 
           return (
             <div>
@@ -104,10 +108,11 @@ export class CreateSession extends PureComponent {
                   }
                 ]}
               >
-                {(createSession, { loading }) => (
+                {(createSession, { loading, error }) => (
                   <Form
                     onSubmit={event => this.createSession(event, createSession)}
                   >
+                    <ErrorMessage error={error} />
                     <fieldset aria-busy={loading} disabled={loading}>
                       <label htmlFor='title'>
                         Title

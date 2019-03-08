@@ -6,7 +6,10 @@ import gql from 'graphql-tag'
 import styled from 'styled-components'
 
 import DetailsMenu from './styles/DetailsMenu'
+import ErrorMessage from './ErrorMessage'
 import Session from './Session'
+import Title from './Title'
+import User from './User'
 
 const StyledSingleSession = styled.div``
 
@@ -21,6 +24,10 @@ export const SINGLE_SESSION_QUERY = gql`
       adventure {
         id
         title
+        owner {
+          id
+          name
+        }
         sessions(where: { id_not: $id }) {
           id
           title
@@ -37,18 +44,22 @@ export const SINGLE_SESSION_QUERY = gql`
  */
 const SingleSession = props => (
   <Query query={SINGLE_SESSION_QUERY} variables={{ id: props.id }}>
-    {({ loading, data }) => {
-      /** @type {SessionModel} */
-      const session = data.session
-
+    {({ loading, error, data }) => {
       if (loading) {
         return <p>Loading...</p>
-      } else if (!session) {
+      } else if (error) {
+        return <ErrorMessage error={error} />
+      } else if (!data.session) {
         return <p>No session found for ID {props.id}</p>
       }
 
+      /** @type {SessionModel} */
+      const session = data.session
+
       return (
         <StyledSingleSession>
+          <Title title={`${session.title} | ${session.adventure.title}`} />
+
           <header>
             <h1>{session.title}</h1>
             <DetailsMenu>
@@ -71,16 +82,26 @@ const SingleSession = props => (
                   </Link>
                 </span>
               </div>
-              <div className='options'>
-                <Link
-                  href={{
-                    pathname: '/update-session',
-                    query: { id: session.id }
-                  }}
-                >
-                  <a>Update Session</a>
-                </Link>
-              </div>
+              <User>
+                {({ data: { me } }) => {
+                  if (!me || session.adventure.owner.id !== me.id) {
+                    return null
+                  }
+
+                  return (
+                    <div className='options'>
+                      <Link
+                        href={{
+                          pathname: '/update-session',
+                          query: { id: session.id }
+                        }}
+                      >
+                        <a>Update Session</a>
+                      </Link>
+                    </div>
+                  )
+                }}
+              </User>
             </DetailsMenu>
           </header>
 

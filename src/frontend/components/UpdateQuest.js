@@ -6,6 +6,7 @@ import Router from 'next/router'
 import Form from './styles/Form'
 import FormButton from './styles/FormButton'
 import Editor from './Editor'
+import ErrorMessage from './ErrorMessage'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
 import { SINGLE_QUEST_QUERY } from './SingleQuest'
 import Title from './Title'
@@ -70,15 +71,17 @@ export class UpdateQuest extends PureComponent {
 
     return (
       <Query query={SINGLE_QUEST_QUERY} variables={{ id }}>
-        {({ loading, data }) => {
-          /** @type {QuestModel} */
-          const quest = data.quest
-
+        {({ loading, error, data }) => {
           if (loading) {
             return <p>Loading...</p>
-          } else if (!quest) {
+          } else if (error) {
+            return <ErrorMessage error={error} />
+          } else if (!data.quest) {
             return <p>No quest found for ID {id}</p>
           }
+
+          /** @type {QuestModel} */
+          const quest = data.quest
 
           return (
             <div>
@@ -102,6 +105,7 @@ export class UpdateQuest extends PureComponent {
                   <Form
                     onSubmit={event => this.updateQuest(event, updateQuest)}
                   >
+                    <ErrorMessage error={error} />
                     <fieldset aria-busy={loading} disabled={loading}>
                       <label htmlFor='title'>
                         Title

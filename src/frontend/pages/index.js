@@ -2,7 +2,7 @@ import React from 'react'
 
 import Adventures from '../components/Adventures'
 
-const Home = props => (
+const Home = () => (
   <div>
     <Adventures />
   </div>

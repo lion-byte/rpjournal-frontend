@@ -6,6 +6,7 @@ import Router from 'next/router'
 import Form from './styles/Form'
 import FormButton from './styles/FormButton'
 import Editor from './Editor'
+import ErrorMessage from './ErrorMessage'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
 import { SINGLE_SESSION_QUERY } from './SingleSession'
 import Title from './Title'
@@ -64,15 +65,17 @@ export class UpdateSession extends PureComponent {
 
     return (
       <Query query={SINGLE_SESSION_QUERY} variables={{ id }}>
-        {({ loading, data }) => {
-          /** @type {SessionModel} */
-          const session = data.session
-
+        {({ loading, error, data }) => {
           if (loading) {
             return <p>Loading...</p>
-          } else if (!session) {
+          } else if (error) {
+            return <ErrorMessage error={error} />
+          } else if (!data.session) {
             return <p>No session found for ID {id}</p>
           }
+
+          /** @type {SessionModel} */
+          const session = data.session
 
           return (
             <div>
@@ -96,6 +99,7 @@ export class UpdateSession extends PureComponent {
                   <Form
                     onSubmit={event => this.updateSession(event, updateSession)}
                   >
+                    <ErrorMessage error={error} />
                     <fieldset aria-busy={loading} disabled={loading}>
                       <label htmlFor='title'>
                         Title
