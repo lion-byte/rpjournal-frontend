@@ -5,6 +5,7 @@ import gql from 'graphql-tag'
 
 import Form from './styles/Form'
 import FormButton from './styles/FormButton'
+import ErrorMessage from './ErrorMessage'
 import Title from './Title'
 import { CURRENT_USER_QUERY } from './User'
 
@@ -58,7 +59,7 @@ export class Register extends Component {
             onSubmit={event => this.handleSubmit(event, register)}
           >
             <Title title='Register' />
-
+            <ErrorMessage error={error} />
             <fieldset disabled={loading} aria-busy={loading}>
               <label htmlFor='name'>
                 Name
