@@ -65,15 +65,17 @@ export class UpdateSession extends PureComponent {
 
     return (
       <Query query={SINGLE_SESSION_QUERY} variables={{ id }}>
-        {({ loading, data }) => {
-          /** @type {SessionModel} */
-          const session = data.session
-
+        {({ loading, error, data }) => {
           if (loading) {
             return <p>Loading...</p>
-          } else if (!session) {
+          } else if (error) {
+            return <ErrorMessage error={error} />
+          } else if (!data.session) {
             return <p>No session found for ID {id}</p>
           }
+
+          /** @type {SessionModel} */
+          const session = data.session
 
           return (
             <div>

@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 import styled from 'styled-components'
 
 import DetailsMenu from './styles/DetailsMenu'
+import ErrorMessage from './ErrorMessage'
 import Quest from './Quest'
 import Session from './Session'
 import Title from './Title'
@@ -58,7 +59,7 @@ const SingleAdventure = props => (
       if (loading) {
         return <p>Loading...</p>
       } else if (error) {
-        return <p>Error. {error.message}</p>
+        return <ErrorMessage error={error} />
       } else if (!adventure) {
         return <p>No adventure found for ID {props.id}</p>
       }
@@ -80,8 +81,8 @@ const SingleAdventure = props => (
                 </span>
               </div>
               <User>
-                {({ data: { me } }) => {
-                  if (!me || adventure.owner.id !== me.id) {
+                {({ data, error }) => {
+                  if (error || !data.me || adventure.owner.id !== data.me.id) {
                     return null
                   }
 

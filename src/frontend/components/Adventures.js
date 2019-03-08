@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import DetailsMenu from './styles/DetailsMenu'
 import Adventure from './Adventure'
+import ErrorMessage from './ErrorMessage'
 import User from './User'
 
 const StyledAdventures = styled.div`
@@ -23,8 +24,8 @@ const Adventures = () => (
     <header>
       <h1>Adventures</h1>
       <User>
-        {({ data: { me } }) => {
-          if (!me) {
+        {({ data, error }) => {
+          if (error || !data.me) {
             return null
           }
 
@@ -46,9 +47,7 @@ const Adventures = () => (
         if (loading) {
           return <p>Loading...</p>
         } else if (error) {
-          return <pre>Error: {error.message}</pre>
-        } else if (!data) {
-          return null
+          return <ErrorMessage error={error} />
         }
 
         /** @type {UserModel} */

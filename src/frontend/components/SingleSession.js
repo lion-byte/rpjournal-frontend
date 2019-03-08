@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 import styled from 'styled-components'
 
 import DetailsMenu from './styles/DetailsMenu'
+import ErrorMessage from './ErrorMessage'
 import Session from './Session'
 import Title from './Title'
 import User from './User'
@@ -43,15 +44,17 @@ export const SINGLE_SESSION_QUERY = gql`
  */
 const SingleSession = props => (
   <Query query={SINGLE_SESSION_QUERY} variables={{ id: props.id }}>
-    {({ loading, data }) => {
-      /** @type {SessionModel} */
-      const session = data.session
-
+    {({ loading, error, data }) => {
       if (loading) {
         return <p>Loading...</p>
-      } else if (!session) {
+      } else if (error) {
+        return <ErrorMessage error={error} />
+      } else if (!data.session) {
         return <p>No session found for ID {props.id}</p>
       }
+
+      /** @type {SessionModel} */
+      const session = data.session
 
       return (
         <StyledSingleSession>

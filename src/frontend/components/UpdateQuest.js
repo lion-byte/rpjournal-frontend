@@ -71,15 +71,17 @@ export class UpdateQuest extends PureComponent {
 
     return (
       <Query query={SINGLE_QUEST_QUERY} variables={{ id }}>
-        {({ loading, data }) => {
-          /** @type {QuestModel} */
-          const quest = data.quest
-
+        {({ loading, error, data }) => {
           if (loading) {
             return <p>Loading...</p>
-          } else if (!quest) {
+          } else if (error) {
+            return <ErrorMessage error={error} />
+          } else if (!data.quest) {
             return <p>No quest found for ID {id}</p>
           }
+
+          /** @type {QuestModel} */
+          const quest = data.quest
 
           return (
             <div>

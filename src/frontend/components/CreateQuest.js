@@ -77,15 +77,17 @@ export class CreateQuest extends PureComponent {
 
     return (
       <Query query={SINGLE_ADVENTURE_QUERY} variables={{ id: adventureId }}>
-        {({ loading, data }) => {
-          /** @type {AdventureModel} */
-          const adventure = data.adventure
-
+        {({ loading, error, data }) => {
           if (loading) {
             return <p>Loading...</p>
-          } else if (!adventure) {
+          } else if (error) {
+            return <ErrorMessage error={error} />
+          } else if (!data.adventure) {
             return <p>No adventure found for ID {adventureId}.</p>
           }
+
+          /** @type {AdventureModel} */
+          const adventure = data.adventure
 
           return (
             <div>

@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 import styled from 'styled-components'
 
 import DetailsMenu from './styles/DetailsMenu'
+import ErrorMessage from './ErrorMessage'
 import Quest from './Quest'
 import Title from './Title'
 import User from './User'
@@ -45,15 +46,17 @@ export const SINGLE_QUEST_QUERY = gql`
  */
 const SingleQuest = props => (
   <Query query={SINGLE_QUEST_QUERY} variables={{ id: props.id }}>
-    {({ loading, data }) => {
-      /** @type {QuestModel} */
-      const quest = data.quest
-
+    {({ loading, error, data }) => {
       if (loading) {
         return <p>Loading...</p>
-      } else if (!quest) {
+      } else if (error) {
+        return <ErrorMessage error={error} />
+      } else if (!data.quest) {
         return <p>No quest found for ID {props.id}</p>
       }
+
+      /** @type {QuestModel} */
+      const quest = data.quest
 
       return (
         <StyledSingleQuest>
@@ -83,8 +86,12 @@ const SingleQuest = props => (
               </div>
 
               <User>
-                {({ data: { me } }) => {
-                  if (!me || quest.adventure.owner.id !== me.id) {
+                {({ data, error }) => {
+                  if (
+                    error ||
+                    !data.me ||
+                    quest.adventure.owner.id !== data.me.id
+                  ) {
                     return null
                   }
 
