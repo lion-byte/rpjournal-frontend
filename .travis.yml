@@ -6,9 +6,9 @@ node_js:
 matrix:
   include:
     - name: Back End
-      env: PROJECT=src/backend
+      env: PROJECT=backend
     - name: Front End
-      env: PROJECT=src/frontend
+      env: PROJECT=frontend
 
 before_install:
   - npm i -g npm@6
