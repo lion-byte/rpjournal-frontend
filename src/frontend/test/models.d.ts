@@ -4,6 +4,7 @@ interface UserModel {
   email: string
   permissions: Array<string>
   adventures: Array<AdventureModel>
+  [key: string]: any
 }
 
 interface AdventureModel {

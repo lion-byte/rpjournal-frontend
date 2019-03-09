@@ -54,15 +54,16 @@ export const SINGLE_ADVENTURE_QUERY = gql`
 const SingleAdventure = props => (
   <Query query={SINGLE_ADVENTURE_QUERY} variables={{ id: props.id }}>
     {({ loading, error, data }) => {
-      /** @type {AdventureModel} */
-      const adventure = data.adventure
       if (loading) {
         return <p>Loading...</p>
       } else if (error) {
         return <ErrorMessage error={error} />
-      } else if (!adventure) {
+      } else if (!data.adventure) {
         return <p>No adventure found for ID {props.id}</p>
       }
+
+      /** @type {AdventureModel} */
+      const adventure = data.adventure
 
       return (
         <StyledAdventure>

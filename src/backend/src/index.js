@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 const { createServer } = require('./create-server')
-// const { db } = require('./db')
 
 const server = createServer()
 const app = express()
@@ -16,12 +15,16 @@ app.use((req, res, next) => {
   const { token } = req.cookies
 
   if (token) {
-    // @ts-ignore
-    const { userId } = jwt.verify(token, process.env.APP_SECRET)
+    try {
+      // @ts-ignore
+      const { userId } = jwt.verify(token, process.env.APP_SECRET)
 
-    // Append the userId to the request parameter
-    // @ts-ignore
-    req.userId = userId
+      // Append the userId to the request parameter
+      // @ts-ignore
+      req.userId = userId
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   next()
