@@ -7,10 +7,10 @@ import Adventure from './Adventure'
 import ErrorMessage from './ErrorMessage'
 import User from './User'
 
-const StyledAdventures = styled.div`
+const StyledAdventures = styled.section`
   .list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(20em, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(30em, 1fr));
     grid-gap: 2em;
   }
 
