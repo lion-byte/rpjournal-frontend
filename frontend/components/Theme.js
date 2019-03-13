@@ -16,7 +16,7 @@ const theme = {
   darkGray: '#525252',
   black: '#353535',
   primaryColor: '#ea45ba',
-  accentColor: '',
+  accentColor: '#1d5e81',
   headerFont: `'Sarabun', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif`,
   baseFont: `'Open Sans', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif`
 }

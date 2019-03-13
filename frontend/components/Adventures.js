@@ -7,7 +7,7 @@ import Adventure from './Adventure'
 import ErrorMessage from './ErrorMessage'
 import User from './User'
 
-const StyledAdventures = styled.section`
+const StyledAdventures = styled.div`
   .list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(30em, 1fr));

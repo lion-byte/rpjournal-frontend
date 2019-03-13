@@ -1,12 +1,5 @@
 import React from 'react'
 import Link from 'next/link'
-import styled from 'styled-components'
-
-const StyledQuest = styled.article`
-  .quest-status {
-    font-size: 0.8em;
-  }
-`
 
 /**
  * @param {object} props
@@ -16,19 +9,15 @@ const Quest = props => {
   const { quest } = props
 
   return (
-    <StyledQuest>
+    <article className='quest'>
       <h1>
         <Link href={{ pathname: '/quest', query: { id: quest.id } }}>
           <a>{quest.title}</a>
         </Link>
       </h1>
 
-      <p className='quest-status'>
-        [{quest.completed ? 'Completed' : 'In Progress'}]
-      </p>
-
       <section dangerouslySetInnerHTML={{ __html: quest.description }} />
-    </StyledQuest>
+    </article>
   )
 }
 

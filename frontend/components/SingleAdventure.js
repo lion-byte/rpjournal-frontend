@@ -5,14 +5,36 @@ import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 
+import { fillerBackgroundImage } from '../lib/filler'
 import DetailsMenu from './styles/DetailsMenu'
 import ErrorMessage from './ErrorMessage'
-import Quest from './Quest'
-import Session from './Session'
+import Quests from './Quests'
+import Sessions from './Sessions'
 import Title from './Title'
 import User from './User'
 
 const StyledAdventure = styled.div`
+  .banner {
+    background-color: ${props => props.theme.primaryColor};
+    background-image: initial;
+    background-position: center;
+    background-size: cover;
+    display: block;
+    height: 15em;
+    width: 100%;
+
+    &::after {
+      content: ' ';
+      background-color: transparent;
+      background-image: linear-gradient(
+        transparent 67.5%,
+        ${props => props.theme.white}
+      );
+      display: block;
+      height: 15em;
+    }
+  }
+
   .additional-details {
     display: grid;
     grid-gap: 2em;
@@ -31,17 +53,6 @@ export const SINGLE_ADVENTURE_QUERY = gql`
       owner {
         id
         name
-      }
-      sessions(orderBy: title_ASC) {
-        id
-        title
-        description
-      }
-      quests(orderBy: title_ASC) {
-        id
-        title
-        description
-        completed
       }
     }
   }
@@ -67,13 +78,22 @@ const SingleAdventure = props => (
 
       return (
         <StyledAdventure>
+          <div
+            className='banner'
+            style={{
+              backgroundImage: `url(${fillerBackgroundImage({
+                width: 1600,
+                height: 350
+              })})`
+            }}
+          />
+
           <Title title={adventure.title} />
 
           <header>
             <h1>{adventure.title}</h1>
             <DetailsMenu>
               <div className='details'>
-                <span>By {adventure.owner.name}</span>
                 <span>
                   Created <TimeAgo date={adventure.createdAt} />
                 </span>
@@ -127,26 +147,12 @@ const SingleAdventure = props => (
           <div className='additional-details'>
             <section className='sessions'>
               <h2>Sessions</h2>
-
-              {adventure.sessions.length === 0 ? (
-                <p>No sessions yet.</p>
-              ) : (
-                adventure.sessions.map(session => (
-                  <Session key={session.id} session={session} />
-                ))
-              )}
+              <Sessions adventureId={props.id} />
             </section>
 
             <section className='quests'>
               <h2>Quests</h2>
-
-              {adventure.quests.length === 0 ? (
-                <p>No quests yet.</p>
-              ) : (
-                adventure.quests.map(quest => (
-                  <Quest key={quest.id} quest={quest} />
-                ))
-              )}
+              <Quests adventureId={props.id} />
             </section>
           </div>
         </StyledAdventure>
@@ -154,9 +160,5 @@ const SingleAdventure = props => (
     }}
   </Query>
 )
-
-SingleAdventure.defaultProps = {
-  id: ''
-}
 
 export default SingleAdventure
