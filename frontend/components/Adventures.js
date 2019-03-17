@@ -1,17 +1,46 @@
 import React from 'react'
 import Link from 'next/link'
+import TimeAgo from 'react-timeago'
 import styled from 'styled-components'
 
+import { fillerBackgroundImage } from '../lib/filler'
+import Banner from './styles/Banner'
 import DetailsMenu from './styles/DetailsMenu'
-import Adventure from './Adventure'
 import ErrorMessage from './ErrorMessage'
 import User from './User'
 
 const StyledAdventures = styled.div`
-  .list {
+  .adventure-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(30em, 1fr));
     grid-gap: 2em;
+    grid-template-columns: 1fr;
+
+    @media screen and (min-width: 60em) {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .adventure {
+      border: 0.125em solid ${props => props.theme.offWhite};
+      word-wrap: break-word;
+
+      .info {
+        align-items: flex-start;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 1em 0.5em;
+
+        h1 {
+          margin: 0;
+          max-width: 20em;
+        }
+
+        time {
+          text-align: right;
+        }
+      }
+    }
   }
 
   pre {
@@ -60,9 +89,30 @@ const Adventures = () => (
         }
 
         return (
-          <div className='list'>
+          <div className='adventure-list'>
             {me.adventures.map(adventure => (
-              <Adventure key={adventure.id} adventure={adventure} />
+              <article className='adventure' key={adventure.id}>
+                <Banner
+                  style={{
+                    backgroundImage: `url(${fillerBackgroundImage()})`
+                  }}
+                />
+
+                <div className='info'>
+                  <h1>
+                    <Link
+                      href={{
+                        pathname: '/adventure',
+                        query: { id: adventure.id }
+                      }}
+                    >
+                      <a>{adventure.title}</a>
+                    </Link>
+                  </h1>
+
+                  <TimeAgo date={adventure.updatedAt} />
+                </div>
+              </article>
             ))}
           </div>
         )

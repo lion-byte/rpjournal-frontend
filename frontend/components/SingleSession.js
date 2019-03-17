@@ -7,7 +7,6 @@ import styled from 'styled-components'
 
 import DetailsMenu from './styles/DetailsMenu'
 import ErrorMessage from './ErrorMessage'
-import Session from './Session'
 import Title from './Title'
 import User from './User'
 
@@ -27,11 +26,6 @@ export const SINGLE_SESSION_QUERY = gql`
         owner {
           id
           name
-        }
-        sessions(where: { id_not: $id }) {
-          id
-          title
-          description
         }
       }
     }
@@ -106,19 +100,6 @@ const SingleSession = props => (
           </header>
 
           <section dangerouslySetInnerHTML={{ __html: session.description }} />
-
-          <footer>
-            <h2>Other Sessions</h2>
-            {session.adventure.sessions.length === 0 ? (
-              <p>No other sessions.</p>
-            ) : (
-              <div className='other-sessions'>
-                {session.adventure.sessions.map(otherSession => (
-                  <Session key={otherSession.id} session={otherSession} />
-                ))}
-              </div>
-            )}
-          </footer>
         </StyledSingleSession>
       )
     }}

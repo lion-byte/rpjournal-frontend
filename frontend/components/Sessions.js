@@ -5,10 +5,9 @@ import gql from 'graphql-tag'
 import TimeAgo from 'react-timeago'
 import styled from 'styled-components'
 
-import { fillerBackgroundImage } from '../lib/filler'
 import ErrorMessage from './ErrorMessage'
 
-const SESSIONS_QUERY = gql`
+export const SESSIONS_QUERY = gql`
   query SESSIONS_QUERY($adventureId: ID!) {
     adventure(where: { id: $adventureId }) {
       id
@@ -45,12 +44,6 @@ const SessionList = styled.div`
         }
       }
     }
-
-    img {
-      object-fit: contain;
-      width: 100%;
-      max-width: 5em;
-    }
   }
 `
 
@@ -80,11 +73,6 @@ const Sessions = props => (
         <SessionList>
           {adventure.sessions.map(session => (
             <article key={session.id} className='session'>
-              <img
-                src={fillerBackgroundImage({ height: 128, width: 128 })}
-                alt={session.title}
-              />
-
               <div className='content'>
                 <header>
                   <h1>
@@ -96,10 +84,6 @@ const Sessions = props => (
                   </h1>
                   <TimeAgo date={session.updatedAt} />
                 </header>
-
-                <section
-                  dangerouslySetInnerHTML={{ __html: session.description }}
-                />
               </div>
             </article>
           ))}

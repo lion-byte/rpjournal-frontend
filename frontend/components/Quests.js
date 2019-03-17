@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import ErrorMessage from './ErrorMessage'
 
-const QUESTS_QUERY = gql`
+export const QUESTS_QUERY = gql`
   query QUESTS_QUERY($adventureId: ID!) {
     adventure(where: { id: $adventureId }) {
       id

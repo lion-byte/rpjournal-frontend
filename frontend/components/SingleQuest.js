@@ -7,7 +7,6 @@ import styled from 'styled-components'
 
 import DetailsMenu from './styles/DetailsMenu'
 import ErrorMessage from './ErrorMessage'
-import Quest from './Quest'
 import Title from './Title'
 import User from './User'
 
@@ -28,12 +27,6 @@ export const SINGLE_QUEST_QUERY = gql`
         owner {
           id
           name
-        }
-        quests(where: { id_not: $id }) {
-          id
-          title
-          description
-          completed
         }
       }
     }
@@ -115,19 +108,6 @@ const SingleQuest = props => (
           <p>{quest.completed ? '' : 'Not '}Completed</p>
 
           <section dangerouslySetInnerHTML={{ __html: quest.description }} />
-
-          <footer>
-            <h2>Other Quests</h2>
-            {quest.adventure.quests.length === 0 ? (
-              <p>No other quests.</p>
-            ) : (
-              <div className='other-quests'>
-                {quest.adventure.quests.map(otherQuest => (
-                  <Quest key={quest.id} quest={otherQuest} />
-                ))}
-              </div>
-            )}
-          </footer>
         </StyledSingleQuest>
       )
     }}

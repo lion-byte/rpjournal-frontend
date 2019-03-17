@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 import styled from 'styled-components'
 
 import { fillerBackgroundImage } from '../lib/filler'
+import Banner from './styles/Banner'
 import DetailsMenu from './styles/DetailsMenu'
 import ErrorMessage from './ErrorMessage'
 import Quests from './Quests'
@@ -14,27 +15,6 @@ import Title from './Title'
 import User from './User'
 
 const StyledAdventure = styled.div`
-  .banner {
-    background-color: ${props => props.theme.primaryColor};
-    background-image: initial;
-    background-position: center;
-    background-size: cover;
-    display: block;
-    height: 15em;
-    width: 100%;
-
-    &::after {
-      content: ' ';
-      background-color: transparent;
-      background-image: linear-gradient(
-        transparent 67.5%,
-        ${props => props.theme.white}
-      );
-      display: block;
-      height: 15em;
-    }
-  }
-
   .additional-details {
     display: grid;
     grid-gap: 2em;
@@ -78,8 +58,8 @@ const SingleAdventure = props => (
 
       return (
         <StyledAdventure>
-          <div
-            className='banner'
+          <Banner
+            className='large'
             style={{
               backgroundImage: `url(${fillerBackgroundImage({
                 width: 1600,

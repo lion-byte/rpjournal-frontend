@@ -7,7 +7,7 @@ import Form from './styles/Form'
 import FormButton from './styles/FormButton'
 import Editor from './Editor'
 import ErrorMessage from './ErrorMessage'
-import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
+import { QUESTS_QUERY } from './Quests'
 import { SINGLE_QUEST_QUERY } from './SingleQuest'
 import Title from './Title'
 
@@ -96,8 +96,8 @@ export class UpdateQuest extends PureComponent {
                 refetchQueries={[
                   { query: SINGLE_QUEST_QUERY, variables: { id } },
                   {
-                    query: SINGLE_ADVENTURE_QUERY,
-                    variables: { id: quest.adventure.id }
+                    query: QUESTS_QUERY,
+                    variables: { adventureId: quest.adventure.id }
                   }
                 ]}
               >

@@ -7,7 +7,7 @@ import Form from './styles/Form'
 import FormButton from './styles/FormButton'
 import Editor from './Editor'
 import ErrorMessage from './ErrorMessage'
-import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
+import { SESSIONS_QUERY } from './Sessions'
 import { SINGLE_SESSION_QUERY } from './SingleSession'
 import Title from './Title'
 
@@ -90,8 +90,8 @@ export class UpdateSession extends PureComponent {
                 refetchQueries={[
                   { query: SINGLE_SESSION_QUERY, variables: { id } },
                   {
-                    query: SINGLE_ADVENTURE_QUERY,
-                    variables: { id: session.adventure.id }
+                    query: SESSIONS_QUERY,
+                    variables: { adventureId: session.adventure.id }
                   }
                 ]}
               >
