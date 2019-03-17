@@ -7,7 +7,7 @@ import Form from './styles/Form'
 import FormButton from './styles/FormButton'
 import Editor from './Editor'
 import ErrorMessage from './ErrorMessage'
-import Session from './Session'
+import { SESSIONS_QUERY } from './Sessions'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
 import Title from './Title'
 
@@ -97,15 +97,11 @@ export class CreateSession extends PureComponent {
                   Create New Session for <u>{adventure.title}</u>
                 </h1>
               </header>
-
               <Mutation
                 mutation={CREATE_SESSION_MUTATION}
                 variables={{ adventureId, title, description }}
                 refetchQueries={[
-                  {
-                    query: SINGLE_ADVENTURE_QUERY,
-                    variables: { id: adventureId }
-                  }
+                  { query: SESSIONS_QUERY, variables: { adventureId } }
                 ]}
               >
                 {(createSession, { loading, error }) => (
@@ -125,30 +121,15 @@ export class CreateSession extends PureComponent {
                           required
                         />
                       </label>
-
                       <div className='description'>
                         Description
                         <Editor onSave={this.handleDescription} />
                       </div>
-
                       <FormButton>Create Session</FormButton>
                     </fieldset>
                   </Form>
                 )}
               </Mutation>
-
-              <footer>
-                <h2>Other Sessions</h2>
-                {adventure.sessions.length === 0 ? (
-                  <p>No other sessions. Looks like this is your first one!</p>
-                ) : (
-                  <div className='other-sessions'>
-                    {adventure.sessions.map(otherSession => (
-                      <Session key={otherSession.id} session={otherSession} />
-                    ))}
-                  </div>
-                )}
-              </footer>
             </div>
           )
         }}

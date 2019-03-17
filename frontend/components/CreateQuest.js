@@ -7,7 +7,7 @@ import Form from './styles/Form'
 import FormButton from './styles/FormButton'
 import Editor from './Editor'
 import ErrorMessage from './ErrorMessage'
-import Quest from './Quest'
+import { QUESTS_QUERY } from './Quests'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
 import Title from './Title'
 
@@ -102,10 +102,7 @@ export class CreateQuest extends PureComponent {
                 mutation={CREATE_QUEST_MUTATION}
                 variables={{ adventureId, title, description }}
                 refetchQueries={[
-                  {
-                    query: SINGLE_ADVENTURE_QUERY,
-                    variables: { id: adventureId }
-                  }
+                  { query: QUESTS_QUERY, variables: { adventureId } }
                 ]}
               >
                 {(createQuest, { loading, error }) => (
@@ -125,30 +122,15 @@ export class CreateQuest extends PureComponent {
                           required
                         />
                       </label>
-
                       <div className='description'>
                         Description
                         <Editor onSave={this.handleDescription} />
                       </div>
-
                       <FormButton>Create Quest</FormButton>
                     </fieldset>
                   </Form>
                 )}
               </Mutation>
-
-              <footer>
-                <h2>Other Quests</h2>
-                {adventure.quests.length === 0 ? (
-                  <p>No other quests. Looks like this is your first one!</p>
-                ) : (
-                  <div className='other-quests'>
-                    {adventure.quests.map(otherQuest => (
-                      <Quest key={otherQuest.id} quest={otherQuest} />
-                    ))}
-                  </div>
-                )}
-              </footer>
             </div>
           )
         }}
