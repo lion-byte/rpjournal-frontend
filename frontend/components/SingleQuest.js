@@ -107,7 +107,10 @@ const SingleQuest = props => (
 
           <p>{quest.completed ? '' : 'Not '}Completed</p>
 
-          <section dangerouslySetInnerHTML={{ __html: quest.description }} />
+          <section
+            className='detail-notes'
+            dangerouslySetInnerHTML={{ __html: quest.description }}
+          />
         </StyledSingleQuest>
       )
     }}

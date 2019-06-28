@@ -121,6 +121,7 @@ const SingleAdventure = props => (
           </header>
 
           <section
+            className='detail-notes'
             dangerouslySetInnerHTML={{ __html: adventure.description }}
           />
 

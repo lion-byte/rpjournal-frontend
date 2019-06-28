@@ -10,7 +10,7 @@ const StyledPage = styled.div`
   main {
     margin: 0 auto;
     max-width: 1400px;
-    padding: 2em;
+    padding: 4em 2em;
   }
 `
 

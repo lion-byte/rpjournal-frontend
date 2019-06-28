@@ -99,7 +99,10 @@ const SingleSession = props => (
             </DetailsMenu>
           </header>
 
-          <section dangerouslySetInnerHTML={{ __html: session.description }} />
+          <section
+            className='detail-notes'
+            dangerouslySetInnerHTML={{ __html: session.description }}
+          />
         </StyledSingleSession>
       )
     }}
