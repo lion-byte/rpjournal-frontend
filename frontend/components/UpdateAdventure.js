@@ -3,13 +3,13 @@ import { Query, Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import Router from 'next/router'
 
+import { CURRENT_USER_QUERY } from './hooks/useUser'
 import Form from './styles/Form'
 import FormButton from './styles/FormButton'
 import Editor from './Editor'
 import ErrorMessage from './ErrorMessage'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
 import Title from './Title'
-import { CURRENT_USER_QUERY } from './User'
 
 export const UPDATE_ADVENTURE_MUTATION = gql`
   mutation UPDATE_ADVENTURE_MUTATION(

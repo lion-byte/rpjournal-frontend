@@ -4,10 +4,10 @@ import TimeAgo from 'react-timeago'
 import styled from 'styled-components'
 
 import { fillerBackgroundImage } from '../lib/filler'
+import { useUser } from './hooks/useUser'
 import Banner from './styles/Banner'
 import DetailsMenu from './styles/DetailsMenu'
 import ErrorMessage from './ErrorMessage'
-import User from './User'
 
 const StyledAdventures = styled.div`
   .adventure-list {
@@ -48,77 +48,66 @@ const StyledAdventures = styled.div`
   }
 `
 
-const Adventures = () => (
-  <StyledAdventures>
-    <header>
-      <h1>Adventures</h1>
-      <User>
-        {({ data, error }) => {
-          if (error || !data.me) {
-            return null
-          }
+export function Adventures () {
+  const { loading, error, data } = useUser()
 
-          return (
-            <DetailsMenu>
-              <div className='options'>
-                <Link href='/new-adventure'>
-                  <a>+ New Adventure</a>
-                </Link>
-              </div>
-            </DetailsMenu>
-          )
-        }}
-      </User>
-    </header>
+  if (loading) {
+    return <p>Loading...</p>
+  } else if (error) {
+    return <ErrorMessage error={error} />
+  } else if (!data.me) {
+    return <p>Login to see your adventures.</p>
+  }
 
-    <User>
-      {({ loading, error, data }) => {
-        if (loading) {
-          return <p>Loading...</p>
-        } else if (error) {
-          return <ErrorMessage error={error} />
-        }
+  /** @type {UserModel} */
+  const user = data.me
 
-        /** @type {UserModel} */
-        const me = data.me
+  return (
+    <StyledAdventures>
+      <header>
+        <h1>Adventures</h1>
 
-        if (!me) {
-          return <p>Login to see your adventures.</p>
-        } else if (me.adventures.length === 0) {
-          return <p>No adventures have been written yet.</p>
-        }
-
-        return (
-          <div className='adventure-list'>
-            {me.adventures.map(adventure => (
-              <article className='adventure' key={adventure.id}>
-                <Banner
-                  style={{
-                    backgroundImage: `url(${fillerBackgroundImage()})`
-                  }}
-                />
-
-                <div className='info'>
-                  <h1>
-                    <Link
-                      href={{
-                        pathname: '/adventure',
-                        query: { id: adventure.id }
-                      }}
-                    >
-                      <a>{adventure.title}</a>
-                    </Link>
-                  </h1>
-
-                  <TimeAgo date={adventure.updatedAt} />
-                </div>
-              </article>
-            ))}
+        <DetailsMenu>
+          <div className='options'>
+            <Link href='/new-adventure'>
+              <a>+ New Adventure</a>
+            </Link>
           </div>
-        )
-      }}
-    </User>
-  </StyledAdventures>
-)
+        </DetailsMenu>
+      </header>
+      {user.adventures.length === 0 ? (
+        <p>No adventures have been written yet.</p>
+      ) : (
+        <div className='adventure-list'>
+          {user.adventures.map(adventure => (
+            <article className='adventure' key={adventure.id}>
+              <Banner
+                style={{
+                  backgroundImage: `url(${fillerBackgroundImage()})`
+                }}
+              />
+
+              <div className='info'>
+                <h1>
+                  <Link
+                    href={{
+                      pathname: '/adventure',
+                      query: { id: adventure.id }
+                    }}
+                  >
+                    <a>{adventure.title}</a>
+                  </Link>
+                </h1>
+
+                <TimeAgo date={adventure.updatedAt} />
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+      }
+    </StyledAdventures>
+  )
+}
 
 export default Adventures

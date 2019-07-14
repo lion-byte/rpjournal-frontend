@@ -1,29 +1,30 @@
 import React from 'react'
 
+import { useUser } from './hooks/useUser'
+import ErrorMessage from './ErrorMessage'
 import Login from './Login'
-import User from './User'
 
 /**
  * @param {object} props
  * @param {any} props.children
  */
-const PleaseLogin = props => (
-  <User>
-    {({ data, loading }) => {
-      if (loading) {
-        return <p>Loading...</p>
-      } else if (!data.me) {
-        return (
-          <div>
-            <p>Please Login</p>
-            <Login noRedirect />
-          </div>
-        )
-      }
+export function PleaseLogin (props) {
+  const { loading, error, data } = useUser()
 
-      return props.children
-    }}
-  </User>
-)
+  if (loading) {
+    return <p>Loading...</p>
+  } else if (error) {
+    return <ErrorMessage error={error} />
+  } else if (!data.me) {
+    return (
+      <div>
+        <p>Please Login</p>
+        <Login noRedirect />
+      </div>
+    )
+  }
+
+  return props.children
+}
 
 export default PleaseLogin

@@ -3,11 +3,11 @@ import Router from 'next/router'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 
+import { CURRENT_USER_QUERY } from './hooks/useUser'
 import Form from './styles/Form'
 import FormButton from './styles/FormButton'
 import ErrorMessage from './ErrorMessage'
 import Title from './Title'
-import { CURRENT_USER_QUERY } from './User'
 
 export const REGISTER_MUTATION = gql`
   mutation REGISTER_MUTATION(

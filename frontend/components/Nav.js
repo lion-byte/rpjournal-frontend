@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
 
+import { useUser } from './hooks/useUser'
 import Logout from './Logout'
-import User from './User'
 
 const StyledNav = styled.nav`
   font-size: 1.5em;
@@ -88,61 +88,40 @@ const StyledNav = styled.nav`
   }
 `
 
-export class Nav extends React.PureComponent {
-  state = { menuActive: false }
+export function Nav () {
+  const [isActive, setActive] = useState(false)
+  const { loading, error, data } = useUser()
 
-  toggleMenu = () =>
-    this.setState(currentState => ({ menuActive: !currentState.menuActive }))
+  const toggleMenu = () => setActive(!isActive)
+  const hideMenu = () => setActive(false)
 
-  hideMenu = () => this.setState({ menuActive: false })
+  return (
+    <StyledNav>
+      <button className='menu-button' onClick={toggleMenu}>
+        <span>Menu</span>
+      </button>
 
-  render () {
-    const { menuActive } = this.state
+      <div className={isActive ? 'menu active' : 'menu'} onClick={hideMenu}>
+        <ul>
+          <li>
+            <Link href='/' prefetch>
+              <a>Home</a>
+            </Link>
+          </li>
 
-    return (
-      <StyledNav>
-        <button className='menu-button' onClick={this.toggleMenu}>
-          <span>Menu</span>
-        </button>
-
-        <div
-          className={menuActive ? 'menu active' : 'menu'}
-          onClick={this.hideMenu}
-        >
-          <ul>
-            <li>
-              <Link href='/' prefetch>
-                <a>Home</a>
+          <li>
+            {loading || error || !data.me ? (
+              <Link href='/login'>
+                <a>Login</a>
               </Link>
-            </li>
-            <User>
-              {({ data }) => {
-                if (!data || !data.me) {
-                  return (
-                    <React.Fragment>
-                      <li>
-                        <Link href='/login'>
-                          <a>Login</a>
-                        </Link>
-                      </li>
-                    </React.Fragment>
-                  )
-                } else {
-                  return (
-                    <React.Fragment>
-                      <li>
-                        <Logout />
-                      </li>
-                    </React.Fragment>
-                  )
-                }
-              }}
-            </User>
-          </ul>
-        </div>
-      </StyledNav>
-    )
-  }
+            ) : (
+              <Logout />
+            )}
+          </li>
+        </ul>
+      </div>
+    </StyledNav>
+  )
 }
 
 export default Nav

@@ -1,14 +1,14 @@
 import React from 'react'
 import TimeAgo from 'react-timeago'
 import Link from 'next/link'
-import { Query } from 'react-apollo'
+import { useQuery } from 'react-apollo'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 
+import { useUser } from './hooks/useUser'
 import DetailsMenu from './styles/DetailsMenu'
 import ErrorMessage from './ErrorMessage'
 import Title from './Title'
-import User from './User'
 
 const StyledSingleQuest = styled.div``
 
@@ -37,85 +37,79 @@ export const SINGLE_QUEST_QUERY = gql`
  * @param {object} props
  * @param {string} props.id
  */
-const SingleQuest = props => (
-  <Query query={SINGLE_QUEST_QUERY} variables={{ id: props.id }}>
-    {({ loading, error, data }) => {
-      if (loading) {
-        return <p>Loading...</p>
-      } else if (error) {
-        return <ErrorMessage error={error} />
-      } else if (!data.quest) {
-        return <p>No quest found for ID {props.id}</p>
-      }
+export function SingleQuest (props) {
+  const { loading, error, data } = useQuery(SINGLE_QUEST_QUERY, {
+    variables: { id: props.id }
+  })
+  const user = useUser()
 
-      /** @type {QuestModel} */
-      const quest = data.quest
+  if (loading) {
+    return <p>Loading...</p>
+  } else if (error) {
+    return <ErrorMessage error={error} />
+  } else if (!data.quest) {
+    return <p>No quest found for ID {props.id}</p>
+  }
 
-      return (
-        <StyledSingleQuest>
-          <Title title={`${quest.title} | ${quest.adventure.title}`} />
+  /** @type {QuestModel} */
+  const quest = data.quest
+  const showControls =
+    !user.loading &&
+    !user.error &&
+    user.data.me &&
+    quest.adventure.owner.id === user.data.me.id
 
-          <header>
-            <h1>{quest.title}</h1>
-            <DetailsMenu>
-              <div className='details'>
-                <span>
-                  Created <TimeAgo date={quest.createdAt} />
-                </span>
-                <span>
-                  Updated <TimeAgo date={quest.updatedAt} />
-                </span>
-                <span>
-                  Adventure -{' '}
-                  <Link
-                    href={{
-                      pathname: '/adventure',
-                      query: { id: quest.adventure.id }
-                    }}
-                  >
-                    <a>{quest.adventure.title}</a>
-                  </Link>
-                </span>
-              </div>
+  return (
+    <StyledSingleQuest>
+      <Title title={`${quest.title} | ${quest.adventure.title}`} />
 
-              <User>
-                {({ data, error }) => {
-                  if (
-                    error ||
-                    !data.me ||
-                    quest.adventure.owner.id !== data.me.id
-                  ) {
-                    return null
-                  }
-
-                  return (
-                    <div className='options'>
-                      <Link
-                        href={{
-                          pathname: '/update-quest',
-                          query: { id: quest.id }
-                        }}
-                      >
-                        <a>Update Quest</a>
-                      </Link>
-                    </div>
-                  )
+      <header>
+        <h1>{quest.title}</h1>
+        <DetailsMenu>
+          <div className='details'>
+            <span>
+              Created <TimeAgo date={quest.createdAt} />
+            </span>
+            <span>
+              Updated <TimeAgo date={quest.updatedAt} />
+            </span>
+            <span>
+              Adventure -{' '}
+              <Link
+                href={{
+                  pathname: '/adventure',
+                  query: { id: quest.adventure.id }
                 }}
-              </User>
-            </DetailsMenu>
-          </header>
+              >
+                <a>{quest.adventure.title}</a>
+              </Link>
+            </span>
+          </div>
 
-          <p>{quest.completed ? '' : 'Not '}Completed</p>
+          {showControls ? (
+            <div className='options'>
+              <Link
+                href={{
+                  pathname: '/update-quest',
+                  query: { id: quest.id }
+                }}
+              >
+                <a>Update Quest</a>
+              </Link>
+            </div>
+          ) : null}
+        </DetailsMenu>
+      </header>
 
-          <section
-            className='detail-notes'
-            dangerouslySetInnerHTML={{ __html: quest.description }}
-          />
-        </StyledSingleQuest>
-      )
-    }}
-  </Query>
-)
+      <p>{quest.completed ? '' : 'Not '}Completed</p>
+
+      <section
+        className='detail-notes'
+        dangerouslySetInnerHTML={{ __html: quest.description }}
+      />
+    </StyledSingleQuest>
+  )
+}
 
 SingleQuest.defaultProps = { id: '' }
 
