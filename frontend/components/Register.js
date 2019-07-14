@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import Router from 'next/router'
-import { Mutation } from 'react-apollo'
+import { useMutation } from 'react-apollo'
 import gql from 'graphql-tag'
 
 import { CURRENT_USER_QUERY } from './hooks/useUser'
@@ -23,90 +23,81 @@ export const REGISTER_MUTATION = gql`
   }
 `
 
-export class Register extends Component {
-  state = {
+export function Register () {
+  const [state, setState] = useState({
     name: '',
     email: '',
     password: ''
-  }
+  })
+  const [register, { loading, error }] = useMutation(REGISTER_MUTATION, {
+    variables: { ...state },
+    refetchQueries: [{ query: CURRENT_USER_QUERY }]
+  })
 
-  handleChange = event => {
+  const handleChange = event => {
     const { name, value } = event.target
-    this.setState({ [name]: value })
+    setState(prevState => ({ ...prevState, [name]: value }))
   }
 
-  handleSubmit = async (event, registerMutation) => {
+  const handleSubmit = async event => {
     event.preventDefault()
-    const { data } = await registerMutation()
+    const mutationResult = await register()
 
-    if (data.register) {
-      Router.push('/')
+    if (mutationResult && mutationResult.data && mutationResult.data.register) {
+      await Router.push('/')
     }
   }
 
-  render () {
-    const { name, email, password } = this.state
+  const { name, email, password } = state
 
-    return (
-      <Mutation
-        mutation={REGISTER_MUTATION}
-        variables={{ name, email, password }}
-        refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-      >
-        {(register, { error, loading }) => (
-          <Form
-            method='post'
-            onSubmit={event => this.handleSubmit(event, register)}
-          >
-            <Title title='Register' />
-            <ErrorMessage error={error} />
-            <fieldset disabled={loading} aria-busy={loading}>
-              <label htmlFor='name'>
-                Name
-                <input
-                  id='name'
-                  name='name'
-                  placeholder='Name'
-                  type='text'
-                  required
-                  value={name}
-                  onChange={this.handleChange}
-                />
-              </label>
+  return (
+    <Form method='post' onSubmit={handleSubmit}>
+      <Title title='Register' />
+      <ErrorMessage error={error} />
+      <fieldset disabled={loading} aria-busy={loading}>
+        <label htmlFor='name'>
+          Name
+          <input
+            id='name'
+            name='name'
+            placeholder='Name'
+            type='text'
+            required
+            value={name}
+            onChange={handleChange}
+          />
+        </label>
 
-              <label htmlFor='email'>
-                Email
-                <input
-                  id='email'
-                  name='email'
-                  placeholder='Email'
-                  type='email'
-                  required
-                  value={email}
-                  onChange={this.handleChange}
-                />
-              </label>
+        <label htmlFor='email'>
+          Email
+          <input
+            id='email'
+            name='email'
+            placeholder='Email'
+            type='email'
+            required
+            value={email}
+            onChange={handleChange}
+          />
+        </label>
 
-              <label htmlFor='password'>
-                Password
-                <input
-                  id='password'
-                  name='password'
-                  placeholder='Password'
-                  type='password'
-                  required
-                  value={password}
-                  onChange={this.handleChange}
-                />
-              </label>
+        <label htmlFor='password'>
+          Password
+          <input
+            id='password'
+            name='password'
+            placeholder='Password'
+            type='password'
+            required
+            value={password}
+            onChange={handleChange}
+          />
+        </label>
 
-              <FormButton>Register</FormButton>
-            </fieldset>
-          </Form>
-        )}
-      </Mutation>
-    )
-  }
+        <FormButton>Register</FormButton>
+      </fieldset>
+    </Form>
+  )
 }
 
 export default Register

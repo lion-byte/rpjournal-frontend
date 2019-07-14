@@ -105,7 +105,6 @@ export function Adventures () {
           ))}
         </div>
       )}
-      }
     </StyledAdventures>
   )
 }

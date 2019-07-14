@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import Router from 'next/router'
-import { Mutation } from 'react-apollo'
+import { useMutation } from 'react-apollo'
 import gql from 'graphql-tag'
 
 import { CURRENT_USER_QUERY } from './hooks/useUser'
@@ -21,90 +21,86 @@ export const LOGIN_MUTATION = gql`
 `
 
 /**
- * @typedef {object} LoginProps
- * @property {boolean} [noRedirect]
+ * @param {object} props
+ * @param {boolean} [props.noRedirect]
  */
+export function Login (props) {
+  const { noRedirect } = props
 
-/** @augments Component<LoginProps> */
-export class Login extends Component {
-  static defaultProps = { noRedirect: false }
-
-  state = {
+  const [state, setState] = useState({
     email: '',
     password: ''
-  }
+  })
+  const [login, { loading, error }] = useMutation(LOGIN_MUTATION, {
+    variables: { ...state },
+    refetchQueries: [{ query: CURRENT_USER_QUERY }]
+  })
 
-  handleChange = event => {
+  const handleChange = event => {
     const { name, value } = event.target
-    this.setState({ [name]: value })
+    setState(prevState => ({ ...prevState, [name]: value }))
   }
 
-  handleSubmit = async (event, loginMutation) => {
+  const handleSubmit = async event => {
     event.preventDefault()
-    const { data } = await loginMutation()
+    const mutationResult = await login()
 
-    if (data.login && !this.props.noRedirect) {
-      Router.push('/')
+    if (
+      mutationResult &&
+      mutationResult.data &&
+      mutationResult.data.login &&
+      !noRedirect
+    ) {
+      await Router.push('/')
     }
   }
 
-  render () {
-    const { email, password } = this.state
+  const { email, password } = state
 
-    return (
-      <Mutation
-        mutation={LOGIN_MUTATION}
-        variables={{ email, password }}
-        refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-      >
-        {(login, { error, loading }) => (
-          <Form
-            method='post'
-            onSubmit={event => this.handleSubmit(event, login)}
-          >
-            <Title title='Login' />
-            <ErrorMessage error={error} />
-            <fieldset disabled={loading} aria-busy={loading}>
-              <label htmlFor='email'>
-                Email
-                <input
-                  id='email'
-                  name='email'
-                  placeholder='Email'
-                  type='email'
-                  required
-                  value={email}
-                  onChange={this.handleChange}
-                />
-              </label>
+  return (
+    <Form method='post' onSubmit={handleSubmit}>
+      <Title title='Login' />
+      <ErrorMessage error={error} />
+      <fieldset disabled={loading} aria-busy={loading}>
+        <label htmlFor='email'>
+          Email
+          <input
+            id='email'
+            name='email'
+            placeholder='Email'
+            type='email'
+            required
+            value={email}
+            onChange={handleChange}
+          />
+        </label>
 
-              <label htmlFor='password'>
-                Password
-                <input
-                  id='password'
-                  name='password'
-                  placeholder='Password'
-                  type='password'
-                  required
-                  value={password}
-                  onChange={this.handleChange}
-                />
-              </label>
+        <label htmlFor='password'>
+          Password
+          <input
+            id='password'
+            name='password'
+            placeholder='Password'
+            type='password'
+            required
+            value={password}
+            onChange={handleChange}
+          />
+        </label>
 
-              <FormButton>Sign In</FormButton>
+        <FormButton>Sign In</FormButton>
 
-              <div style={{ marginTop: '1em' }}>
-                New here?{' '}
-                <Link href='/register' prefetch>
-                  <a>Register an account</a>
-                </Link>
-              </div>
-            </fieldset>
-          </Form>
-        )}
-      </Mutation>
-    )
-  }
+        <div style={{ marginTop: '1em' }}>
+          New here?{' '}
+          <Link href='/register' prefetch>
+            <a>Register an account</a>
+          </Link>
+        </div>
+      </fieldset>
+    </Form>
+  )
 }
+
+Login.defaultProps = { noRedirect: false }
 
 export default Login
