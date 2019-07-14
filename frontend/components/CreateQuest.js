@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react'
-import { Query, Mutation } from 'react-apollo'
+import React, { useState } from 'react'
+import { useQuery, useMutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import Router from 'next/router'
 
@@ -28,115 +28,98 @@ export const CREATE_QUEST_MUTATION = gql`
 `
 
 /**
- * @typedef {object} CreateQuestProps
- * @property {string} adventureId
+ * @param {object} props
+ * @param {string} props.adventureId
  */
+export function CreateQuest (props) {
+  const { adventureId } = props
 
-/** @augments {PureComponent<CreateQuestProps>} */
-export class CreateQuest extends PureComponent {
-  static defaultProps = {
-    adventureId: ''
-  }
-
-  state = {
+  const [state, setState] = useState({
     title: '',
     description: ''
-  }
+  })
+  const { loading, error, data } = useQuery(SINGLE_ADVENTURE_QUERY, {
+    variables: { id: adventureId }
+  })
+  const [createQuest, createResult] = useMutation(CREATE_QUEST_MUTATION, {
+    variables: { adventureId, ...state },
+    refetchQueries: [{ query: QUESTS_QUERY, variables: { adventureId } }]
+  })
 
-  /**
-   * @param {React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>} event
-   */
-  handleChange = event => {
+  const handleChange = event => {
     const { name, value } = event.target
-
-    this.setState({ [name]: value })
+    setState(prevState => ({ ...prevState, [name]: value }))
   }
 
-  handleDescription = description => this.setState({ description })
+  const handleDescription = description =>
+    setState(prevState => ({ ...prevState, description }))
 
-  /**
-   * @param {React.FormEvent<HTMLFormElement>} event
-   * @param {any} createQuestMutation
-   */
-  createQuest = async (event, createQuestMutation) => {
+  const create = async event => {
     event.preventDefault()
+    const mutationResult = await createQuest()
 
-    const { data } = await createQuestMutation()
-
-    Router.push({
-      pathname: '/quest',
-      query: { id: data.createQuest.id }
-    })
+    if (
+      mutationResult &&
+      mutationResult.data &&
+      mutationResult.data.createQuest
+    ) {
+      await Router.push({
+        pathname: '/quest',
+        query: { id: mutationResult.data.createQuest.id }
+      })
+    }
   }
 
-  render () {
-    const {
-      props: { adventureId },
-      state: { title, description }
-    } = this
+  const { title, description } = state
 
-    return (
-      <Query query={SINGLE_ADVENTURE_QUERY} variables={{ id: adventureId }}>
-        {({ loading, error, data }) => {
-          if (loading) {
-            return <p>Loading...</p>
-          } else if (error) {
-            return <ErrorMessage error={error} />
-          } else if (!data.adventure) {
-            return <p>No adventure found for ID {adventureId}.</p>
-          }
-
-          /** @type {AdventureModel} */
-          const adventure = data.adventure
-
-          return (
-            <div>
-              <Title title='New Quest' />
-              <header>
-                <h1>
-                  Create New Quest for <u>{adventure.title}</u>
-                </h1>
-              </header>
-
-              <Mutation
-                mutation={CREATE_QUEST_MUTATION}
-                variables={{ adventureId, title, description }}
-                refetchQueries={[
-                  { query: QUESTS_QUERY, variables: { adventureId } }
-                ]}
-              >
-                {(createQuest, { loading, error }) => (
-                  <Form
-                    onSubmit={event => this.createQuest(event, createQuest)}
-                  >
-                    <ErrorMessage error={error} />
-                    <fieldset aria-busy={loading} disabled={loading}>
-                      <label htmlFor='title'>
-                        Title
-                        <input
-                          id='title'
-                          type='text'
-                          name='title'
-                          value={title}
-                          onChange={this.handleChange}
-                          required
-                        />
-                      </label>
-                      <div className='description'>
-                        Description
-                        <Editor onSave={this.handleDescription} />
-                      </div>
-                      <FormButton>Create Quest</FormButton>
-                    </fieldset>
-                  </Form>
-                )}
-              </Mutation>
-            </div>
-          )
-        }}
-      </Query>
-    )
+  if (loading) {
+    return <p>Loading...</p>
+  } else if (error) {
+    return <ErrorMessage error={error} />
+  } else if (!data.adventure) {
+    return <p>No adventure found for ID {adventureId}.</p>
   }
+
+  /** @type {AdventureModel} */
+  const adventure = data.adventure
+
+  return (
+    <div>
+      <Title title='New Quest' />
+      <header>
+        <h1>
+          Create New Quest for <u>{adventure.title}</u>
+        </h1>
+      </header>
+
+      <Form onSubmit={create}>
+        <ErrorMessage error={createResult.error} />
+        <fieldset
+          aria-busy={createResult.loading}
+          disabled={createResult.loading}
+        >
+          <label htmlFor='title'>
+            Title
+            <input
+              id='title'
+              type='text'
+              name='title'
+              value={title}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <div className='description'>
+            Description
+            <Editor initialText={description} onSave={handleDescription} />
+          </div>
+          <FormButton>Create Quest</FormButton>
+        </fieldset>
+      </Form>
+    </div>
+  )
 }
+
+CreateQuest.defaultProps = { adventureId: '' }
 
 export default CreateQuest
