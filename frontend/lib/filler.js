@@ -12,3 +12,15 @@ export const fillerImage = options => {
     text
   )}`
 }
+
+/**
+ * @param {object} [options]
+ * @param {number} [options.height]
+ * @param {number} [options.width]
+ * @returns {string}
+ */
+export const fillerBackgroundImage = (options = {}) => {
+  const { height = 480, width = 640 } = options
+
+  return `https://placeimg.com/${width}/${height}/nature`
+}

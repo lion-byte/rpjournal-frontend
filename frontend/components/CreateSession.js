@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react'
-import { Query, Mutation } from 'react-apollo'
+import React, { useState } from 'react'
+import { useQuery, useMutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import Router from 'next/router'
 
@@ -7,7 +7,7 @@ import Form from './styles/Form'
 import FormButton from './styles/FormButton'
 import Editor from './Editor'
 import ErrorMessage from './ErrorMessage'
-import Session from './Session'
+import { SESSIONS_QUERY } from './Sessions'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
 import Title from './Title'
 
@@ -28,133 +28,97 @@ export const CREATE_SESSION_MUTATION = gql`
 `
 
 /**
- * @typedef {object} CreateSessionProps
- * @property {string} adventureId
+ * @param {object} props
+ * @param {string} props.adventureId
  */
+export function CreateSession (props) {
+  const { adventureId } = props
 
-/** @augments {PureComponent<CreateSessionProps>} */
-export class CreateSession extends PureComponent {
-  static defaultProps = {
-    adventureId: ''
-  }
-
-  state = {
+  const [state, setState] = useState({
     title: '',
     description: ''
-  }
+  })
+  const { loading, error, data } = useQuery(SINGLE_ADVENTURE_QUERY, {
+    variables: { id: adventureId }
+  })
+  const [createSession, createResult] = useMutation(CREATE_SESSION_MUTATION, {
+    variables: { adventureId, ...state },
+    refetchQueries: [{ query: SESSIONS_QUERY, variables: { adventureId } }]
+  })
 
-  /**
-   * @param {React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>} event
-   */
-  handleChange = event => {
+  const handleChange = event => {
     const { name, value } = event.target
-
-    this.setState({ [name]: value })
+    setState(prevState => ({ ...prevState, [name]: value }))
   }
 
-  handleDescription = description => this.setState({ description })
+  const handleDescription = description =>
+    setState(prevState => ({ ...prevState, description }))
 
-  /**
-   * @param {React.FormEvent<HTMLFormElement>} event
-   * @param {any} createSessionMutation
-   */
-  createSession = async (event, createSessionMutation) => {
+  const create = async event => {
     event.preventDefault()
+    const mutationResult = await createSession()
 
-    const { data } = await createSessionMutation()
-
-    Router.push({
-      pathname: '/session',
-      query: { id: data.createSession.id }
-    })
+    if (
+      mutationResult &&
+      mutationResult.data &&
+      mutationResult.data.createSession
+    ) {
+      await Router.push({
+        pathname: '/session',
+        query: { id: mutationResult.data.createSession.id }
+      })
+    }
   }
 
-  render () {
-    const {
-      props: { adventureId },
-      state: { title, description }
-    } = this
+  const { title, description } = state
 
-    return (
-      <Query query={SINGLE_ADVENTURE_QUERY} variables={{ id: adventureId }}>
-        {({ loading, error, data }) => {
-          if (loading) {
-            return <p>Loading...</p>
-          } else if (error) {
-            return <ErrorMessage error={error} />
-          } else if (!data.adventure) {
-            return <p>No adventure found for ID {adventureId}.</p>
-          }
-
-          /** @type {AdventureModel} */
-          const adventure = data.adventure
-
-          return (
-            <div>
-              <Title title='New Session' />
-              <header>
-                <h1>
-                  Create New Session for <u>{adventure.title}</u>
-                </h1>
-              </header>
-
-              <Mutation
-                mutation={CREATE_SESSION_MUTATION}
-                variables={{ adventureId, title, description }}
-                refetchQueries={[
-                  {
-                    query: SINGLE_ADVENTURE_QUERY,
-                    variables: { id: adventureId }
-                  }
-                ]}
-              >
-                {(createSession, { loading, error }) => (
-                  <Form
-                    onSubmit={event => this.createSession(event, createSession)}
-                  >
-                    <ErrorMessage error={error} />
-                    <fieldset aria-busy={loading} disabled={loading}>
-                      <label htmlFor='title'>
-                        Title
-                        <input
-                          id='title'
-                          type='text'
-                          name='title'
-                          value={title}
-                          onChange={this.handleChange}
-                          required
-                        />
-                      </label>
-
-                      <div className='description'>
-                        Description
-                        <Editor onSave={this.handleDescription} />
-                      </div>
-
-                      <FormButton>Create Session</FormButton>
-                    </fieldset>
-                  </Form>
-                )}
-              </Mutation>
-
-              <footer>
-                <h2>Other Sessions</h2>
-                {adventure.sessions.length === 0 ? (
-                  <p>No other sessions. Looks like this is your first one!</p>
-                ) : (
-                  <div className='other-sessions'>
-                    {adventure.sessions.map(otherSession => (
-                      <Session key={otherSession.id} session={otherSession} />
-                    ))}
-                  </div>
-                )}
-              </footer>
-            </div>
-          )
-        }}
-      </Query>
-    )
+  if (loading) {
+    return <p>Loading...</p>
+  } else if (error) {
+    return <ErrorMessage error={error} />
+  } else if (!data.adventure) {
+    return <p>No adventure found for ID {adventureId}.</p>
   }
+
+  /** @type {AdventureModel} */
+  const adventure = data.adventure
+
+  return (
+    <div>
+      <Title title='New Session' />
+      <header>
+        <h1>
+          Create New Session for <u>{adventure.title}</u>
+        </h1>
+      </header>
+      <Form onSubmit={create}>
+        <ErrorMessage error={createResult.error} />
+        <fieldset
+          aria-busy={createResult.loading}
+          disabled={createResult.loading}
+        >
+          <label htmlFor='title'>
+            Title
+            <input
+              id='title'
+              type='text'
+              name='title'
+              value={title}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <div className='description'>
+            Description
+            <Editor initialText={description} onSave={handleDescription} />
+          </div>
+          <FormButton>Create Session</FormButton>
+        </fieldset>
+      </Form>
+    </div>
+  )
 }
+
+CreateSession.defaultProps = { adventureId: '' }
 
 export default CreateSession

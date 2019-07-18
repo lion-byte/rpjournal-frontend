@@ -9,14 +9,14 @@ import 'typeface-open-sans'
 import 'typeface-sarabun'
 
 const theme = {
-  white: '#ffffff',
-  offWhite: '#dfdfdf',
-  lightGray: '#c3c3c3',
-  gray: '#767676',
-  darkGray: '#525252',
-  black: '#353535',
+  white: 'rgb(255,255,255)',
+  offWhite: 'rgb(225,225,225)',
+  lightGray: 'rgb(175,175,175)',
+  gray: 'rgb(125,125,125)',
+  darkGray: 'rgb(75,75,75)',
+  black: 'rgb(25,25,25)',
   primaryColor: '#ea45ba',
-  accentColor: '',
+  accentColor: '#1d5e81',
   headerFont: `'Sarabun', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif`,
   baseFont: `'Open Sans', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif`
 }
@@ -44,6 +44,10 @@ const GlobalStyles = createGlobalStyle`
   h5,
   h6 {
     font-family: ${props => props.theme.headerFont};
+  }
+
+  .detail-notes {
+    line-height: 1.5;
   }
 `
 

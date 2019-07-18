@@ -4,14 +4,25 @@
     "baseUrl": ".",
     "checkJs": true,
     "esModuleInterop": true,
-    "jsx": "react",
-    "module": "es2015",
+    "jsx": "preserve",
+    "module": "esnext",
     "moduleResolution": "node",
-    "paths": { "*": ["test/types/*"] },
-    "plugins": [{ "name": "typescript-styled-plugin" }],
+    "paths": {
+      "*": ["test/types/*"]
+    },
+    "plugins": [
+      {
+        "name": "typescript-styled-plugin"
+      }
+    ],
     "resolveJsonModule": true,
     "noEmit": true,
-    "target": "esnext"
+    "target": "esnext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true
   },
   "exclude": [".next", "coverage", "node_modules"],
   "include": ["test/theme.d.ts", "test/models.d.ts", "**/*.js"]

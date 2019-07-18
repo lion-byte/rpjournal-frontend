@@ -14,8 +14,8 @@ const StyledHeader = styled.header`
 
     h1 {
       font-family: ${props => props.theme.baseFont};
-      font-size: 4em;
-      margin-left: 0.5em;
+      font-size: 3em;
+      margin: 0.25em 0.5em;
       position: relative;
 
       @media (max-width: 1300px) {
@@ -42,7 +42,7 @@ const StyledHeader = styled.header`
   }
 `
 
-const Header = props => (
+const Header = () => (
   <StyledHeader>
     <div className='bar'>
       <h1>

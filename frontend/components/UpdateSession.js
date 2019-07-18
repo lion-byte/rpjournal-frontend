@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react'
-import { Query, Mutation } from 'react-apollo'
+import React, { useState } from 'react'
+import { useQuery, useMutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import Router from 'next/router'
 
@@ -7,7 +7,7 @@ import Form from './styles/Form'
 import FormButton from './styles/FormButton'
 import Editor from './Editor'
 import ErrorMessage from './ErrorMessage'
-import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
+import { SESSIONS_QUERY } from './Sessions'
 import { SINGLE_SESSION_QUERY } from './SingleSession'
 import Title from './Title'
 
@@ -24,114 +24,101 @@ export const UPDATE_SESSION_MUTATION = gql`
 `
 
 /**
- * @typedef {object} UpdateSessionProps
- * @property {string} id
+ * @param {object} props
+ * @param {string} props.id
  */
+export function UpdateSession (props) {
+  const { id } = props
 
-/** @augments {PureComponent<UpdateSessionProps>} */
-export class UpdateSession extends PureComponent {
-  static defaultProps = {
-    id: ''
+  const [state, setState] = useState({})
+  const { loading, error, data } = useQuery(SINGLE_SESSION_QUERY, {
+    variables: { id }
+  })
+  const [updateSession, updateResult] = useMutation(UPDATE_SESSION_MUTATION, {
+    variables: { id, ...state }
+  })
+
+  if (loading) {
+    return <p>Loading...</p>
+  } else if (error) {
+    return <ErrorMessage error={error} />
+  } else if (!data.session) {
+    return <p>No session found for ID {id}</p>
   }
 
-  state = {}
+  /** @type {SessionModel} */
+  const session = data.session
+  const adventureId = session.adventure.id
 
-  handleChange = event => {
+  const handleChange = event => {
     const { name, value } = event.target
-
-    this.setState({ [name]: value })
+    setState(prevState => ({ ...prevState, [name]: value }))
   }
 
-  descriptionChange = description => this.setState({ description })
+  const descriptionChange = description =>
+    setState(prevState => ({ ...prevState, description }))
 
-  updateSession = async (event, updateSessionMutation) => {
+  const save = async event => {
     event.preventDefault()
 
-    const { data } = await updateSessionMutation()
+    const mutationResult = await updateSession({
+      refetchQueries: [
+        { query: SINGLE_SESSION_QUERY, variables: { id } },
+        { query: SESSIONS_QUERY, variables: { adventureId } }
+      ]
+    })
 
-    if (data.updateSession) {
-      Router.push({
-        pathname: '/session',
-        query: { id: data.updateSession.id }
-      })
+    if (
+      mutationResult &&
+      mutationResult.data &&
+      mutationResult.data.updateSession
+    ) {
+      await Router.push({ pathname: '/session', query: { id } })
     }
   }
 
-  render () {
-    const {
-      props: { id },
-      state
-    } = this
+  return (
+    <div>
+      <Title title='Update Session' />
+      <header>
+        <h1>Updating - {session.title}</h1>
+      </header>
 
-    return (
-      <Query query={SINGLE_SESSION_QUERY} variables={{ id }}>
-        {({ loading, error, data }) => {
-          if (loading) {
-            return <p>Loading...</p>
-          } else if (error) {
-            return <ErrorMessage error={error} />
-          } else if (!data.session) {
-            return <p>No session found for ID {id}</p>
-          }
+      <Form onSubmit={save}>
+        <ErrorMessage error={updateResult.error} />
+        <fieldset
+          aria-busy={updateResult.loading}
+          disabled={updateResult.loading}
+        >
+          <label htmlFor='title'>
+            Title
+            <input
+              id='title'
+              type='text'
+              name='title'
+              defaultValue={session.title}
+              onChange={handleChange}
+              required
+            />
+          </label>
 
-          /** @type {SessionModel} */
-          const session = data.session
+          <div className='description'>
+            Description
+            <Editor
+              initialText={session.description}
+              onSave={descriptionChange}
+            />
+          </div>
 
-          return (
-            <div>
-              <Title title='Update Session' />
-              <header>
-                <h1>Updating - {session.title}</h1>
-              </header>
+          <FormButton>Update Session</FormButton>
+        </fieldset>
+      </Form>
+    </div>
+  )
+}
 
-              <Mutation
-                mutation={UPDATE_SESSION_MUTATION}
-                variables={{ id, ...state }}
-                refetchQueries={[
-                  { query: SINGLE_SESSION_QUERY, variables: { id } },
-                  {
-                    query: SINGLE_ADVENTURE_QUERY,
-                    variables: { id: session.adventure.id }
-                  }
-                ]}
-              >
-                {(updateSession, { loading, error }) => (
-                  <Form
-                    onSubmit={event => this.updateSession(event, updateSession)}
-                  >
-                    <ErrorMessage error={error} />
-                    <fieldset aria-busy={loading} disabled={loading}>
-                      <label htmlFor='title'>
-                        Title
-                        <input
-                          id='title'
-                          type='text'
-                          name='title'
-                          defaultValue={session.title}
-                          onChange={this.handleChange}
-                          required
-                        />
-                      </label>
-
-                      <div className='description'>
-                        Description
-                        <Editor
-                          initialText={session.description}
-                          onSave={this.descriptionChange}
-                        />
-                      </div>
-
-                      <FormButton>Update Session</FormButton>
-                    </fieldset>
-                  </Form>
-                )}
-              </Mutation>
-            </div>
-          )
-        }}
-      </Query>
-    )
-  }
+UpdateSession.defaultProps = {
+  id: ''
 }
 
 export default UpdateSession

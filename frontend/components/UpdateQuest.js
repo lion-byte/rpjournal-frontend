@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react'
-import { Query, Mutation } from 'react-apollo'
+import React, { useState } from 'react'
+import { useQuery, useMutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import Router from 'next/router'
 
@@ -7,7 +7,7 @@ import Form from './styles/Form'
 import FormButton from './styles/FormButton'
 import Editor from './Editor'
 import ErrorMessage from './ErrorMessage'
-import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
+import { QUESTS_QUERY } from './Quests'
 import { SINGLE_QUEST_QUERY } from './SingleQuest'
 import Title from './Title'
 
@@ -30,114 +30,101 @@ export const UPDATE_QUEST_MUTATION = gql`
 `
 
 /**
- * @typedef {object} UpdateQuestProps
- * @property {string} id
+ * @param {object} props
+ * @param {string} props.id
  */
+export function UpdateQuest (props) {
+  const { id } = props
 
-/** @augments {PureComponent<UpdateQuestProps>} */
-export class UpdateQuest extends PureComponent {
-  static defaultProps = {
-    id: ''
+  const [state, setState] = useState({})
+  const { loading, error, data } = useQuery(SINGLE_QUEST_QUERY, {
+    variables: { id }
+  })
+  const [updateQuest, updateResult] = useMutation(UPDATE_QUEST_MUTATION, {
+    variables: { id, ...state }
+  })
+
+  if (loading) {
+    return <p>Loading...</p>
+  } else if (error) {
+    return <ErrorMessage error={error} />
+  } else if (!data.quest) {
+    return <p>No quest found for ID {id}</p>
   }
 
-  state = {}
+  /** @type {QuestModel} */
+  const quest = data.quest
+  const adventureId = quest.adventure.id
 
-  handleChange = event => {
+  const handleChange = event => {
     const { name, value } = event.target
-
-    this.setState({ [name]: value })
+    setState(prevState => ({ ...prevState, [name]: value }))
   }
 
-  descriptionChange = description => this.setState({ description })
+  const descriptionChange = description =>
+    setState(prevState => ({ ...prevState, description }))
 
-  updateQuest = async (event, updateQuestMutation) => {
+  const save = async event => {
     event.preventDefault()
 
-    const { data } = await updateQuestMutation()
+    const mutationResult = await updateQuest({
+      refetchQueries: [
+        { query: SINGLE_QUEST_QUERY, variables: { id } },
+        { query: QUESTS_QUERY, variables: { adventureId } }
+      ]
+    })
 
-    if (data.updateQuest) {
-      Router.push({
-        pathname: '/quest',
-        query: { id: data.updateQuest.id }
-      })
+    if (
+      mutationResult &&
+      mutationResult.data &&
+      mutationResult.data.updateQuest
+    ) {
+      await Router.push({ pathname: '/quest', query: { id } })
     }
   }
 
-  render () {
-    const {
-      props: { id },
-      state
-    } = this
+  return (
+    <div>
+      <Title title='Update Quest' />
+      <header>
+        <h1>Updating - {quest.title}</h1>
+      </header>
 
-    return (
-      <Query query={SINGLE_QUEST_QUERY} variables={{ id }}>
-        {({ loading, error, data }) => {
-          if (loading) {
-            return <p>Loading...</p>
-          } else if (error) {
-            return <ErrorMessage error={error} />
-          } else if (!data.quest) {
-            return <p>No quest found for ID {id}</p>
-          }
+      <Form onSubmit={save}>
+        <ErrorMessage error={updateResult.error} />
+        <fieldset
+          aria-busy={updateResult.loading}
+          disabled={updateResult.loading}
+        >
+          <label htmlFor='title'>
+            Title
+            <input
+              id='title'
+              type='text'
+              name='title'
+              defaultValue={quest.title}
+              onChange={handleChange}
+              required
+            />
+          </label>
 
-          /** @type {QuestModel} */
-          const quest = data.quest
+          <div className='description'>
+            Description
+            <Editor
+              initialText={quest.description}
+              onSave={descriptionChange}
+            />
+          </div>
 
-          return (
-            <div>
-              <Title title='Update Quest' />
-              <header>
-                <h1>Updating - {quest.title}</h1>
-              </header>
+          <FormButton>Update Quest</FormButton>
+        </fieldset>
+      </Form>
+    </div>
+  )
+}
 
-              <Mutation
-                mutation={UPDATE_QUEST_MUTATION}
-                variables={{ id, ...state }}
-                refetchQueries={[
-                  { query: SINGLE_QUEST_QUERY, variables: { id } },
-                  {
-                    query: SINGLE_ADVENTURE_QUERY,
-                    variables: { id: quest.adventure.id }
-                  }
-                ]}
-              >
-                {(updateQuest, { loading, error }) => (
-                  <Form
-                    onSubmit={event => this.updateQuest(event, updateQuest)}
-                  >
-                    <ErrorMessage error={error} />
-                    <fieldset aria-busy={loading} disabled={loading}>
-                      <label htmlFor='title'>
-                        Title
-                        <input
-                          id='title'
-                          type='text'
-                          name='title'
-                          defaultValue={quest.title}
-                          onChange={this.handleChange}
-                          required
-                        />
-                      </label>
-
-                      <div className='description'>
-                        Description
-                        <Editor
-                          initialText={quest.description}
-                          onSave={this.descriptionChange}
-                        />
-                      </div>
-
-                      <FormButton>Update Quest</FormButton>
-                    </fieldset>
-                  </Form>
-                )}
-              </Mutation>
-            </div>
-          )
-        }}
-      </Query>
-    )
-  }
+UpdateQuest.defaultProps = {
+  id: ''
 }
 
 export default UpdateQuest

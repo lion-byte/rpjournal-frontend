@@ -1,9 +1,9 @@
-import React, { PureComponent } from 'react'
+import React from 'react'
 import Router from 'next/router'
-import { Mutation } from 'react-apollo'
+import { useMutation } from 'react-apollo'
 import gql from 'graphql-tag'
 
-import { CURRENT_USER_QUERY } from './User'
+import { CURRENT_USER_QUERY } from './hooks/useUser'
 
 export const LOGOUT_MUTATION = gql`
   mutation LOGOUT_MUTATION {
@@ -11,22 +11,17 @@ export const LOGOUT_MUTATION = gql`
   }
 `
 
-class Logout extends PureComponent {
-  leave = async logoutMutation => {
-    await logoutMutation()
-    Router.push('/')
+export function Logout () {
+  const [logout] = useMutation(LOGOUT_MUTATION, {
+    refetchQueries: [{ query: CURRENT_USER_QUERY }]
+  })
+
+  const leave = async () => {
+    await logout()
+    await Router.push('/')
   }
 
-  render () {
-    return (
-      <Mutation
-        mutation={LOGOUT_MUTATION}
-        refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-      >
-        {logout => <button onClick={() => this.leave(logout)}>Logout</button>}
-      </Mutation>
-    )
-  }
+  return <button onClick={leave}>Logout</button>
 }
 
 export default Logout
