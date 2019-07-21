@@ -1,5 +1,5 @@
 import React from 'react'
-import { Query } from 'react-apollo'
+import { useQuery } from 'react-apollo'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 
@@ -48,37 +48,36 @@ const QuestList = styled.div`
  * @param {object} props
  * @param {string} props.adventureId
  */
-const Quests = props => (
-  <Query query={QUESTS_QUERY} variables={{ adventureId: props.adventureId }}>
-    {({ loading, error, data }) => {
-      if (loading) {
-        return <p>Loading...</p>
-      } else if (error) {
-        return <ErrorMessage error={error} />
-      }
+export function Quests (props) {
+  const { loading, error, data } = useQuery(QUESTS_QUERY, {
+    variables: { adventureId: props.adventureId }
+  })
 
-      /** @type {AdventureModel} */
-      const adventure = data.adventure
+  if (loading) {
+    return <p>Loading...</p>
+  } else if (error) {
+    return <ErrorMessage error={error} />
+  }
 
-      if (!adventure) {
-        return <p>No adventure found for ID: {props.adventureId}</p>
-      } else if (adventure.quests.length === 0) {
-        return <p>No quests yet.</p>
-      }
+  /** @type {AdventureModel} */
+  const adventure = data.adventure
 
-      return (
-        <QuestList>
-          {adventure.quests.map(quest => (
-            <article key={quest.id} className='quest'>
-              <button>
-                <h1>{quest.title}</h1>
-              </button>
-            </article>
-          ))}
-        </QuestList>
-      )
-    }}
-  </Query>
-)
+  if (!adventure) {
+    return <p>No adventure found for ID: {props.adventureId}</p>
+  } else if (adventure.quests.length === 0) {
+    return <p>No quests yet.</p>
+  }
 
+  return (
+    <QuestList>
+      {adventure.quests.map(quest => (
+        <article key={quest.id} className='quest'>
+          <button>
+            <h1>{quest.title}</h1>
+          </button>
+        </article>
+      ))}
+    </QuestList>
+  )
+}
 export default Quests
