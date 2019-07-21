@@ -10,7 +10,6 @@ import { useUser } from './hooks/useUser'
 import Banner from './styles/Banner'
 import DetailsMenu from './styles/DetailsMenu'
 import ErrorMessage from './ErrorMessage'
-import Quests from './Quests'
 import Sessions from './Sessions'
 import Title from './Title'
 
@@ -104,14 +103,6 @@ export function SingleAdventure (props) {
               </Link>
               <Link
                 href={{
-                  pathname: '/new-quest',
-                  query: { adventureId: adventure.id }
-                }}
-              >
-                <a>+ New Quest</a>
-              </Link>
-              <Link
-                href={{
                   pathname: '/update-adventure',
                   query: { id: adventure.id }
                 }}
@@ -132,11 +123,6 @@ export function SingleAdventure (props) {
         <section className='sessions'>
           <h2>Sessions</h2>
           <Sessions adventureId={props.id} />
-        </section>
-
-        <section className='quests'>
-          <h2>Quests</h2>
-          <Quests adventureId={props.id} />
         </section>
       </div>
     </StyledAdventure>

@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { Query } from 'react-apollo'
+import { useQuery } from 'react-apollo'
 import gql from 'graphql-tag'
 import TimeAgo from 'react-timeago'
 import styled from 'styled-components'
@@ -51,46 +51,49 @@ const SessionList = styled.div`
  * @param {object} props
  * @param {string} props.adventureId
  */
-const Sessions = props => (
-  <Query query={SESSIONS_QUERY} variables={{ adventureId: props.adventureId }}>
-    {({ loading, error, data }) => {
-      if (loading) {
-        return <p>Loading...</p>
-      } else if (error) {
-        return <ErrorMessage error={error} />
-      }
+export function Sessions (props) {
+  const { loading, error, data } = useQuery(SESSIONS_QUERY, {
+    variables: { adventureId: props.adventureId }
+  })
 
-      /** @type {AdventureModel} */
-      const adventure = data.adventure
+  if (loading) {
+    return <p>Loading...</p>
+  } else if (error) {
+    return <ErrorMessage error={error} />
+  }
 
-      if (!adventure) {
-        return <p>No adventure found for ID: {props.adventureId}</p>
-      } else if (adventure.sessions.length === 0) {
-        return <p>No sessions yet.</p>
-      }
+  /** @type {AdventureModel} */
+  const adventure = data.adventure
 
-      return (
-        <SessionList>
-          {adventure.sessions.map(session => (
-            <article key={session.id} className='session'>
-              <div className='content'>
-                <header>
-                  <h1>
-                    <Link
-                      href={{ pathname: '/session', query: { id: session.id } }}
-                    >
-                      <a>{session.title}</a>
-                    </Link>
-                  </h1>
-                  <TimeAgo date={session.updatedAt} />
-                </header>
-              </div>
-            </article>
-          ))}
-        </SessionList>
-      )
-    }}
-  </Query>
-)
+  if (!adventure) {
+    return <p>No adventure found for ID: {props.adventureId}</p>
+  } else if (adventure.sessions.length === 0) {
+    return <p>No sessions yet.</p>
+  }
+
+  return (
+    <SessionList>
+      {adventure.sessions.map(session => (
+        <article key={session.id} className='session'>
+          <div className='content'>
+            <header>
+              <h1>
+                <Link
+                  href={{
+                    pathname: '/session',
+                    query: { id: session.id }
+                  }}
+                >
+                  <a>{session.title}</a>
+                </Link>
+              </h1>
+              <TimeAgo date={session.updatedAt} />
+            </header>
+          </div>
+        </article>
+      ))}
+    </SessionList>
+  )
+}
 
 export default Sessions
