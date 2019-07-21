@@ -115,7 +115,7 @@ export function SingleAdventure (props) {
         </DetailsMenu>
       </header>
 
-      <Description info={adventure.description} />
+      <Description data={adventure.description} />
 
       <div className='additional-details'>
         <section className='sessions'>

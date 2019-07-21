@@ -101,7 +101,7 @@ export function SingleSession (props) {
         </DetailsMenu>
       </header>
 
-      <Description info={session.description} />
+      <Description data={session.description} />
     </StyledSingleSession>
   )
 }

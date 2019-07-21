@@ -1,41 +1,7 @@
 import React from 'react'
-import { convertFromRaw, convertToRaw } from 'draft-js'
-import { convertToHTML, convertFromHTML } from 'draft-convert'
+import { convertFromRaw } from 'draft-js'
+import { convertToHTML } from 'draft-convert'
 import { BLOCK_TYPE, ENTITY_TYPE, INLINE_STYLE } from 'draftail'
-
-const defaultImportConfig = {
-  htmlToBlock: nodename => {
-    switch (nodename) {
-      case 'value':
-        return BLOCK_TYPE.ATOMIC
-
-      default:
-        return null
-    }
-  },
-
-  htmlToEntity: (nodename, node, createEntity) => {
-    switch (nodename) {
-      case 'hr':
-        return createEntity(ENTITY_TYPE.HORIZONTAL_RULE, 'IMMUTABLE', {})
-
-      default:
-        return null
-    }
-  }
-}
-
-export function importHTML (html = '', importConfig = {}) {
-  const config = { ...defaultImportConfig, ...importConfig }
-
-  if (!html) {
-    return null
-  }
-
-  const data = convertFromHTML(config)(html)
-
-  return convertToRaw(data)
-}
 
 const defaultExportConfig = {
   blockToHTML: block => {
@@ -68,18 +34,16 @@ const defaultExportConfig = {
 }
 
 /**
- * @param {import('draft-js').RawDraftContentState} contentState
- * @param {any} [exportConfig]
- * @returns {string} HTML
+ * @param {string} [jsonData]
+ * @returns {string}
  */
-export function exportHTML (contentState, exportConfig = {}) {
-  const config = { ...defaultExportConfig, ...exportConfig }
+export function dataToHTML (jsonData = null) {
+  const content = JSON.parse(jsonData)
 
-  if (!contentState) {
+  if (!content) {
     return ''
   }
 
-  const data = convertFromRaw(contentState)
-
-  return convertToHTML(config)(data)
+  const data = convertFromRaw(content)
+  return convertToHTML(defaultExportConfig)(data)
 }
