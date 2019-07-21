@@ -45,10 +45,6 @@ const GlobalStyles = createGlobalStyle`
   h6 {
     font-family: ${props => props.theme.headerFont};
   }
-
-  .detail-notes {
-    line-height: 1.5;
-  }
 `
 
 const Theme = ({ children }) => (

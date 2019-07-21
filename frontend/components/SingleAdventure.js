@@ -8,6 +8,7 @@ import styled from 'styled-components'
 import { fillerBackgroundImage } from '../lib/filler'
 import { useUser } from './hooks/useUser'
 import Banner from './styles/Banner'
+import Description from './Description'
 import DetailsMenu from './styles/DetailsMenu'
 import ErrorMessage from './ErrorMessage'
 import Sessions from './Sessions'
@@ -114,10 +115,7 @@ export function SingleAdventure (props) {
         </DetailsMenu>
       </header>
 
-      <section
-        className='detail-notes'
-        dangerouslySetInnerHTML={{ __html: adventure.description }}
-      />
+      <Description info={adventure.description} />
 
       <div className='additional-details'>
         <section className='sessions'>

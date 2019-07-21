@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 import styled from 'styled-components'
 
 import { useUser } from './hooks/useUser'
+import Description from './Description'
 import DetailsMenu from './styles/DetailsMenu'
 import ErrorMessage from './ErrorMessage'
 import Title from './Title'
@@ -100,10 +101,7 @@ export function SingleSession (props) {
         </DetailsMenu>
       </header>
 
-      <section
-        className='detail-notes'
-        dangerouslySetInnerHTML={{ __html: session.description }}
-      />
+      <Description info={session.description} />
     </StyledSingleSession>
   )
 }
