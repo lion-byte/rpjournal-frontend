@@ -56,7 +56,7 @@ export function CreateAdventure () {
     }
   }
 
-  const { title, description } = state
+  const { title } = state
 
   return (
     <div>
@@ -80,7 +80,7 @@ export function CreateAdventure () {
 
           <div className='description'>
             Description
-            <Editor initialText={description} onSave={handleDescription} />
+            <Editor onSave={handleDescription} />
           </div>
 
           <FormButton>Create Adventure</FormButton>

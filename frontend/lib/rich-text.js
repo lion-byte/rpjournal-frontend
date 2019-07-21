@@ -3,6 +3,40 @@ import { convertFromRaw, convertToRaw } from 'draft-js'
 import { convertToHTML, convertFromHTML } from 'draft-convert'
 import { BLOCK_TYPE, ENTITY_TYPE, INLINE_STYLE } from 'draftail'
 
+const defaultImportConfig = {
+  htmlToBlock: nodename => {
+    switch (nodename) {
+      case 'value':
+        return BLOCK_TYPE.ATOMIC
+
+      default:
+        return null
+    }
+  },
+
+  htmlToEntity: (nodename, node, createEntity) => {
+    switch (nodename) {
+      case 'hr':
+        return createEntity(ENTITY_TYPE.HORIZONTAL_RULE, 'IMMUTABLE', {})
+
+      default:
+        return null
+    }
+  }
+}
+
+export function importHTML (html = '', importConfig = {}) {
+  const config = { ...defaultImportConfig, ...importConfig }
+
+  if (!html) {
+    return null
+  }
+
+  const data = convertFromHTML(config)(html)
+
+  return convertToRaw(data)
+}
+
 const defaultExportConfig = {
   blockToHTML: block => {
     switch (block.type) {
@@ -38,44 +72,14 @@ const defaultExportConfig = {
  * @param {any} [exportConfig]
  * @returns {string} HTML
  */
-export const exportHTML = (contentState, exportConfig = {}) => {
+export function exportHTML (contentState, exportConfig = {}) {
   const config = { ...defaultExportConfig, ...exportConfig }
 
   if (!contentState) {
     return ''
   }
 
-  return convertToHTML(config)(convertFromRaw(contentState))
-}
+  const data = convertFromRaw(contentState)
 
-const defaultImportConfig = {
-  htmlToBlock: nodename => {
-    switch (nodename) {
-      case 'value':
-        return BLOCK_TYPE.ATOMIC
-
-      default:
-        return null
-    }
-  },
-
-  htmlToEntity: (nodename, node, createEntity) => {
-    switch (nodename) {
-      case 'hr':
-        return createEntity(ENTITY_TYPE.HORIZONTAL_RULE, 'IMMUTABLE', {})
-
-      default:
-        return null
-    }
-  }
-}
-
-export const importHTML = (html = '', importConfig = {}) => {
-  const config = { ...defaultImportConfig, ...importConfig }
-
-  if (!html) {
-    return null
-  }
-
-  return convertToRaw(convertFromHTML(config)(html))
+  return convertToHTML(config)(data)
 }

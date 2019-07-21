@@ -70,7 +70,7 @@ export function CreateSession (props) {
     }
   }
 
-  const { title, description } = state
+  const { title } = state
 
   if (loading) {
     return <p>Loading...</p>
@@ -110,7 +110,7 @@ export function CreateSession (props) {
           </label>
           <div className='description'>
             Description
-            <Editor initialText={description} onSave={handleDescription} />
+            <Editor onSave={handleDescription} />
           </div>
           <FormButton>Create Session</FormButton>
         </fieldset>
