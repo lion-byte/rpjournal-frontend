@@ -3,8 +3,10 @@ import { convertFromRaw } from 'draft-js'
 import { convertToHTML } from 'draft-convert'
 import { BLOCK_TYPE, ENTITY_TYPE, INLINE_STYLE } from 'draftail'
 
-const defaultExportConfig = {
-  blockToHTML: block => {
+/** @type {import('draft-convert').IConvertToHTMLConfig} */
+const convertDataConfig = {
+  blockToHTML (block) {
+    // @ts-ignore
     switch (block.type) {
       case BLOCK_TYPE.ATOMIC:
         return { start: '', end: '' }
@@ -13,7 +15,7 @@ const defaultExportConfig = {
     }
   },
 
-  entityToHTML: (entity, originalText) => {
+  entityToHTML (entity, originalText) {
     switch (entity.type) {
       case ENTITY_TYPE.HORIZONTAL_RULE:
         return <hr />
@@ -23,7 +25,7 @@ const defaultExportConfig = {
     }
   },
 
-  styleToHTML: style => {
+  styleToHTML (style) {
     switch (style) {
       case INLINE_STYLE.STRIKETHROUGH:
         return <s />
@@ -45,5 +47,5 @@ export function dataToHTML (jsonData = null) {
   }
 
   const data = convertFromRaw(content)
-  return convertToHTML(defaultExportConfig)(data)
+  return convertToHTML(convertDataConfig)(data)
 }
