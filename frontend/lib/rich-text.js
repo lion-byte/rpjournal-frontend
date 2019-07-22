@@ -1,10 +1,12 @@
 import React from 'react'
-import { convertFromRaw, convertToRaw } from 'draft-js'
-import { convertToHTML, convertFromHTML } from 'draft-convert'
+import { convertFromRaw } from 'draft-js'
+import { convertToHTML } from 'draft-convert'
 import { BLOCK_TYPE, ENTITY_TYPE, INLINE_STYLE } from 'draftail'
 
-const defaultExportConfig = {
-  blockToHTML: block => {
+/** @type {import('draft-convert').IConvertToHTMLConfig} */
+const convertDataConfig = {
+  blockToHTML (block) {
+    // @ts-ignore
     switch (block.type) {
       case BLOCK_TYPE.ATOMIC:
         return { start: '', end: '' }
@@ -13,7 +15,7 @@ const defaultExportConfig = {
     }
   },
 
-  entityToHTML: (entity, originalText) => {
+  entityToHTML (entity, originalText) {
     switch (entity.type) {
       case ENTITY_TYPE.HORIZONTAL_RULE:
         return <hr />
@@ -23,7 +25,7 @@ const defaultExportConfig = {
     }
   },
 
-  styleToHTML: style => {
+  styleToHTML (style) {
     switch (style) {
       case INLINE_STYLE.STRIKETHROUGH:
         return <s />
@@ -34,48 +36,16 @@ const defaultExportConfig = {
 }
 
 /**
- * @param {import('draft-js').RawDraftContentState} contentState
- * @param {any} [exportConfig]
- * @returns {string} HTML
+ * @param {string} [jsonData]
+ * @returns {string}
  */
-export const exportHTML = (contentState, exportConfig = {}) => {
-  const config = { ...defaultExportConfig, ...exportConfig }
+export function dataToHTML (jsonData = null) {
+  const content = JSON.parse(jsonData)
 
-  if (!contentState) {
+  if (!content) {
     return ''
   }
 
-  return convertToHTML(config)(convertFromRaw(contentState))
-}
-
-const defaultImportConfig = {
-  htmlToBlock: nodename => {
-    switch (nodename) {
-      case 'value':
-        return BLOCK_TYPE.ATOMIC
-
-      default:
-        return null
-    }
-  },
-
-  htmlToEntity: (nodename, node, createEntity) => {
-    switch (nodename) {
-      case 'hr':
-        return createEntity(ENTITY_TYPE.HORIZONTAL_RULE, 'IMMUTABLE', {})
-
-      default:
-        return null
-    }
-  }
-}
-
-export const importHTML = (html = '', importConfig = {}) => {
-  const config = { ...defaultImportConfig, ...importConfig }
-
-  if (!html) {
-    return null
-  }
-
-  return convertToRaw(convertFromHTML(config)(html))
+  const data = convertFromRaw(content)
+  return convertToHTML(convertDataConfig)(data)
 }

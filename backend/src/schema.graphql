@@ -24,12 +24,7 @@ type Mutation {
   updateSession(id: ID!, title: String, description: String): Session
   deleteSession(id: ID!): Session
 
-  createQuest(
-    adventureId: ID!
-    title: String!
-    description: String!
-    completed: Boolean
-  ): Quest!
+  createQuest(adventureId: ID!, title: String!, description: String!): Quest!
   updateQuest(
     id: ID!
     title: String

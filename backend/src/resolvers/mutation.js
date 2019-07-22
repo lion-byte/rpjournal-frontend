@@ -2,7 +2,6 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
 const { db } = require('../db')
-const { sanitize } = require('../sanitize')
 
 const Mutation = {
   async register (parent, args, ctx, info) {
@@ -75,15 +74,10 @@ const Mutation = {
       throw Error('You must be logged in to do that!')
     }
 
-    const { title, description } = args
-
-    const cleanDescription = sanitize(description)
-
     return db.mutation.createAdventure(
       {
         data: {
-          title,
-          description: cleanDescription,
+          ...args,
           owner: { connect: { id: userId } }
         }
       },
@@ -110,10 +104,6 @@ const Mutation = {
       return null
     } else if (adventure.owner.id !== userId) {
       throw Error(`You don't have permission to do that!`)
-    }
-
-    if (updates.description) {
-      updates.description = sanitize(updates.description)
     }
 
     return db.mutation.updateAdventure(
@@ -169,13 +159,11 @@ const Mutation = {
       throw Error(`You don't have permission to do that!`)
     }
 
-    const cleanDescription = sanitize(description)
-
     return db.mutation.createSession(
       {
         data: {
           title,
-          description: cleanDescription,
+          description,
           adventure: { connect: { id: adventureId } }
         }
       },
@@ -201,10 +189,6 @@ const Mutation = {
       return null
     } else if (session.adventure.owner.id !== userId) {
       throw Error(`You don't have permission to do that!`)
-    }
-
-    if (updates.description) {
-      updates.description = sanitize(updates.description)
     }
 
     return db.mutation.updateSession({ data: updates, where: { id } }, info)
@@ -235,7 +219,7 @@ const Mutation = {
 
   async createQuest (parent, args, ctx, info) {
     const { userId } = ctx.req
-    const { adventureId, title, description, completed = false } = args
+    const { adventureId, title, description } = args
 
     // Check for user ID
     if (!userId) {
@@ -253,14 +237,11 @@ const Mutation = {
       throw Error(`You don't have permission to do that!`)
     }
 
-    const cleanDescription = sanitize(description)
-
     return db.mutation.createQuest(
       {
         data: {
           title,
-          description: cleanDescription,
-          completed,
+          description,
           adventure: { connect: { id: adventureId } }
         }
       },
@@ -286,10 +267,6 @@ const Mutation = {
       return null
     } else if (quest.adventure.owner.id !== userId) {
       throw Error(`You don't have permission to do that!`)
-    }
-
-    if (updates.description) {
-      updates.description = sanitize(updates.description)
     }
 
     return db.mutation.updateQuest({ data: updates, where: { id } }, info)

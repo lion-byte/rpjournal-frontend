@@ -13,6 +13,7 @@
   "main": "n/a",
   "author": "Mark Hernandez <mark@lion-byte.com>",
   "devDependencies": {
+    "@types/draft-convert": "^2.1.1",
     "@types/draft-js": "^0.10.34",
     "@types/graphql": "^14.2.2",
     "@types/jest": "^24.0.15",
