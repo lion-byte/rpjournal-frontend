@@ -73,7 +73,7 @@ export function Sessions (props) {
 
   return (
     <SessionList>
-      {adventure.sessions.map(session => (
+      {adventure.sessions.map((session, index) => (
         <article key={session.id} className='session'>
           <div className='content'>
             <header>
@@ -84,7 +84,9 @@ export function Sessions (props) {
                     query: { id: session.id }
                   }}
                 >
-                  <a>{session.title}</a>
+                  <a>
+                    {index + 1} - {session.title}
+                  </a>
                 </Link>
               </h1>
               <TimeAgo date={session.updatedAt} />

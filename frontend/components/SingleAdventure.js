@@ -5,22 +5,12 @@ import { useQuery } from 'react-apollo'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 
-import { fillerBackgroundImage } from '../lib/filler'
 import { useUser } from './hooks/useUser'
-import Banner from './styles/Banner'
 import Description from './Description'
 import DetailsMenu from './styles/DetailsMenu'
 import ErrorMessage from './ErrorMessage'
 import Sessions from './Sessions'
 import Title from './Title'
-
-const StyledAdventure = styled.div`
-  .additional-details {
-    display: grid;
-    grid-gap: 2em;
-    grid-template-columns: repeat(auto-fit, minmax(18em, 1fr));
-  }
-`
 
 export const SINGLE_ADVENTURE_QUERY = gql`
   query SINGLE_ADVENTURE_QUERY($id: ID!) {
@@ -34,6 +24,18 @@ export const SINGLE_ADVENTURE_QUERY = gql`
         id
         name
       }
+    }
+  }
+`
+
+const StyledAdventure = styled.div`
+  .adventure-details {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    & > * {
+      flex: 1 1 15em;
     }
   }
 `
@@ -68,58 +70,46 @@ export function SingleAdventure (props) {
 
   return (
     <StyledAdventure>
-      <Banner
-        className='large'
-        style={{
-          backgroundImage: `url(${fillerBackgroundImage({
-            width: 1600,
-            height: 350
-          })})`
-        }}
-      />
-
       <Title title={adventure.title} />
+      <h1>{adventure.title}</h1>
+      <DetailsMenu>
+        <div className='details'>
+          <span>
+            Created <TimeAgo date={adventure.createdAt} />
+          </span>
+          <span>
+            Updated <TimeAgo date={adventure.updatedAt} />
+          </span>
+        </div>
+      </DetailsMenu>
 
-      <header>
-        <h1>{adventure.title}</h1>
-        <DetailsMenu>
-          <div className='details'>
-            <span>
-              Created <TimeAgo date={adventure.createdAt} />
-            </span>
-            <span>
-              Updated <TimeAgo date={adventure.updatedAt} />
-            </span>
-          </div>
+      <div className='adventure-details'>
+        <section>
+          {showControls && (
+            <Link
+              href={{
+                pathname: '/update-adventure',
+                query: { id: adventure.id }
+              }}
+            >
+              <a>Update Adventure</a>
+            </Link>
+          )}
+          <Description data={adventure.description} />
+        </section>
 
-          {showControls ? (
-            <div className='options'>
-              <Link
-                href={{
-                  pathname: '/new-session',
-                  query: { adventureId: adventure.id }
-                }}
-              >
-                <a>+ New Session</a>
-              </Link>
-              <Link
-                href={{
-                  pathname: '/update-adventure',
-                  query: { id: adventure.id }
-                }}
-              >
-                <a>Update Adventure</a>
-              </Link>
-            </div>
-          ) : null}
-        </DetailsMenu>
-      </header>
-
-      <Description data={adventure.description} />
-
-      <div className='additional-details'>
-        <section className='sessions'>
+        <section>
           <h2>Sessions</h2>
+          {showControls && (
+            <Link
+              href={{
+                pathname: '/new-session',
+                query: { adventureId: adventure.id }
+              }}
+            >
+              <a>+ New Session</a>
+            </Link>
+          )}
           <Sessions adventureId={props.id} />
         </section>
       </div>

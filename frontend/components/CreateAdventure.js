@@ -63,7 +63,7 @@ export function CreateAdventure () {
       <Title title='New Adventure' />
       <h1>Create New Adventure</h1>
 
-      <Form onSubmit={create}>
+      <Form method='post' onSubmit={create}>
         <ErrorMessage error={error} />
         <fieldset aria-busy={loading} disabled={loading}>
           <label htmlFor='title'>

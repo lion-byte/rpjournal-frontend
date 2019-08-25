@@ -91,7 +91,7 @@ export function CreateSession (props) {
           Create New Session for <u>{adventure.title}</u>
         </h1>
       </header>
-      <Form onSubmit={create}>
+      <Form method='post' onSubmit={create}>
         <ErrorMessage error={createResult.error} />
         <fieldset
           aria-busy={createResult.loading}

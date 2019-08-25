@@ -5,6 +5,7 @@ import { dataToHTML } from '../lib/rich-text'
 
 const StyledDescription = styled.section`
   line-height: 1.5;
+  padding: 0 0.5rem;
 `
 
 /**

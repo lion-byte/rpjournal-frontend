@@ -84,7 +84,7 @@ export function UpdateSession (props) {
         <h1>Updating - {session.title}</h1>
       </header>
 
-      <Form onSubmit={save}>
+      <Form method='post' onSubmit={save}>
         <ErrorMessage error={updateResult.error} />
         <fieldset
           aria-busy={updateResult.loading}

@@ -85,7 +85,7 @@ export function UpdateAdventure (props) {
         <h1>Updating - {adventure.title}</h1>
       </header>
 
-      <Form onSubmit={save}>
+      <Form method='post' onSubmit={save}>
         <ErrorMessage error={updateResult.error} />
         <fieldset
           aria-busy={updateResult.loading}
