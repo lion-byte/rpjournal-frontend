@@ -5,7 +5,6 @@ import gql from 'graphql-tag'
 
 import { CURRENT_USER_QUERY } from './hooks/useUser'
 import Form from './styles/Form'
-import FormButton from './styles/FormButton'
 import ErrorMessage from './ErrorMessage'
 import Title from './Title'
 
@@ -94,7 +93,7 @@ export function Register () {
           />
         </label>
 
-        <FormButton>Register</FormButton>
+        <input type='submit' value='Register' />
       </fieldset>
     </Form>
   )

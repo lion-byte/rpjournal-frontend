@@ -4,8 +4,10 @@
   "description": "A journaling tool for holding RPG session notes",
   "scripts": {
     "build": "next build",
+    "build-storybook": "build-storybook",
     "dev": "next",
     "start": "next start",
+    "storybook": "start-storybook -p 6006",
     "test": "npm run type && jest",
     "type": "tsc --pretty"
   },
@@ -13,6 +15,11 @@
   "main": "n/a",
   "author": "Mark Hernandez <mark@lion-byte.com>",
   "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@storybook/addon-actions": "^5.1.11",
+    "@storybook/addon-links": "^5.1.11",
+    "@storybook/addons": "^5.1.11",
+    "@storybook/react": "^5.1.11",
     "@types/draft-convert": "^2.1.1",
     "@types/draft-js": "^0.10.35",
     "@types/graphql": "^14.5.0",
@@ -23,8 +30,10 @@
     "@types/react": "^16.9.2",
     "@types/react-test-renderer": "^16.9.0",
     "@types/react-timeago": "^4.1.1",
+    "@types/storybook__react": "^4.0.2",
     "@types/styled-components": "^4.1.18",
     "babel-jest": "^24.9.0",
+    "babel-loader": "^8.0.6",
     "csstype": "^2.6.6",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.9.0",

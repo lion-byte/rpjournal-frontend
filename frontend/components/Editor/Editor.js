@@ -7,6 +7,9 @@ const EditorStyles = styled.section`
     background-color: ${props => props.theme.darkGray};
     color: ${props => props.theme.white};
   }
+  .DraftEditor-root {
+    font-size: 0.67em;
+  }
 `
 
 const blockTypes = [

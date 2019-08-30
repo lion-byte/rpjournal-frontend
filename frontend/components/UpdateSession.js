@@ -4,7 +4,6 @@ import gql from 'graphql-tag'
 import Router from 'next/router'
 
 import Form from './styles/Form'
-import FormButton from './styles/FormButton'
 import Editor from './Editor'
 import ErrorMessage from './ErrorMessage'
 import { SESSIONS_QUERY } from './Sessions'
@@ -110,7 +109,7 @@ export function UpdateSession (props) {
             />
           </div>
 
-          <FormButton>Update Session</FormButton>
+          <input type='submit' value='Update Session' />
         </fieldset>
       </Form>
     </div>

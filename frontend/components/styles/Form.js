@@ -18,9 +18,9 @@ const Form = styled.form`
   .description {
     display: block;
     margin-bottom: 1em;
-    font-size: 1.5em;
+    font-size: 1em;
   }
-  input,
+  input:not([type='submit']),
   textarea,
   select {
     width: 100%;
@@ -58,6 +58,17 @@ const Form = styled.form`
         ${props => props.theme.white} 100%
       );
       transition: background 1s ease-in-out;
+    }
+  }
+  input[type='submit'] {
+    background-color: ${props => props.theme.primaryColor};
+    color: ${props => props.theme.white};
+    border: 0;
+    font-weight: bold;
+    padding: 0.5em 1.25em;
+
+    &:hover {
+      cursor: pointer;
     }
   }
 `

@@ -5,7 +5,6 @@ import Router from 'next/router'
 
 import { CURRENT_USER_QUERY } from './hooks/useUser'
 import Form from './styles/Form'
-import FormButton from './styles/FormButton'
 import Editor from './Editor'
 import ErrorMessage from './ErrorMessage'
 import Title from './Title'
@@ -83,7 +82,7 @@ export function CreateAdventure () {
             <Editor onSave={handleDescription} />
           </div>
 
-          <FormButton>Create Adventure</FormButton>
+          <input type='submit' value='Create Adventure' />
         </fieldset>
       </Form>
     </div>

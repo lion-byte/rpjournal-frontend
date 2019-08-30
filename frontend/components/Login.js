@@ -6,7 +6,6 @@ import gql from 'graphql-tag'
 
 import { CURRENT_USER_QUERY } from './hooks/useUser'
 import Form from './styles/Form'
-import FormButton from './styles/FormButton'
 import ErrorMessage from './ErrorMessage'
 import Title from './Title'
 
@@ -88,7 +87,7 @@ export function Login (props) {
           />
         </label>
 
-        <FormButton>Sign In</FormButton>
+        <input type='submit' value='Sign In' />
 
         <div style={{ marginTop: '1em' }}>
           New here?{' '}

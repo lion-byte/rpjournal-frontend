@@ -17,7 +17,18 @@
   "root": true,
   "rules": {
     "no-var": "error",
+    "quotes": [
+      "error",
+      "single",
+      { "avoidEscape": true, "allowTemplateLiterals": true }
+    ],
     "react/jsx-uses-react": "error",
-    "react/jsx-uses-vars": "error"
+    "react/jsx-uses-vars": "error",
+    "react/jsx-fragments": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "latest"
+    }
   }
 }

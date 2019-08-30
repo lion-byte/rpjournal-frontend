@@ -5,7 +5,6 @@ import Router from 'next/router'
 
 import { CURRENT_USER_QUERY } from './hooks/useUser'
 import Form from './styles/Form'
-import FormButton from './styles/FormButton'
 import Editor from './Editor'
 import ErrorMessage from './ErrorMessage'
 import { SINGLE_ADVENTURE_QUERY } from './SingleAdventure'
@@ -111,7 +110,7 @@ export function UpdateAdventure (props) {
             />
           </div>
 
-          <FormButton>Update Adventure</FormButton>
+          <input type='submit' value='Update Adventure' />
         </fieldset>
       </Form>
     </div>

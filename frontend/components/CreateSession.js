@@ -4,7 +4,6 @@ import gql from 'graphql-tag'
 import Router from 'next/router'
 
 import Form from './styles/Form'
-import FormButton from './styles/FormButton'
 import Editor from './Editor'
 import ErrorMessage from './ErrorMessage'
 import { SESSIONS_QUERY } from './Sessions'
@@ -112,7 +111,7 @@ export function CreateSession (props) {
             Description
             <Editor onSave={handleDescription} />
           </div>
-          <FormButton>Create Session</FormButton>
+          <input type='submit' value='Create Session' />
         </fieldset>
       </Form>
     </div>
