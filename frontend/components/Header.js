@@ -1,61 +1,46 @@
 import React from 'react'
 import Link from 'next/link'
-import styled from 'styled-components'
 
+import { useUser } from './hooks/useUser'
+import StyledHeader from './styles/Header'
+import Logout from './Logout'
 import Nav from './Nav'
 
-const StyledHeader = styled.header`
-  .bar {
-    align-items: stretch;
-    border-bottom: 0.625em solid ${props => props.theme.black};
-    display: grid;
-    grid-template-columns: auto 1fr;
-    justify-content: space-between;
+export function Header () {
+  const { loading, error, data } = useUser()
 
-    h1 {
-      font-family: ${props => props.theme.baseFont};
-      font-size: 3em;
-      margin: 0.25em 0.5em;
-      position: relative;
+  return (
+    <StyledHeader>
+      <div className='bar'>
+        <h1>
+          <Link href='/'>
+            <a>RPJournal</a>
+          </Link>
+        </h1>
+      </div>
 
-      @media (max-width: 1300px) {
-        margin: 0;
-        text-align: center;
-      }
-
-      a {
-        padding: 0.125em 0.25em;
-        text-decoration: none;
-      }
-    }
-
-    @media (max-width: 1300px) {
-      grid-template-columns: 1fr;
-      justify-content: center;
-    }
-  }
-
-  .sub-bar {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    border-bottom: 1px solid ${props => props.theme.black};
-  }
-`
-
-const Header = () => (
-  <StyledHeader>
-    <div className='bar'>
-      <h1>
-        <Link href='/'>
-          <a>RPJournal</a>
-        </Link>
-      </h1>
-    </div>
-
-    <div className='sub-bar'>
-      <Nav />
-    </div>
-  </StyledHeader>
-)
+      <div className='sub-bar'>
+        <Nav>
+          <ul>
+            <li>
+              <Link href='/'>
+                <a>Home</a>
+              </Link>
+            </li>
+            <li>
+              {loading || error || !data.me ? (
+                <Link href='/login'>
+                  <a>Login</a>
+                </Link>
+              ) : (
+                <Logout />
+              )}
+            </li>
+          </ul>
+        </Nav>
+      </div>
+    </StyledHeader>
+  )
+}
 
 export default Header
