@@ -3,12 +3,15 @@ import { DraftailEditor, BLOCK_TYPE, INLINE_STYLE } from 'draftail'
 import styled from 'styled-components'
 
 const EditorStyles = styled.section`
+  .Draftail-Editor {
+    margin-bottom: 0.5em;
+  }
   .Draftail-Toolbar {
     background-color: ${props => props.theme.darkGray};
     color: ${props => props.theme.white};
   }
   .DraftEditor-root {
-    font-size: 0.67em;
+    font-size: 1em;
   }
 `
 
