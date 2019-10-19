@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { useState, useEffect } from 'react'
 import { DraftailEditor, BLOCK_TYPE, INLINE_STYLE } from 'draftail'
 import styled from 'styled-components'
 
@@ -32,52 +32,43 @@ const inlineStyles = [
 ]
 
 /**
- * @typedef {object} EditorProps
- * @property {string} [initialText] Initial data to fill the Editor
- * @property {(jsonString: string) => void} [onSave]
+ * @param {object} props
+ * @param {string} [props.initialText] Initial data to fill the Editor
+ * @param {(jsonString: string) => void} [props.onSave]
  */
+export function Editor (props) {
+  const [showEditor, setShowEditor] = useState(false)
 
-/** @augments {PureComponent<EditorProps>} */
-export class Editor extends PureComponent {
-  state = { showEditor: false }
+  useEffect(() => {
+    setShowEditor(true)
+  }, [showEditor])
 
-  componentDidMount () {
-    this.setState({ showEditor: true })
-  }
-
-  handleSave = rawContent => {
-    if (!this.props.onSave) {
+  const onSave = rawContent => {
+    if (!props.onSave) {
       return
     }
 
-    this.props.onSave(JSON.stringify(rawContent))
+    props.onSave(JSON.stringify(rawContent))
   }
 
-  render () {
-    const {
-      state: { showEditor },
-      props: { initialText }
-    } = this
-
-    if (!showEditor) {
-      return null
-    }
-
-    const content = JSON.parse(initialText)
-
-    return (
-      <EditorStyles>
-        <DraftailEditor
-          rawContentState={content}
-          blockTypes={blockTypes}
-          enableHorizontalRule
-          inlineStyles={inlineStyles}
-          onSave={this.handleSave}
-          stateSaveInterval={500}
-        />
-      </EditorStyles>
-    )
+  if (!showEditor) {
+    return null
   }
+
+  const content = JSON.parse(props.initialText)
+
+  return (
+    <EditorStyles>
+      <DraftailEditor
+        rawContentState={content}
+        blockTypes={blockTypes}
+        enableHorizontalRule
+        inlineStyles={inlineStyles}
+        onSave={onSave}
+        stateSaveInterval={500}
+      />
+    </EditorStyles>
+  )
 }
 
 Editor.defaultProps = {
