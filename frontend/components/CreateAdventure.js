@@ -4,8 +4,8 @@ import gql from 'graphql-tag'
 import Router from 'next/router'
 import useForm from 'react-hook-form'
 
-import { CURRENT_USER_QUERY } from './hooks/useUser'
 import Form from './styles/Form'
+import { ADVENTURES_QUERY } from './Adventures'
 import Editor from './Editor'
 import ErrorMessage from './ErrorMessage'
 import Title from './Title'
@@ -22,7 +22,7 @@ export function CreateAdventure () {
   const { handleSubmit, register, setValue } = useForm()
   const [createAdventure, { loading, error }] = useMutation(
     CREATE_ADVENTURE_MUTATION,
-    { refetchQueries: [{ query: CURRENT_USER_QUERY }] }
+    { refetchQueries: [{ query: ADVENTURES_QUERY }] }
   )
 
   /** @param {string} desc */

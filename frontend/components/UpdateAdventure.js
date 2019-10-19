@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import Router from 'next/router'
 import useForm from 'react-hook-form'
 
-import { CURRENT_USER_QUERY } from './hooks/useUser'
+import { ADVENTURES_QUERY } from './Adventures'
 import { objectExtract } from '../lib/utils'
 import Form from './styles/Form'
 import Editor from './Editor'
@@ -39,7 +39,7 @@ export function UpdateAdventure (props) {
     {
       refetchQueries: [
         { query: SINGLE_ADVENTURE_QUERY, variables: { id } },
-        { query: CURRENT_USER_QUERY }
+        { query: ADVENTURES_QUERY }
       ]
     }
   )

@@ -8,13 +8,6 @@ export const CURRENT_USER_QUERY = gql`
       name
       email
       permissions
-      adventures(orderBy: title_ASC) {
-        id
-        title
-        description
-        createdAt
-        updatedAt
-      }
     }
   }
 `

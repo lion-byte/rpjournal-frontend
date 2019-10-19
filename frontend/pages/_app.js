@@ -5,6 +5,7 @@ import Router from 'next/router'
 import NProgress from 'nprogress'
 
 import Page from '../components/Page'
+import UserProvider from '../components/UserProvider'
 import withData from '../lib/withData'
 
 Router.events.on('routeChangeStart', () => NProgress.start())
@@ -30,9 +31,11 @@ class MyApp extends App {
 
     return (
       <ApolloProvider client={apollo}>
-        <Page>
-          <Component {...pageProps} />
-        </Page>
+        <UserProvider>
+          <Page>
+            <Component {...pageProps} />
+          </Page>
+        </UserProvider>
       </ApolloProvider>
     )
   }

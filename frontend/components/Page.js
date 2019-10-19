@@ -14,7 +14,7 @@ const StyledPage = styled.div`
   }
 `
 
-const Page = ({ children }) => (
+export const Page = ({ children }) => (
   <Theme>
     <StyledPage>
       <Meta />
