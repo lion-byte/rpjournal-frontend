@@ -1,15 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import TimeAgo from 'react-timeago'
 import Link from 'next/link'
 import { useQuery } from 'react-apollo'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 
-import { useUser } from './hooks/useUser'
 import Description from './Description'
 import DetailsMenu from './styles/DetailsMenu'
 import ErrorMessage from './ErrorMessage'
 import Title from './Title'
+import { UserContext } from './UserProvider'
 
 export const SINGLE_ADVENTURE_QUERY = gql`
   query SINGLE_ADVENTURE_QUERY($id: ID!) {
@@ -49,7 +49,7 @@ export function SingleAdventure (props) {
       id: props.id
     }
   })
-  const user = useUser()
+  const user = useContext(UserContext)
 
   if (loading) {
     return <p>Loading...</p>
@@ -61,11 +61,7 @@ export function SingleAdventure (props) {
 
   /** @type {AdventureModel} */
   const adventure = data.adventure
-  const showControls =
-    !user.loading &&
-    !user.error &&
-    user.data.me &&
-    adventure.owner.id === user.data.me.id
+  const showControls = user != null && adventure.owner.id === user.id
 
   return (
     <StyledAdventure>

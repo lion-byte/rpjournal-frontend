@@ -1,13 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Link from 'next/link'
 
-import { useUser } from './hooks/useUser'
 import StyledHeader from './styles/Header'
 import Logout from './Logout'
 import Nav from './Nav'
+import { UserContext } from './UserProvider'
 
 export function Header () {
-  const { loading, error, data } = useUser()
+  const user = useContext(UserContext)
 
   return (
     <StyledHeader>
@@ -28,12 +28,12 @@ export function Header () {
               </Link>
             </li>
             <li>
-              {loading || error || !data.me ? (
+              {user ? (
+                <Logout />
+              ) : (
                 <Link href='/login'>
                   <a>Login</a>
                 </Link>
-              ) : (
-                <Logout />
               )}
             </li>
           </ul>

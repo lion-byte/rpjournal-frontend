@@ -3,7 +3,8 @@ import Router from 'next/router'
 import { useMutation } from 'react-apollo'
 import gql from 'graphql-tag'
 
-import { CURRENT_USER_QUERY } from './hooks/useUser'
+import { ADVENTURES_QUERY } from './Adventures'
+import { CURRENT_USER_QUERY } from './UserProvider'
 
 export const LOGOUT_MUTATION = gql`
   mutation LOGOUT_MUTATION {
@@ -13,7 +14,7 @@ export const LOGOUT_MUTATION = gql`
 
 export function Logout () {
   const [logout] = useMutation(LOGOUT_MUTATION, {
-    refetchQueries: [{ query: CURRENT_USER_QUERY }]
+    refetchQueries: [{ query: CURRENT_USER_QUERY }, { query: ADVENTURES_QUERY }]
   })
 
   const leave = async () => {

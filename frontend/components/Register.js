@@ -4,10 +4,10 @@ import { useMutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import useForm from 'react-hook-form'
 
-import { CURRENT_USER_QUERY } from './hooks/useUser'
 import Form from './styles/Form'
 import ErrorMessage from './ErrorMessage'
 import Title from './Title'
+import { CURRENT_USER_QUERY } from './UserProvider'
 
 export const REGISTER_MUTATION = gql`
   mutation REGISTER_MUTATION(
