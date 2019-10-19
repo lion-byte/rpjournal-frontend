@@ -30,9 +30,7 @@ export function CreateAdventure () {
 
   /** @param {Record<string, any>} values */
   const onSubmit = async values => {
-    const mutationResult = await createAdventure({
-      variables: { ...values }
-    })
+    const mutationResult = await createAdventure({ variables: { ...values } })
 
     if (
       mutationResult &&
@@ -54,25 +52,30 @@ export function CreateAdventure () {
       <Title title='New Adventure' />
       <h1>Create New Adventure</h1>
 
-      <Form method='post' onSubmit={handleSubmit(onSubmit)}>
+      <Form
+        className='pure-form pure-form-stacked'
+        method='post'
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <ErrorMessage error={error} />
         <fieldset aria-busy={loading} disabled={loading}>
-          <label htmlFor='title'>
-            Title
-            <input
-              id='title'
-              type='text'
-              name='title'
-              ref={register({ required: true })}
-            />
-          </label>
+          <label htmlFor='title'>Title</label>
+          <input
+            id='title'
+            className='pure-input-1'
+            type='text'
+            name='title'
+            ref={register({ required: true })}
+          />
 
-          <div className='description'>
+          <div>
             Description
             <Editor onSave={handleEditor} />
           </div>
 
-          <input type='submit' value='Create Adventure' />
+          <button className='pure-button pure-button-primary' type='submit'>
+            Create Adventure
+          </button>
         </fieldset>
       </Form>
     </div>

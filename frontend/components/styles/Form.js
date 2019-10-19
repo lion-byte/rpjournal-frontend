@@ -10,7 +10,7 @@ const loading = keyframes`
   }
 `
 
-const Form = styled.form`
+export const Form = styled.form`
   textarea {
     min-height: 8em;
   }

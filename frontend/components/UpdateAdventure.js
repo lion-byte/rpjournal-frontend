@@ -83,30 +83,35 @@ export function UpdateAdventure (props) {
       <Title title='Update Adventure' />
       <h1>Updating - {adventure.title}</h1>
 
-      <Form method='post' onSubmit={handleSubmit(onSubmit)}>
+      <Form
+        className='pure-form pure-form-stacked'
+        method='post'
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <ErrorMessage error={updateResult.error} />
         <fieldset
           aria-busy={updateResult.loading}
           disabled={updateResult.loading}
         >
-          <label htmlFor='title'>
-            Title
-            <input
-              id='title'
-              type='text'
-              name='title'
-              ref={register({ required: true })}
-              defaultValue={adventure.title}
-              required
-            />
-          </label>
+          <label htmlFor='title'>Title</label>
+          <input
+            id='title'
+            className='pure-input-1'
+            type='text'
+            name='title'
+            ref={register({ required: true })}
+            defaultValue={adventure.title}
+            required
+          />
 
-          <div className='description'>
+          <div>
             Description
             <Editor initialText={adventure.description} onSave={handleEditor} />
           </div>
 
-          <input type='submit' value='Update Adventure' />
+          <button className='pure-button pure-button-primary' type='submit'>
+            Update Adventure
+          </button>
         </fieldset>
       </Form>
     </div>
