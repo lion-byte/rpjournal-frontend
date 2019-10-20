@@ -81,7 +81,7 @@ export function Login (props) {
 
         <div style={{ marginTop: '1em' }}>
           New here?{' '}
-          <Link href='/register' prefetch>
+          <Link href='/register'>
             <a>Register an account</a>
           </Link>
         </div>
