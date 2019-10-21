@@ -1,10 +1,10 @@
 import React from 'react'
 import { useQuery, useMutation } from 'react-apollo'
 import gql from 'graphql-tag'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 import useForm from 'react-hook-form'
 
-import { CURRENT_USER_QUERY } from './hooks/useUser'
+import { ADVENTURES_QUERY } from './Adventures'
 import { objectExtract } from '../lib/utils'
 import Form from './styles/Form'
 import Editor from './Editor'
@@ -31,6 +31,7 @@ export const UPDATE_ADVENTURE_MUTATION = gql`
 export function UpdateAdventure (props) {
   const { id } = props
   const { formState, handleSubmit, register, setValue } = useForm()
+  const router = useRouter()
   const { loading, error, data } = useQuery(SINGLE_ADVENTURE_QUERY, {
     variables: { id }
   })
@@ -39,7 +40,7 @@ export function UpdateAdventure (props) {
     {
       refetchQueries: [
         { query: SINGLE_ADVENTURE_QUERY, variables: { id } },
-        { query: CURRENT_USER_QUERY }
+        { query: ADVENTURES_QUERY }
       ]
     }
   )
@@ -60,7 +61,7 @@ export function UpdateAdventure (props) {
       mutationResult.data &&
       mutationResult.data.updateAdventure
     ) {
-      await Router.push({ pathname: '/adventure', query: { id } })
+      await router.push({ pathname: '/adventure', query: { id } })
     }
   }
 
@@ -83,30 +84,35 @@ export function UpdateAdventure (props) {
       <Title title='Update Adventure' />
       <h1>Updating - {adventure.title}</h1>
 
-      <Form method='post' onSubmit={handleSubmit(onSubmit)}>
+      <Form
+        className='pure-form pure-form-stacked'
+        method='post'
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <ErrorMessage error={updateResult.error} />
         <fieldset
           aria-busy={updateResult.loading}
           disabled={updateResult.loading}
         >
-          <label htmlFor='title'>
-            Title
-            <input
-              id='title'
-              type='text'
-              name='title'
-              ref={register({ required: true })}
-              defaultValue={adventure.title}
-              required
-            />
-          </label>
+          <label htmlFor='title'>Title</label>
+          <input
+            id='title'
+            className='pure-input-1'
+            type='text'
+            name='title'
+            ref={register({ required: true })}
+            defaultValue={adventure.title}
+            required
+          />
 
-          <div className='description'>
+          <div>
             Description
             <Editor initialText={adventure.description} onSave={handleEditor} />
           </div>
 
-          <input type='submit' value='Update Adventure' />
+          <button className='pure-button pure-button-primary' type='submit'>
+            Update Adventure
+          </button>
         </fieldset>
       </Form>
     </div>

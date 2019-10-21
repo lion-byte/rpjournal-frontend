@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
-import Router from 'next/router'
+import React from 'react'
+import { useRouter } from 'next/router'
 import { useMutation } from 'react-apollo'
 import gql from 'graphql-tag'
+import useForm from 'react-hook-form'
 
-import { CURRENT_USER_QUERY } from './hooks/useUser'
 import Form from './styles/Form'
 import ErrorMessage from './ErrorMessage'
 import Title from './Title'
+import { CURRENT_USER_QUERY } from './UserProvider'
 
 export const REGISTER_MUTATION = gql`
   mutation REGISTER_MUTATION(
@@ -23,77 +24,63 @@ export const REGISTER_MUTATION = gql`
 `
 
 export function Register () {
-  const [state, setState] = useState({
-    name: '',
-    email: '',
-    password: ''
-  })
-  const [register, { loading, error }] = useMutation(REGISTER_MUTATION, {
-    variables: { ...state },
+  const { handleSubmit, register } = useForm()
+  const router = useRouter()
+  const [registerAccount, { loading, error }] = useMutation(REGISTER_MUTATION, {
     refetchQueries: [{ query: CURRENT_USER_QUERY }]
   })
 
-  const handleChange = event => {
-    const { name, value } = event.target
-    setState(prevState => ({ ...prevState, [name]: value }))
-  }
-
-  const handleSubmit = async event => {
-    event.preventDefault()
-    const mutationResult = await register()
+  /** @param {Record<string, any>} values */
+  const onSubmit = async values => {
+    const mutationResult = await registerAccount({ variables: { ...values } })
 
     if (mutationResult && mutationResult.data && mutationResult.data.register) {
-      await Router.push('/')
+      await router.push('/')
     }
   }
 
-  const { name, email, password } = state
-
   return (
-    <Form method='post' onSubmit={handleSubmit}>
+    <Form
+      className='pure-form pure-form-stacked'
+      method='post'
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <Title title='Register' />
       <ErrorMessage error={error} />
       <fieldset disabled={loading} aria-busy={loading}>
-        <label htmlFor='name'>
-          Name
-          <input
-            id='name'
-            name='name'
-            placeholder='Name'
-            type='text'
-            required
-            value={name}
-            onChange={handleChange}
-          />
-        </label>
+        <label htmlFor='name'>Name</label>
+        <input
+          id='name'
+          className='pure-input-1'
+          type='text'
+          name='name'
+          placeholder='Name'
+          ref={register({ required: true })}
+        />
 
-        <label htmlFor='email'>
-          Email
-          <input
-            id='email'
-            name='email'
-            placeholder='Email'
-            type='email'
-            required
-            value={email}
-            onChange={handleChange}
-          />
-        </label>
+        <label htmlFor='email'>Email</label>
+        <input
+          id='email'
+          className='pure-input-1'
+          type='email'
+          name='email'
+          placeholder='Email'
+          ref={register({ required: true })}
+        />
 
-        <label htmlFor='password'>
-          Password
-          <input
-            id='password'
-            name='password'
-            placeholder='Password'
-            type='password'
-            required
-            value={password}
-            onChange={handleChange}
-          />
-        </label>
+        <label htmlFor='password'>Password</label>
+        <input
+          id='password'
+          className='pure-input-1'
+          type='password'
+          name='password'
+          placeholder='Password'
+          ref={register({ required: true })}
+        />
 
-        <input type='submit' value='Register' />
+        <button className='pure-button pure-button-primary' type='submit'>
+          Register
+        </button>
       </fieldset>
     </Form>
   )

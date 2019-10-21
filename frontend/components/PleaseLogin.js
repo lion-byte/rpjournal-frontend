@@ -1,21 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
-import { useUser } from './hooks/useUser'
-import ErrorMessage from './ErrorMessage'
 import Login from './Login'
+import { UserContext } from './UserProvider'
 
 /**
  * @param {object} props
  * @param {any} props.children
  */
 export function PleaseLogin (props) {
-  const { loading, error, data } = useUser()
+  const user = useContext(UserContext)
 
-  if (loading) {
-    return <p>Loading...</p>
-  } else if (error) {
-    return <ErrorMessage error={error} />
-  } else if (!data.me) {
+  if (!user) {
     return (
       <div>
         <p>Please Login</p>

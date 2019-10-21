@@ -1,11 +1,11 @@
 import React from 'react'
 import { useMutation } from 'react-apollo'
 import gql from 'graphql-tag'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 import useForm from 'react-hook-form'
 
-import { CURRENT_USER_QUERY } from './hooks/useUser'
 import Form from './styles/Form'
+import { ADVENTURES_QUERY } from './Adventures'
 import Editor from './Editor'
 import ErrorMessage from './ErrorMessage'
 import Title from './Title'
@@ -20,9 +20,10 @@ export const CREATE_ADVENTURE_MUTATION = gql`
 
 export function CreateAdventure () {
   const { handleSubmit, register, setValue } = useForm()
+  const router = useRouter()
   const [createAdventure, { loading, error }] = useMutation(
     CREATE_ADVENTURE_MUTATION,
-    { refetchQueries: [{ query: CURRENT_USER_QUERY }] }
+    { refetchQueries: [{ query: ADVENTURES_QUERY }] }
   )
 
   /** @param {string} desc */
@@ -30,16 +31,14 @@ export function CreateAdventure () {
 
   /** @param {Record<string, any>} values */
   const onSubmit = async values => {
-    const mutationResult = await createAdventure({
-      variables: { ...values }
-    })
+    const mutationResult = await createAdventure({ variables: { ...values } })
 
     if (
       mutationResult &&
       mutationResult.data &&
       mutationResult.data.createAdventure
     ) {
-      await Router.push({
+      await router.push({
         pathname: '/adventure',
         query: { id: mutationResult.data.createAdventure.id }
       })
@@ -54,25 +53,30 @@ export function CreateAdventure () {
       <Title title='New Adventure' />
       <h1>Create New Adventure</h1>
 
-      <Form method='post' onSubmit={handleSubmit(onSubmit)}>
+      <Form
+        className='pure-form pure-form-stacked'
+        method='post'
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <ErrorMessage error={error} />
         <fieldset aria-busy={loading} disabled={loading}>
-          <label htmlFor='title'>
-            Title
-            <input
-              id='title'
-              type='text'
-              name='title'
-              ref={register({ required: true })}
-            />
-          </label>
+          <label htmlFor='title'>Title</label>
+          <input
+            id='title'
+            className='pure-input-1'
+            type='text'
+            name='title'
+            ref={register({ required: true })}
+          />
 
-          <div className='description'>
+          <div>
             Description
             <Editor onSave={handleEditor} />
           </div>
 
-          <input type='submit' value='Create Adventure' />
+          <button className='pure-button pure-button-primary' type='submit'>
+            Create Adventure
+          </button>
         </fieldset>
       </Form>
     </div>

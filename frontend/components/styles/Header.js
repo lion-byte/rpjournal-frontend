@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const Header = styled.header`
+export const Header = styled.header`
   .bar {
     align-items: stretch;
     border-bottom: 0.625em solid ${props => props.theme.black};

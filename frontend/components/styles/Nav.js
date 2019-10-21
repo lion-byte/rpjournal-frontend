@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const Nav = styled.nav`
+export const Nav = styled.nav`
   font-size: 1.5em;
 
   a,

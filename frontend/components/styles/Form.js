@@ -10,36 +10,12 @@ const loading = keyframes`
   }
 `
 
-const Form = styled.form`
-  border: 0.25em solid ${props => props.theme.offWhite};
-  padding: 1.5em;
-  line-height: 1.5;
-  label,
-  .description {
-    display: block;
-    margin-bottom: 1em;
-    font-size: 1em;
-  }
-  input:not([type='submit']),
-  textarea,
-  select {
-    width: 100%;
-    padding: 0.5em;
-    font-size: 0.67em;
-    border: 1px solid ${props => props.theme.black};
-    font-family: inherit;
-    resize: vertical;
-    &:focus {
-      outline: 0;
-      border-color: ${props => props.theme.primaryColor};
-    }
-  }
+export const Form = styled.form`
   textarea {
     min-height: 8em;
   }
   fieldset {
     border: 0;
-    padding: 0;
     &[disabled] {
       opacity: 0.5;
     }
@@ -58,17 +34,6 @@ const Form = styled.form`
         ${props => props.theme.white} 100%
       );
       transition: background 1s ease-in-out;
-    }
-  }
-  input[type='submit'] {
-    background-color: ${props => props.theme.primaryColor};
-    color: ${props => props.theme.white};
-    border: 0;
-    font-weight: bold;
-    padding: 0.5em 1.25em;
-
-    &:hover {
-      cursor: pointer;
     }
   }
 `

@@ -1,6 +1,7 @@
 import React from 'react'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import 'modern-normalize'
+import 'purecss/build/pure-min.css'
 import 'nprogress/nprogress.css'
 import '@reach/skip-nav/styles.css'
 import 'draft-js/dist/Draft.css'
@@ -47,12 +48,16 @@ const GlobalStyles = createGlobalStyle`
   }
 `
 
-const Theme = ({ children }) => (
+/**
+ * @param {object} props
+ * @param {React.ReactNode} props.children
+ */
+export const Theme = props => (
   <ThemeProvider theme={theme}>
     <React.Fragment>
       <GlobalStyles />
 
-      {children}
+      {props.children}
     </React.Fragment>
   </ThemeProvider>
 )

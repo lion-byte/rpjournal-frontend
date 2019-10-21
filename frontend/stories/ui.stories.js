@@ -42,7 +42,10 @@ storiesOf('UI', module)
     const exampleErr = Error('Something went wrong.')
 
     return (
-      <Form onSubmit={e => e.preventDefault()}>
+      <Form
+        className='pure-form pure-form-stacked'
+        onSubmit={e => e.preventDefault()}
+      >
         {isError ? (
           <ErrorMessage
             // @ts-ignore
@@ -50,22 +53,17 @@ storiesOf('UI', module)
           />
         ) : null}
         <fieldset aria-busy={isSubmitting} disabled={isSubmitting}>
-          <label htmlFor='c-text'>
-            Text
-            <input id='c-text' type='text' />
-          </label>
+          <label htmlFor='c-text'>Text</label>
+          <input id='c-text' className='pure-input-1' type='text' />
 
-          <label htmlFor='c-textarea'>
-            Text Area
-            <textarea id='c-textarea' />
-          </label>
-
-          <div className='description'>
+          <div>
             Text
             <Editor />
           </div>
 
-          <input type='submit' value='Submit' />
+          <button className='pure-button pure-button-primary' type='submit'>
+            Submit
+          </button>
         </fieldset>
       </Form>
     )
