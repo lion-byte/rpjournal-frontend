@@ -1,21 +1,22 @@
 import React from 'react'
 import styled from 'styled-components'
+import { ApolloError } from 'apollo-boost'
 
-const ErrorStyles = styled.div`
+export const ErrorStyles = styled.div`
   background-color: ${props => props.theme.white};
   color: ${props => props.theme.accentColor};
 `
 
 /**
  * @param {object} props
- * @param {import('apollo-client').ApolloError} [props.error]
+ * @param {Error | ApolloError} [props.error]
  */
-const ErrorMessage = props => {
+export const ErrorMessage = props => {
   const { error } = props
 
   if (!error || !error.message) {
     return null
-  } else if (error.graphQLErrors && error.graphQLErrors.length !== 0) {
+  } else if (error instanceof ApolloError && error.graphQLErrors.length > 0) {
     return (
       <React.Fragment>
         {error.graphQLErrors.map((err, i) => (

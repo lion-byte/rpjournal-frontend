@@ -43,6 +43,7 @@ export function Editor (props) {
     setShowEditor(true)
   }, [showEditor])
 
+  /** @param {any} rawContent */
   const onSave = rawContent => {
     if (!props.onSave) {
       return

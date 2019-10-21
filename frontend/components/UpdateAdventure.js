@@ -1,7 +1,7 @@
 import React from 'react'
 import { useQuery, useMutation } from 'react-apollo'
 import gql from 'graphql-tag'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 import useForm from 'react-hook-form'
 
 import { ADVENTURES_QUERY } from './Adventures'
@@ -31,6 +31,7 @@ export const UPDATE_ADVENTURE_MUTATION = gql`
 export function UpdateAdventure (props) {
   const { id } = props
   const { formState, handleSubmit, register, setValue } = useForm()
+  const router = useRouter()
   const { loading, error, data } = useQuery(SINGLE_ADVENTURE_QUERY, {
     variables: { id }
   })
@@ -60,7 +61,7 @@ export function UpdateAdventure (props) {
       mutationResult.data &&
       mutationResult.data.updateAdventure
     ) {
-      await Router.push({ pathname: '/adventure', query: { id } })
+      await router.push({ pathname: '/adventure', query: { id } })
     }
   }
 

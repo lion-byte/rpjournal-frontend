@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const DetailsMenu = styled.div`
+export const DetailsMenu = styled.div`
   align-items: center;
   display: flex;
   flex-flow: row;

@@ -17,7 +17,8 @@ export const CURRENT_USER_QUERY = gql`
 export const UserContext = React.createContext(null)
 
 /**
- * @param {{ children: React.ReactNode; }} props
+ * @param {object} props
+ * @param {React.ReactNode} props.children
  */
 export function UserProvider (props) {
   const { loading, error, data } = useQuery(CURRENT_USER_QUERY)

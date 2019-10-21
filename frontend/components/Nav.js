@@ -2,6 +2,10 @@ import React, { useState } from 'react'
 
 import StyledNav from './styles/Nav'
 
+/**
+ * @param {object} props
+ * @param {React.ReactNode} props.children
+ */
 export function Nav (props) {
   const [isActive, setActive] = useState(false)
 

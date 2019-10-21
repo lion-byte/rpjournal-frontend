@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 import { useMutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import useForm from 'react-hook-form'
@@ -25,9 +25,10 @@ export const LOGIN_MUTATION = gql`
  * @param {boolean} [props.noRedirect]
  */
 export function Login (props) {
-  const { noRedirect } = props
+  const { noRedirect = false } = props
 
   const { handleSubmit, register } = useForm()
+  const router = useRouter()
 
   const [login, { loading, error }] = useMutation(LOGIN_MUTATION, {
     refetchQueries: [{ query: CURRENT_USER_QUERY }]
@@ -42,7 +43,7 @@ export function Login (props) {
       mutationResult.data.login &&
       !noRedirect
     ) {
-      await Router.push('/')
+      await router.push('/')
     }
   }
 

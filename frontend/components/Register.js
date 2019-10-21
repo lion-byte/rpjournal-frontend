@@ -1,5 +1,5 @@
 import React from 'react'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 import { useMutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import useForm from 'react-hook-form'
@@ -25,15 +25,17 @@ export const REGISTER_MUTATION = gql`
 
 export function Register () {
   const { handleSubmit, register } = useForm()
+  const router = useRouter()
   const [registerAccount, { loading, error }] = useMutation(REGISTER_MUTATION, {
     refetchQueries: [{ query: CURRENT_USER_QUERY }]
   })
 
+  /** @param {Record<string, any>} values */
   const onSubmit = async values => {
     const mutationResult = await registerAccount({ variables: { ...values } })
 
     if (mutationResult && mutationResult.data && mutationResult.data.register) {
-      await Router.push('/')
+      await router.push('/')
     }
   }
 

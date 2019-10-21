@@ -48,12 +48,16 @@ const GlobalStyles = createGlobalStyle`
   }
 `
 
-const Theme = ({ children }) => (
+/**
+ * @param {object} props
+ * @param {React.ReactNode} props.children
+ */
+export const Theme = props => (
   <ThemeProvider theme={theme}>
     <React.Fragment>
       <GlobalStyles />
 
-      {children}
+      {props.children}
     </React.Fragment>
   </ThemeProvider>
 )
