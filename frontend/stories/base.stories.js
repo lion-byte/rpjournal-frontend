@@ -73,6 +73,7 @@ storiesOf('Base', module)
         <i>Emphasized text.</i>
       </p>
       <p>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a href='#'>Link</a> followed by horizontal rule.
       </p>
       <hr />
@@ -85,13 +86,19 @@ storiesOf('Base', module)
     <div>
       <p>Some text or whatever.</p>
       <figure>
-        <img src={fillerImage({ text: 'Figure', width: 400, height: 250 })} />
+        <img
+          src={fillerImage({ text: 'Figure', width: 400, height: 250 })}
+          alt='Figure'
+        />
         <figcaption>
           <p>Figure caption</p>
         </figcaption>
       </figure>
       <p>Moving on.</p>
-      <img src={fillerImage({ text: 'Just image', width: 400, height: 250 })} />
+      <img
+        src={fillerImage({ text: 'Just image', width: 400, height: 250 })}
+        alt='Just a filler'
+      />
       <p>Done.</p>
     </div>
   ))
