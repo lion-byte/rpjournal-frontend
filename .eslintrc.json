@@ -1,6 +1,5 @@
 {
   "extends": ["@lionbyte"],
-  "parser": "babel-eslint",
   "root": true,
   "rules": {
     "jsx-a11y/anchor-is-valid": [
@@ -11,10 +10,5 @@
         "aspects": ["invalidHref", "preferButton"]
       }
     ]
-  },
-  "settings": {
-    "react": {
-      "version": "latest"
-    }
   }
 }
