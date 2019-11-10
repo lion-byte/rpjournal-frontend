@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react'
 import styled from 'styled-components'
 import { SkipNavContent, SkipNavLink } from '@reach/skip-nav'
@@ -14,16 +15,22 @@ const StyledPage = styled.div`
   }
 `
 
-export const Page = ({ children }) => (
-  <Theme>
-    <StyledPage>
-      <Meta />
-      <SkipNavLink />
-      <Header />
-      <SkipNavContent />
-      <main role='main'>{children}</main>
-    </StyledPage>
-  </Theme>
-)
+/**
+ * @param {object} props
+ * @param {React.ReactNode} props.children
+ */
+export function Page (props) {
+  return (
+    <Theme>
+      <StyledPage>
+        <Meta />
+        <SkipNavLink />
+        <Header />
+        <SkipNavContent />
+        <main role='main'>{props.children}</main>
+      </StyledPage>
+    </Theme>
+  )
+}
 
 export default Page
