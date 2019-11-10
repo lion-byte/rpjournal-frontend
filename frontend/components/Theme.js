@@ -22,8 +22,8 @@ const theme = {
 }
 
 const GlobalStyles = createGlobalStyle`
-  * {
-    outline-width: 2px;
+  :root {
+    font-size: 1rem;
   }
 
   body {
@@ -55,7 +55,6 @@ export const Theme = props => (
   <ThemeProvider theme={theme}>
     <React.Fragment>
       <GlobalStyles />
-
       {props.children}
     </React.Fragment>
   </ThemeProvider>
