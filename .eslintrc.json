@@ -1,34 +1,14 @@
 {
-  "extends": ["standard", "standard-jsx"],
-  "globals": {
-    "afterAll": true,
-    "afterEach": true,
-    "beforeAll": true,
-    "beforeEach": true,
-    "describe": true,
-    "expect": true,
-    "jest": true,
-    "test": true
-  },
-  "parser": "babel-eslint",
-  "parserOptions": {
-    "ecmaVersion": 8
-  },
+  "extends": ["@lionbyte"],
   "root": true,
   "rules": {
-    "no-var": "error",
-    "quotes": [
+    "jsx-a11y/anchor-is-valid": [
       "error",
-      "single",
-      { "avoidEscape": true, "allowTemplateLiterals": true }
-    ],
-    "react/jsx-uses-react": "error",
-    "react/jsx-uses-vars": "error",
-    "react/jsx-fragments": "off"
-  },
-  "settings": {
-    "react": {
-      "version": "latest"
-    }
+      {
+        "components": ["Link"],
+        "specialLink": ["hrefLeft", "hrefRight"],
+        "aspects": ["invalidHref", "preferButton"]
+      }
+    ]
   }
 }

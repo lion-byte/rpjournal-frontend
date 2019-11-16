@@ -1,7 +1,6 @@
 import React from 'react'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
-import 'modern-normalize'
-import 'purecss/build/pure-min.css'
+import 'turretcss/dist/turretcss.min.css'
 import 'nprogress/nprogress.css'
 import '@reach/skip-nav/styles.css'
 import 'draft-js/dist/Draft.css'
@@ -23,8 +22,8 @@ const theme = {
 }
 
 const GlobalStyles = createGlobalStyle`
-  * {
-    outline-width: 2px;
+  :root {
+    font-size: 1rem;
   }
 
   body {
@@ -56,7 +55,6 @@ export const Theme = props => (
   <ThemeProvider theme={theme}>
     <React.Fragment>
       <GlobalStyles />
-
       {props.children}
     </React.Fragment>
   </ThemeProvider>

@@ -18,7 +18,10 @@ export function Nav (props) {
         <span>Menu</span>
       </button>
 
-      <div className={isActive ? 'menu active' : 'menu'} onClick={hideMenu}>
+      <div
+        className={isActive ? 'menu active' : 'menu'}
+        onClickCapture={hideMenu}
+      >
         {props.children}
       </div>
     </StyledNav>

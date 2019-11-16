@@ -21,10 +21,12 @@ export const CREATE_ADVENTURE_MUTATION = gql`
 export function CreateAdventure () {
   const { handleSubmit, register, setValue } = useForm()
   const router = useRouter()
-  const [createAdventure, { loading, error }] = useMutation(
-    CREATE_ADVENTURE_MUTATION,
-    { refetchQueries: [{ query: ADVENTURES_QUERY }] }
-  )
+  const [
+    createAdventure,
+    { loading, error }
+  ] = useMutation(CREATE_ADVENTURE_MUTATION, {
+    refetchQueries: [{ query: ADVENTURES_QUERY }]
+  })
 
   /** @param {string} desc */
   const handleEditor = desc => setValue('description', desc)
@@ -53,17 +55,12 @@ export function CreateAdventure () {
       <Title title='New Adventure' />
       <h1>Create New Adventure</h1>
 
-      <Form
-        className='pure-form pure-form-stacked'
-        method='post'
-        onSubmit={handleSubmit(onSubmit)}
-      >
+      <Form method='post' onSubmit={handleSubmit(onSubmit)}>
         <ErrorMessage error={error} />
         <fieldset aria-busy={loading} disabled={loading}>
           <label htmlFor='title'>Title</label>
           <input
             id='title'
-            className='pure-input-1'
             type='text'
             name='title'
             ref={register({ required: true })}
@@ -74,7 +71,7 @@ export function CreateAdventure () {
             <Editor onSave={handleEditor} />
           </div>
 
-          <button className='pure-button pure-button-primary' type='submit'>
+          <button className='button button-primary' type='submit'>
             Create Adventure
           </button>
         </fieldset>
