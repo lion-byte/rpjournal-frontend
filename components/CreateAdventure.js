@@ -21,12 +21,12 @@ export const CREATE_ADVENTURE_MUTATION = gql`
 export function CreateAdventure () {
   const { handleSubmit, register, setValue } = useForm()
   const router = useRouter()
-  const [
-    createAdventure,
-    { loading, error }
-  ] = useMutation(CREATE_ADVENTURE_MUTATION, {
-    refetchQueries: [{ query: ADVENTURES_QUERY }]
-  })
+  const [createAdventure, { loading, error }] = useMutation(
+    CREATE_ADVENTURE_MUTATION,
+    {
+      refetchQueries: [{ query: ADVENTURES_QUERY }]
+    }
+  )
 
   /** @param {string} desc */
   const handleEditor = desc => setValue('description', desc)
