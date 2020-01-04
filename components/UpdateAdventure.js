@@ -2,10 +2,9 @@ import React from 'react'
 import { useQuery, useMutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import { useRouter } from 'next/router'
-import useForm from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { ADVENTURES_QUERY } from './Adventures'
-import { objectExtract } from '../lib/utils'
 import Form from './styles/Form'
 import Editor from './Editor'
 import ErrorMessage from './ErrorMessage'
@@ -50,10 +49,8 @@ export function UpdateAdventure (props) {
 
   /** @param {Record<string, any>} values */
   const onSubmit = async values => {
-    const changedValues = objectExtract(values, formState.touched)
-
     const mutationResult = await updateAdventure({
-      variables: { id, ...changedValues }
+      variables: { id, ...formState.touched }
     })
 
     if (

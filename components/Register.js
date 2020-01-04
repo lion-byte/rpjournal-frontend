@@ -2,7 +2,7 @@ import React from 'react'
 import { useRouter } from 'next/router'
 import { useMutation } from 'react-apollo'
 import gql from 'graphql-tag'
-import useForm from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import Form from './styles/Form'
 import ErrorMessage from './ErrorMessage'

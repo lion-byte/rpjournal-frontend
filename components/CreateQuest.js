@@ -1,5 +1,5 @@
 import React from 'react'
-import useForm from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import Form from './styles/Form'
 import Editor from './Editor'

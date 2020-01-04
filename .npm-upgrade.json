@@ -1,8 +1,8 @@
 {
   "ignore": {
     "draft-js": {
-      "versions": "0.11.2",
-      "reason": "Compat issue with draftail"
+      "versions": "0.11.3",
+      "reason": "Issue with draftail"
     },
     "next-with-apollo": {
       "versions": "4.3.0",

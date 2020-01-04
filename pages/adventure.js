@@ -9,8 +9,6 @@ const AdventurePage = props => (
   </div>
 )
 
-AdventurePage.getInitialProps = async ctx => {
-  return { query: ctx.query }
-}
+AdventurePage.getInitialProps = async ctx => ({ query: ctx.query })
 
 export default AdventurePage

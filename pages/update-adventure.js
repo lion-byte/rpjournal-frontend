@@ -12,8 +12,6 @@ const UpdateAdventurePage = props => (
   </div>
 )
 
-UpdateAdventurePage.getInitialProps = async ctx => {
-  return { query: ctx.query }
-}
+UpdateAdventurePage.getInitialProps = async ctx => ({ query: ctx.query })
 
 export default UpdateAdventurePage
